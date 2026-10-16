@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S2 算一算再种田 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S2</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S2</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 2 阶段 · 算一算再种田</div>
+      <h1 class="ch-h">算术 / 比较 / 逻辑 / 取余 / 优先级</h1>
+      <p class="ch-d">当订单从"自动收获"变成"棋盘格种树"和"库存不够才补水"，你才会发现光有 if 不够——还要会算。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="2" data-total="5">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 5 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 这一关解锁什么</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>树（Tree）</strong>——但要花 5 木材（先解锁灌木）。</li>
+        <li>解锁 <strong>胡萝卜</strong>——需要先翻土（<code>till()</code> 把草变成 <code>Grounds.Soil</code>）。</li>
+        <li>解锁 <strong>水</strong>（<code>Items.Water</code>）——浇水能让作物 5 倍速生长。</li>
+        <li>试试看：直接 <code>plant(Entities.Tree)</code> 会出现什么？树不能相邻种植。</li>
+      </ul>
+    </div>
+
+    <h2>📖 知识卡 · 5 张</h2>
+
+    <h3>① 算术运算符：+ - * / % // **</h3>
+    <div class="code-wrap"><pre><code>5 + 3     # 8
+5 - 3     # 2
+5 * 3     # 15
+5 / 3     # 1.6666...（除法是浮点数！）
+5 // 2    # 2（整除，向下取整）
+5 % 2     # 1（取余，5 除以 2 余 1）
+2 ** 10   # 1024（幂）</code></pre></div>
+    <p class="tip"><code>%</code> 取余是这一关最常用的——判断奇偶、棋盘格、轮作都靠它。<code>/</code> 永远返回浮点数，要整数得用 <code>//</code>。</p>
+
+    <h3>② 比较运算符：== != &gt; &lt; &gt;= &lt;=</h3>
+    <p>比较返回 <code>True</code> 或 <code>False</code>。<strong>注意是 <code>==</code>，不是 <code>=</code></strong>。单个 <code>=</code> 是"赋值"。</p>
+    <div class="code-wrap"><pre><code>5 == 3     # False
+5 != 3     # True
+5 &gt; 3      # True
+3 &lt;= 3     # True（小于等于）</code></pre></div>
+
+    <h3>③ 逻辑运算符：and / or / not</h3>
+    <p>把多个条件组合起来。<code>and</code> 要求都对，<code>or</code> 一个对就够，<code>not</code> 反过来。</p>
+    <div class="code-wrap"><pre><code>a = 10
+if a &gt; 5 and a &lt; 20:        # 同时满足
+    pass
+if a &lt; 0 or a &gt; 100:        # 满足一个就行
+    pass
+if not can_harvest():        # 没熟
+    pass</code></pre></div>
+
+    <h3>④ 优先级：拿不准就加括号</h3>
+    <p>从高到低：<strong>括号 &gt; 幂 &gt; 乘除 &gt; 加减 &gt; 比较 &gt; 逻辑</strong>。</p>
+    <div class="code-wrap"><pre><code>2 + 3 * 4           # 14，先乘后加
+(2 + 3) * 4         # 20，括号优先
+# 在农场里这么写：if (x % 2 == 0) and (y % 2 == 0):</code></pre></div>
+
+    <h3>⑤ get_water() 是 float，不是 int</h3>
+    <p>这一关特别容易踩的坑：<code>get_water()</code> 返回 <code>0.0 ~ 1.0</code> 的小数（水分比例），不是 0~100 的整数。</p>
+    <div class="code-wrap"><pre><code>get_water()          # 比如 0.75（75% 水分）
+num_items(Items.Hay) # 整数，比如 250</code></pre></div>
+    <p class="tip">想判断"水够不够"写 <code>get_water() &lt; 0.75</code>，别写成 <code>get_water() &lt; 75</code>。</p>
+
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>棋盘格：树 + 灌木</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        在 3×3 田里"黑格"种树、"白格"种灌木。树不能相邻，所以必须是棋盘格图案（(0,0) 树、(0,1) 灌木、(0,2) 树）。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 %（取余）</span>
+        <span class="order-must-chip">必须用 and / or</span>
+        <span class="order-must-chip">不能写 3 个 if 判断 x</span>
+      </div>
+      <details class="fold">
+        <summary>起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre>while True:
+    x = get_pos_x()
+    y = get_pos_y()
+    if can_harvest():
+        harvest()
+    # 判断"是不是黑格"：x 和 y 的奇偶性相同
+    if (<span class="blank">__________</span>):
+        plant(<span class="blank">__________</span>)
+    else:
+        plant(<span class="blank">__________</span>)
+    move(East)
+    if get_pos_x() == 0:
+        move(North)</pre>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>智能浇水 + 自动补货</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        当 <code>get_water() &lt; 0.75</code> 且 <code>num_items(Items.Water) &gt; 0</code> 时浇水。当胡萝卜库存低于 200 才种胡萝卜。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 and</span>
+        <span class="order-must-chip">必须用 &lt; / &gt; 比较</span>
+        <span class="order-must-chip">用到 not</span>
+      </div>
+      <p class="tip">浇水后生长速度 5 倍，是这一关效率的关键。注意：在田里翻土用 <code>till()</code>，种胡萝卜前要先把草变成 <code>Grounds.Soil</code>。</p>
+    </div>
+
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>树和树挤在一起，长不大</b> → 棋盘格条件错了。<code>x % 2 == 0 and y % 2 == 0</code> 是黑格，<code>x % 2 == 1 and y % 2 == 1</code> 也是黑格——这两种情况都得种树。</p>
+        <p><b>胡萝卜种下去直接死了</b> → 没翻土，胡萝卜需要 <code>Grounds.Soil</code>，不能直接种在草地上。</p>
+        <p><b>游戏报错 <code>NameError: Water</code></b> → 新版本里可能没有 <code>Items.Water</code>，或者名字变了，去游戏内文档查。</p>
+        <p><b>if 永远为真 / 永远为假</b> → 拿浮点数和整数比。比如 <code>get_water() &lt; 75</code> 永远为真（因为 0.0~1.0 永远小于 75），要写 <code>0.75</code>。</p>
+      </div>
+    </details>
+
+    <h2>🚪 自查门</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 5 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s2_k1"> 我能在 10 秒内说出 <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>//</code> <code>**</code> 各自的作用</label></li>
+        <li><label><input type="checkbox" data-key="farm_s2_k2"> 我能区分 <code>=</code>（赋值）和 <code>==</code>（比较）</label></li>
+        <li><label><input type="checkbox" data-key="farm_s2_k3"> 我能用 <code>and</code> / <code>or</code> / <code>not</code> 写出至少 3 个组合条件</label></li>
+        <li><label><input type="checkbox" data-key="farm_s2_k4"> 我能默写"算术 &gt; 比较 &gt; 逻辑"的优先级顺序</label></li>
+        <li><label><input type="checkbox" data-key="farm_s2_k5"> 我能说清 <code>get_water()</code> 为什么是 0.75 而不是 75</label></li>
+      </ul>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-1.html" class="prev"><span class="arrow">←</span><span class="text">S1 让无人机活着</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="stage-3.html" class="next"><span class="text">S3 把数据存起来</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    卡住不是失败，是信号 · 拿不准的运算符一律加括号 · API 名字以游戏内文档为准<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

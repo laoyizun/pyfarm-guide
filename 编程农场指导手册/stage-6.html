@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S6 迷宫和恐龙帽 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S6</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S6</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 6 阶段 · 走进迷宫和恐龙帽</div>
+      <h1 class="ch-h">方向列表 / 取模转向 / can_move / 坐标解包</h1>
+      <p class="ch-d">到这里没有固定路线了。学生必须学会"用列表表示方向 + 取模转向 + 探墙 + 走到目标坐标"——前五个阶段的语法在这里第一次合体。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="6" data-total="5">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 5 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 这一关解锁什么</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>奇怪物质（Weird_Substance）</strong>——靠给植物施肥 + 收获时随机获得。</li>
+        <li>解锁 <strong>迷宫升级（Mazes）</strong>——站在灌木上 <code>use_item(Items.Weird_Substance, n)</code> 生成 n×n 迷宫。</li>
+        <li>对 <code>Entities.Treasure</code> 用 <code>harvest()</code> 拿金币，<strong>收别处会让迷宫消失</strong>。</li>
+        <li>解锁 <strong>恐龙帽（Dinosaur_Hat）</strong>——戴上后吃苹果长尾巴，摘帽才换成骨头。骨头数 = n²。</li>
+      </ul>
+    </div>
+
+    <h2>📖 知识卡 · 5 张</h2>
+
+    <h3>① 方向也能放进列表</h3>
+    <p>把四个方向装进一个列表，用下标表示"朝向"：</p>
+    <div class="code-wrap"><pre><code>dirs = [North, East, South, West]   # 顺序：北、东、南、西
+# dirs[0] 是北，dirs[1] 是东，dirs[2] 是南，dirs[3] 是西</code></pre></div>
+
+    <h3>② 取模转向：左转右转不会越界</h3>
+    <p>把"朝向"当成下标，加 1 是右转，减 1 是左转。再用 <code>% 4</code> 防止下标越界。</p>
+    <div class="code-wrap"><pre><code>facing = 0            # 朝北（dirs[0]）
+facing = (facing + 1) % 4     # 右转一次 → 朝东
+facing = (facing - 1) % 4     # 左转一次 → 又回北
+# % 4 保证下标永远在 0~3 之间</code></pre></div>
+
+    <h3>③ can_move：探墙但不真正走</h3>
+    <p><code>can_move(方向)</code> 返回 True/False，<strong>失败的 <code>move()</code> 也要花 1 tick</strong>——但 <code>can_move</code> 不花，所以常用 <code>can_move</code> 先试。</p>
+    <div class="code-wrap"><pre><code>if can_move(East):
+    move(East)        # 走得通才走
+else:
+    pass              # 走不通换别的</code></pre></div>
+
+    <h3>④ 坐标解包：measure() 返回两个值</h3>
+    <p>在迷宫里站在宝箱上调用 <code>measure()</code>，返回<strong>一对坐标</strong>——下一颗苹果在哪。</p>
+    <div class="code-wrap"><pre><code>tx, ty = measure()    # 解包：返回 (tx, ty) 一次拆成两个变量
+print(tx, ty)</code></pre></div>
+
+    <h3>⑤ 终止条件：走到哪算哪</h3>
+    <p>没有固定循环次数——用 <code>while</code> + 条件判断"什么时候该停"。</p>
+    <div class="code-wrap"><pre><code>while get_entity_type() != Entities.Treasure:
+    # 还没到宝箱，继续走
+    pass
+harvest()              # 到了！收宝箱</code></pre></div>
+
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>左手扶墙：解迷宫</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        生成一个新迷宫，无脑"左手扶墙"走到宝箱。具体规则：能左转就左转，否则直走，都不行就右转。站上宝箱时 <code>harvest()</code>。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">用方向列表</span>
+        <span class="order-must-chip">用 % 4 防越界</span>
+        <span class="order-must-chip">用 can_move 探墙</span>
+        <span class="order-must-chip">while 条件 + 终止判断</span>
+      </div>
+      <p class="tip">这是 1.0+ 版的"入门解法"——复用迷宫会出环，新迷宫无环。先生成新迷宫再走。</p>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>恐龙帽：吃苹果追尾巴</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        戴恐龙帽，循环：站在苹果上 <code>measure()</code> 拿到下一个苹果坐标 → 走过去 → 撞到自己尾巴就停。最后摘帽，骨头数 = n²。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">change_hat()</span>
+        <span class="order-must-chip">坐标解包</span>
+        <span class="order-must-chip">用 quick_print</span>
+        <span class="order-must-chip">判断 None 终止</span>
+      </div>
+      <p class="tip">⚠️ <strong>重要</strong>：<code>measure()</code> 必须在<strong>还站在苹果上时</strong>调用。吃掉苹果后 <code>measure()</code> 就不是这个意思了。<br>先用 <code>set_world_size(5)</code> 缩小农场练习，别上来就 32×32。</p>
+    </div>
+
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>迷宫跑一圈回到原点</b> → 复用了同一个迷宫（有环）。每次重新生成新迷宫，<code>harvest()</code> 旧的再种新的。</p>
+        <p><b>IndexError 越界</b> → <code>facing - 1</code> 在 facing=0 时是 -1，忘了 <code>% 4</code>。</p>
+        <p><b>measure() 返回 None</b> → 没苹果了，这是<strong>正常的结束条件</strong>，要写 <code>if nxt == None: break</code>。</p>
+        <p><b>恐龙帽戴不上</b> → 仙人掌数量不够（需要先囤一定数量）。</p>
+        <p><b>循环里 print 卡住</b> → 改用 <code>quick_print()</code>，<code>print</code> 每次花 1 秒。</p>
+      </div>
+    </details>
+
+    <h2>🚪 自查门</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 5 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s6_k1"> 我能把四个方向装进列表并用下标访问</label></li>
+        <li><label><input type="checkbox" data-key="farm_s6_k2"> 我能用 <code>(facing + 1) % 4</code> 实现不会越界的转向</label></li>
+        <li><label><input type="checkbox" data-key="farm_s6_k3"> 我能解释 <code>can_move</code> 和失败的 <code>move</code> 各花多少 tick</label></li>
+        <li><label><input type="checkbox" data-key="farm_s6_k4"> 我能写出 <code>tx, ty = measure()</code> 的解包</label></li>
+        <li><label><input type="checkbox" data-key="farm_s6_k5"> 我能给一个"探索"循环写出明确的终止条件</label></li>
+      </ul>
+    </div>
+
+    <div class="good">
+      <p><b>🎓 6 个阶段通关！</b>到这里你用到的语法已经覆盖 py101 站 L1–L8 全部知识：变量 / 类型 / 运算符 / 列表 / 函数 / 嵌套循环 / 取模 / 解包 / 状态机思想。<br>L9 的 try-except 在游戏里几乎用不上（游戏端只要写防御式 if 即可），到 Thonny 端去练。</p>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">彩蛋 · 多无人机</span>S6 之外还有个彩蛋：<code>spawn_drone(函数名)</code> 可以派生副无人机，并行刷金币。教学建议当 S6 之后的"兴趣任务"，不强制。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-5.html" class="prev"><span class="arrow">←</span><span class="text">S5 排序算法</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="index.html" class="next"><span class="text">回路线首页</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    探索与状态机是这一关的钥匙 · 迷宫不急，先在小田里把恐龙帽跑通<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

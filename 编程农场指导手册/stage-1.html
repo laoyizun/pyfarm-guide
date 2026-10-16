@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S1 让无人机活着 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S1</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S1</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 1 阶段 · 让无人机活着</div>
+      <h1 class="ch-h">while / if / 缩进 / 变量存坐标</h1>
+      <p class="ch-d">把无人机从"按一下动一下"变成"放那让它自己干"。这是后面所有阶段的起点——能跑通这一关再往下走。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="1" data-total="4">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <!-- 1. 游戏进度 -->
+    <h2>🎮 游戏进度 · 课前准备</h2>
+    <div class="stage-card">
+      <h4>📌 课前先把游戏跑起来</h4>
+      <ul>
+        <li>在 Steam 上下载 <strong>The Farmer Was Replaced</strong>，打开进入默认农场（3×3）。</li>
+        <li>左侧是代码编辑器，下方有「执行」按钮，右侧是无人机干活的小窗口。</li>
+        <li>什么都不种，先点执行——能看到无人机原地不动（因为没写动作）。</li>
+        <li>记住三个最常用的 API：<code>harvest()</code>（收割）、<code>move(方向)</code>（移动）、<code>can_harvest()</code>（能不能收）。</li>
+      </ul>
+    </div>
+
+    <div class="api-remind">
+      <span class="api-remind-label">API 名字以游戏内文档为准</span>
+      不同版本的 API 名字有差异。比如新版本里 <code>trade()</code> 已被移除，浇水改成 <code>use_item(Items.Water)</code>；<code>Grounds.Turf</code> 改成 <code>Grounds.Grassland</code>。如果你照老脚本跑报错，先看游戏里能不能点出这个 API。
+    </div>
+
+    <!-- 2. 知识卡 -->
+    <h2>📖 知识卡 · 4 张</h2>
+
+    <h3>① while True：让无人机不停干活</h3>
+    <p>这一关只需要两个动作：<strong>循环</strong>和<strong>判断</strong>。<code>while True</code> 的意思是"永远循环下去"，是自动化脚本的标准开头。</p>
+    <div class="code-wrap"><pre><code>while True:
+    # 下面这些动作每轮都执行一遍
+    if can_harvest():
+        harvest()
+    move(East)</code></pre></div>
+    <p>⚠️ <strong>注意缩进</strong>：第二行前面的空格不能漏，Python 是用缩进判断"哪些代码属于循环内"的。</p>
+
+    <h3>② if / else：让程序会"思考"</h3>
+    <p>判断会返回 <code>True</code> 或 <code>False</code>，如果是 True 就跑 if 下面的代码，否则跳过（或跑 else 下面的）。</p>
+    <div class="code-wrap"><pre><code>if can_harvest():       # 能收吗？
+    harvest()            # 能就收
+else:
+    pass                 # 不能就算了（pass 是"什么都不做"）</code></pre></div>
+
+    <h3>③ 变量存坐标：get_pos_x() / get_pos_y()</h3>
+    <p>想知道无人机站在哪一行哪一列，用 <code>get_pos_x()</code>（列号，0 开始）和 <code>get_pos_y()</code>（行号）。返回值是整数。</p>
+    <div class="code-wrap"><pre><code>x = get_pos_x()
+y = get_pos_y()
+# x 和 y 就是变量，里面存着当前位置的数字</code></pre></div>
+
+    <h3>④ 走遍全田：到行末就换行</h3>
+    <p>田是一格一格的，无人机走到最右边怎么办？答案是判断 <code>get_pos_x() == 0</code> 时向下走一格（注意：游戏里走到行末会自动绕回 0）。</p>
+    <div class="code-wrap"><pre><code>move(East)
+if get_pos_x() == 0:        # 走到行末自动绕回
+    move(North)              # 往下一行走</code></pre></div>
+
+    <!-- 3. 订单 -->
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>最简版自动收获</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        让无人机在 3×3 田里不停地扫，能收就收。运行 2 分钟不报错、产量稳定上升就算交付。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 while True</span>
+        <span class="order-must-chip">必须用 if</span>
+        <span class="order-must-chip">必须用 move(East)</span>
+      </div>
+      <div class="fig">
+        <div class="fig-bar">
+          <span class="fig-tag">种植模板图</span>
+          <span class="fig-name">订单 1 · 全田扫描收获</span>
+          <span class="fig-hint">images/order-1-scan.png</span>
+        </div>
+        <div class="fig-body">
+          <div class="fig-empty">
+            <span class="ico">🖼️</span>
+            <span>放一张 3×3 农场的俯视图</span>
+            <span class="path">images/order-1-scan.png</span>
+            <span class="sub">建议尺寸 720×540，无图时留空</span>
+          </div>
+        </div>
+      </div>
+      <details class="fold">
+        <summary>起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre>while True:
+    if <span class="blank">__________</span>:
+        <span class="blank">__________</span>
+    move(<span class="blank">__________</span>)
+    if get_pos_x() == 0:
+        <span class="blank">__________</span></pre>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>打印"无人机体检报告"</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        把当前坐标和已经收获过的数量用 <code>quick_print()</code> 打印出来。打印时要有"位置"和"次数"两个字段。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">用变量</span>
+        <span class="order-must-chip">用 quick_print</span>
+        <span class="order-must-chip">至少 2 个变量</span>
+      </div>
+      <div class="fig">
+        <div class="fig-bar">
+          <span class="fig-tag">报告样例</span>
+          <span class="fig-name">订单 2 · 无人机体检报告样例</span>
+          <span class="fig-hint">images/order-1-report.png</span>
+        </div>
+        <div class="fig-body">
+          <div class="fig-empty">
+            <span class="ico">🖼️</span>
+            <span>贴一张控制台打印样例的截图</span>
+            <span class="path">images/order-1-report.png</span>
+            <span class="sub">建议尺寸 720×400，无图时留空</span>
+          </div>
+        </div>
+        <div class="fig-cap">报告里至少出现"位置"和"次数"两个字段</div>
+      </div>
+      <p class="tip">用 <code>num_items(Items.Hay)</code> 可以拿到干草库存，库存是 int（整数）。打印别用 <code>print()</code>——它每打印一次要花 1 秒，会卡死循环。用 <code>quick_print()</code>。</p>
+    </div>
+
+    <!-- 4. 常见报错 -->
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>IndentationError: unexpected indent</b> → 缩进对不齐。第 2 行前面必须比第 1 行多 4 个空格。复制代码后最容易出这个错。</p>
+        <p><b>SyntaxError: expected ':'</b> → <code>if</code> 或 <code>while</code> 后面忘了冒号。</p>
+        <p><b>无人机在原地抖动</b> → <code>can_harvest()</code> 写成了 <code>can_harvest</code>（漏了括号）。Python 看到没括号的"函数名"会当变量，不会执行。</p>
+        <p><b>只走一格就停</b> → <code>while</code> 没写 <code>True</code>，或者根本没写 <code>while</code>。</p>
+      </div>
+    </details>
+
+    <!-- 5. 自查门 -->
+    <h2>🚪 自查门 · 打完勾才能进 S2</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 4 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s1_k1"> 我能默写 <code>while True:</code> 并解释它"永远循环"的原因</label></li>
+        <li><label><input type="checkbox" data-key="farm_s1_k2"> 我能说清 <code>if</code> / <code>else</code> / <code>pass</code> 各自的作用</label></li>
+        <li><label><input type="checkbox" data-key="farm_s1_k3"> 我知道 <code>get_pos_x()</code> 返回的是整数，并且能说出田里 (0,0) 是哪一格</label></li>
+        <li><label><input type="checkbox" data-key="farm_s1_k4"> 我能让无人机在 3×3 田里完整走一遍（不卡墙、不漏格）</label></li>
+      </ul>
+    </div>
+
+    <div class="good">
+      <p><b>🎉 闯关成功！</b>能勾完上面 4 个 + 跑通 2 个订单，再进 S2。S1 没勾完就往下走，后面会越学越糊涂。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="index.html" class="prev"><span class="arrow">←</span><span class="text">路线首页</span></a>
+    <a href="stage-2.html" class="next"><span class="text">S2 算一算再种田</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    卡住不是失败，是信号 · 去游戏内文档查 API · 不要直接照抄老脚本<br>
+    这份路线由老师整理 · 配套《NCT Python 一级》学生自学站使用<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>编程农场 · 学生自学路线</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <header class="hero">
+    <div class="eyebrow">编程农场 · STUDENT SELF-STUDY ROADMAP</div>
+    <h1>用《编程农场》练 Python 语法</h1>
+    <p class="lede">学完 L1–L9 但只用得上循环和条件？这份路线带你从「会 if / while」一步步练到运算符、列表、函数、排序、迷宫寻路。答案都在学生版的折叠里——先自己想，再展开。</p>
+
+    <div class="howto">
+      <h3>📌 这份路线怎么用</h3>
+      <ol>
+        <li>按 <strong>S1 → S6</strong> 顺序学：每一关的"农场订单"会逼你用上该阶段的语法；不用就过不去。</li>
+        <li>每个阶段页底有 <strong>自查门</strong>——打勾要老实，打完才能进下一关。</li>
+        <li>知识点的「已会」勾和订单的自查勾都<strong>存在本机浏览器</strong>，换设备不保留。</li>
+        <li>API 名字（<code>Entities.</code> / <code>Items.</code> / <code>Grounds.</code>）<strong>以游戏内文档为准</strong>，不同版本有差异。</li>
+      </ol>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- 顶部进度条 -->
+    <div class="prog-overview">
+      <div class="prog-overview-track">
+        <div class="prog-overview-fill" style="width: 0%"></div>
+      </div>
+      <div class="prog-overview-text">
+        已学 <span class="num">0</span> / <span class="total">0</span> 个知识点
+      </div>
+    </div>
+
+    <!-- 阶段卡列表 -->
+    <div class="toc-block">
+      <div class="toc-title">📚 6 个阶段 · 按顺序打怪升级</div>
+      <div class="toc-list">
+
+        <a href="stage-1.html" class="toc-item" data-stage-card="1" data-total="4">
+          <div class="toc-num">S1</div>
+          <div class="toc-text">
+            <div class="toc-h">让无人机活着</div>
+            <div class="toc-d">while / if / 缩进 / 变量存坐标</div>
+            <div class="toc-meta">🎮 干草、灌木 · 🐍 while / if</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">4 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+        <a href="stage-2.html" class="toc-item" data-stage-card="2" data-total="5">
+          <div class="toc-num">S2</div>
+          <div class="toc-text">
+            <div class="toc-h">算一算再种田</div>
+            <div class="toc-d">算术 / 比较 / 逻辑 / 取余 / 优先级</div>
+            <div class="toc-meta">🎮 树（棋盘格）、胡萝卜、浇水 · 🐍 % / and / or / not</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">5 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+        <a href="stage-3.html" class="toc-item" data-stage-card="3" data-total="4">
+          <div class="toc-num">S3</div>
+          <div class="toc-text">
+            <div class="toc-h">把数据存起来</div>
+            <div class="toc-d">列表 / 索引 / append / len / 遍历</div>
+            <div class="toc-meta">🎮 轮作田、向日葵 · 🐍 [] / for x in list</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">4 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+        <a href="stage-4.html" class="toc-item" data-stage-card="4" data-total="4">
+          <div class="toc-num">S4</div>
+          <div class="toc-text">
+            <div class="toc-h">拆出可复用的函数</div>
+            <div class="toc-d">def / 参数 / return / 复用</div>
+            <div class="toc-meta">🎮 巨型南瓜 · 🐍 def / 平行列表</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">4 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+        <a href="stage-5.html" class="toc-item" data-stage-card="5" data-total="4">
+          <div class="toc-num">S5</div>
+          <div class="toc-text">
+            <div class="toc-h">第一次爬算法坡：排序</div>
+            <div class="toc-d">嵌套 for / 状态标记 / swap / 方向</div>
+            <div class="toc-meta">🎮 仙人掌 · 🐍 冒泡排序</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">4 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+        <a href="stage-6.html" class="toc-item" data-stage-card="6" data-total="5">
+          <div class="toc-num">S6</div>
+          <div class="toc-text">
+            <div class="toc-h">走进迷宫和恐龙帽</div>
+            <div class="toc-d">方向列表 / 取模 / can_move / 坐标解包</div>
+            <div class="toc-meta">🎮 迷宫宝藏、恐龙帽 · 🐍 状态机思想</div>
+            <span class="toc-prog" style="font-size:12px;color:var(--ink-mute);">5 个知识点</span>
+          </div>
+          <span class="toc-arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- 学习节奏 -->
+    <div class="toc-block">
+      <div class="toc-title">⏱️ 学习节奏</div>
+      <ul style="padding-left: 22px; line-height: 1.9;">
+        <li><strong>家里自练</strong>：S1–S4 跟着订单做，2 小时内能通关。代码卡住先读「常见报错」。</li>
+        <li><strong>课上集中练</strong>：S5、S6 留 2–3 课时，难度不是线性的，是台阶式。</li>
+        <li><strong>换需求测试</strong>：把"3 种作物"改成"5 种"、把"5×5 迷宫"改成"7×7"，30 秒内改完才算真会。</li>
+        <li><strong>口述题</strong>：把代码里的列表/取余删掉，换成 if——会变长还是变短？为什么？</li>
+      </ul>
+    </div>
+
+    <!-- 配色对应的游戏机制一览 -->
+    <div class="toc-block">
+      <div class="toc-title">🗺️ 阶段 vs 游戏进度</div>
+      <table style="width:100%; border-collapse: collapse; font-size: 14px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden;">
+        <thead>
+          <tr style="background: var(--paper);">
+            <th style="text-align:left; padding:10px 12px; border-bottom: 2px solid var(--orange);">阶段</th>
+            <th style="text-align:left; padding:10px 12px; border-bottom: 2px solid var(--orange);">游戏内解锁顺序</th>
+            <th style="text-align:left; padding:10px 12px; border-bottom: 2px solid var(--orange);">主要新机制</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S1</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">干草、灌木</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">扫全田自动收获</td></tr>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S2</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">树（棋盘格）、胡萝卜、浇水</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">翻土、整列轮作、阈值判断</td></tr>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S3</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">南瓜、向日葵</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">聚合、记录最大花瓣数</td></tr>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S4</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">巨型南瓜</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">记账式补种</td></tr>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S5</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">仙人掌</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">二维排序，n² 收益</td></tr>
+          <tr><td style="padding:10px 12px; border-bottom:1px solid var(--line);">S6</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">迷宫、恐龙帽</td><td style="padding:10px 12px; border-bottom:1px solid var(--line);">探索与状态机</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      这份路线由老师整理 · 配套《NCT Python 一级》学生自学站使用<br>
+      由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）<br>
+      卡住不是失败，是信号 · 没有解不出来的题，只有还没碰过的解法
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "daily-learning",
+  "version": "1.0.0",
+  "description": "个人补课笔记系统",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init": "node init-db.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "better-sqlite3": "^11.0.0"
+  }
+}

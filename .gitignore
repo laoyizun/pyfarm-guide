@@ -1,0 +1,24 @@
+# ============================================
+# Daily Learning · 仓库根 .gitignore
+# ============================================
+
+# 操作系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js（笔记站点本地依赖）
+笔记/node_modules/
+笔记/data/learning.db
+笔记/data/learning.db-journal
+
+# 编程农场指导手册 · 本地预览页（不上 git page）
+编程农场指导手册/preview-figures.html
+
+# 临时 / 调试文件
+*.log
+*.tmp
+.tmp/

@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 460" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans CJK SC', sans-serif">
+  <rect width="720" height="460" fill="#F9FAFB"/>
+
+  <!-- 标题 -->
+  <text x="360" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#333">S6 订单 1 · 左手扶墙解迷宫（5×5 示例）</text>
+  <text x="360" y="54" text-anchor="middle" font-size="12" fill="#64748B">起点左下角（红圈）→ 沿墙走，红线是无人机实际走过的路径</text>
+
+  <!-- 迷宫：5×5，单元格 70×70，左上 (90, 90) -->
+  <g transform="translate(90, 90)">
+    <!-- 草地底 -->
+    <rect width="350" height="350" fill="#3a6b3a" rx="4"/>
+    <!-- 通道底色（浅色表示可走，深色表示墙） -->
+    <g>
+      <!-- 行 0 -->
+      <rect x="0"   y="0"   width="70" height="70" fill="#7a9c4a"/>
+      <rect x="70"  y="0"   width="70" height="70" fill="#7a9c4a"/>
+      <rect x="140" y="0"   width="70" height="70" fill="#3a6b3a"/>
+      <rect x="210" y="0"   width="70" height="70" fill="#7a9c4a"/>
+      <rect x="280" y="0"   width="70" height="70" fill="#7a9c4a"/>
+      <!-- 行 1 -->
+      <rect x="0"   y="70"  width="70" height="70" fill="#3a6b3a"/>
+      <rect x="70"  y="70"  width="70" height="70" fill="#7a9c4a"/>
+      <rect x="140" y="70"  width="70" height="70" fill="#3a6b3a"/>
+      <rect x="210" y="70"  width="70" height="70" fill="#7a9c4a"/>
+      <rect x="280" y="70"  width="70" height="70" fill="#7a9c4a"/>
+      <!-- 行 2 -->
+      <rect x="0"   y="140" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="70"  y="140" width="70" height="70" fill="#3a6b3a"/>
+      <rect x="140" y="140" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="210" y="140" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="280" y="140" width="70" height="70" fill="#3a6b3a"/>
+      <!-- 行 3 -->
+      <rect x="0"   y="210" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="70"  y="210" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="140" y="210" width="70" height="70" fill="#3a6b3a"/>
+      <rect x="210" y="210" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="280" y="210" width="70" height="70" fill="#3a6b3a"/>
+      <!-- 行 4 -->
+      <rect x="0"   y="280" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="70"  y="280" width="70" height="70" fill="#3a6b3a"/>
+      <rect x="140" y="280" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="210" y="280" width="70" height="70" fill="#7a9c4a"/>
+      <rect x="280" y="280" width="70" height="70" fill="#7a9c4a"/>
+    </g>
+
+    <!-- 网格线 -->
+    <g stroke="#1f1f1f" stroke-width="0.5" fill="none" opacity="0.4">
+      <line x1="70"  y1="0" x2="70"  y2="350"/>
+      <line x1="140" y1="0" x2="140" y2="350"/>
+      <line x1="210" y1="0" x2="210" y2="350"/>
+      <line x1="280" y1="0" x2="280" y2="350"/>
+      <line x1="0" y1="70"  x2="350" y2="70"/>
+      <line x1="0" y1="140" x2="350" y2="140"/>
+      <line x1="0" y1="210" x2="350" y2="210"/>
+      <line x1="0" y1="280" x2="350" y2="280"/>
+      <rect x="0" y="0" width="350" height="350" stroke-width="1.5" opacity="0.7"/>
+    </g>
+
+    <!-- 走过的路径（红线，虚线 + 圆点表示每格） -->
+    <!-- 起点 (0,4) → (1,4) → (1,3) → (1,2) [墙] 改为 (0,2) → (0,1) [墙] → ... 用一个粗略但能讲清扶墙的路径 -->
+    <g stroke="#e74c3c" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="35,315 105,315 105,245 105,175 35,175 35,105 105,105 105,35 245,35 245,105 175,105"/>
+    </g>
+
+    <!-- 起点 -->
+    <circle cx="35" cy="315" r="13" fill="none" stroke="#e74c3c" stroke-width="2.5"/>
+    <text x="35" y="320" text-anchor="middle" font-size="14" font-weight="700" fill="#e74c3c">起</text>
+
+    <!-- 终点（宝箱） -->
+    <g transform="translate(175, 105)">
+      <circle cx="0" cy="0" r="16" fill="#ffd700" stroke="#b8860b" stroke-width="2"/>
+      <text x="0" y="5" text-anchor="middle" font-size="14">📦</text>
+    </g>
+
+    <!-- 标注："左手贴墙"的方向箭头 -->
+    <g fill="#e74c3c" opacity="0.8">
+      <polygon points="100,290 100,310 90,300"/>
+      <polygon points="100,200 100,180 110,190"/>
+    </g>
+    <text x="55" y="206" font-size="10" font-weight="700" fill="#e74c3c">左手</text>
+    <text x="55" y="220" font-size="10" font-weight="700" fill="#e74c3c">贴墙</text>
+
+    <!-- 坐标 -->
+    <g font-size="9" fill="#fff" font-family="ui-monospace, Menlo, monospace" opacity="0.7">
+      <text x="8" y="345">(0,4)</text>
+      <text x="338" y="345">(4,4)</text>
+      <text x="8" y="14">(0,0)</text>
+    </g>
+  </g>
+
+  <!-- 右侧：左手扶墙三规则 -->
+  <g transform="translate(470, 90)">
+    <rect width="220" height="350" fill="#fff" stroke="#EDEDED" rx="10"/>
+    <text x="20" y="30" font-size="14" font-weight="700" fill="#F3A21C">🟧 左手扶墙三规则</text>
+
+    <g font-size="11" fill="#333">
+      <text x="20" y="62" font-weight="600">① 能左转就左转</text>
+      <text x="20" y="78" font-size="10" fill="#64748B">facing = (facing - 1) % 4</text>
+
+      <text x="20" y="106" font-weight="600">② 否则直走</text>
+      <text x="20" y="122" font-size="10" fill="#64748B">can_move(dirs[facing])</text>
+
+      <text x="20" y="150" font-weight="600">③ 否则右转</text>
+      <text x="20" y="166" font-size="10" fill="#64748B">facing = (facing + 1) % 4</text>
+    </g>
+
+    <line x1="20" y1="190" x2="200" y2="190" stroke="#EDEDED"/>
+
+    <text x="20" y="216" font-size="14" font-weight="700" fill="#F3A21C">🟧 为什么能走到宝箱？</text>
+    <text x="20" y="240" font-size="11" fill="#333">新迷宫无环（不会回到</text>
+    <text x="20" y="256" font-size="11" fill="#333">原点）——只要一直扶</text>
+    <text x="20" y="272" font-size="11" fill="#333">墙，必到终点。</text>
+
+    <line x1="20" y1="290" x2="200" y2="290" stroke="#EDEDED"/>
+
+    <text x="20" y="314" font-size="12" font-weight="600" fill="#b85050">⚠️ 复用迷宫有环，会死循环</text>
+    <text x="20" y="332" font-size="10" fill="#64748B">每次必须重新生成新迷宫</text>
+  </g>
+</svg>
