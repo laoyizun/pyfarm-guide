@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 5 章 · 从浏览器到本地服务 · 学生手册</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ 顶部导航 ============ -->
+<header class="topbar">
+  <a class="brand" href="index.html">用 AI Agent 学学习</a>
+  <a class="back" href="index.html">← 学生手册</a>
+</header>
+
+<main class="container">
+
+  <!-- ============ 章节头部 ============ -->
+  <section class="ch-head">
+    <div class="ch-num">5</div>
+    <div class="ch-head-body">
+      <h1 class="ch-title">从浏览器到本地服务</h1>
+      <p class="ch-desc">L4 把复习记录存在浏览器里。这一章让你理解「为什么数据应该住在数据库里」，以及怎么让 AI 帮你搭起来。</p>
+    </div>
+  </section>
+
+  <article class="ch-body">
+
+    <!-- ============ 场景问题 ============ -->
+    <h2>一个真实的问题</h2>
+    <p>你在 L4 复习卡片，标记「✓ 已掌握」。刷新页面，状态还在。</p>
+    <p>但是 ——</p>
+    <ul>
+      <li>你<strong>换个浏览器</strong>登录，状态没了</li>
+      <li>你<strong>换台电脑</strong>用，状态没了</li>
+      <li>你<strong>让 AI 帮你看</strong>「我上周复习过什么」，AI 说「我不知道」</li>
+    </ul>
+    <p>为什么会这样？因为 L4 的数据存在 <strong>浏览器的 localStorage</strong> 里 —— 浏览器关掉就锁在自己家，AI 进不去。</p>
+    <p>这一章要解决的就是：<strong>数据应该住在一个独立的地方</strong>。这个地方叫「数据库」。访问数据库的那个角色叫「服务」。</p>
+
+    <hr style="border:none;border-top:1px solid var(--line);margin:32px 0;">
+
+    <!-- ============ 工作流 4 步 ============ -->
+    <h2>📌 工作流（4 步）</h2>
+
+    <!-- 步骤 1 -->
+    <div class="big-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3 class="step-title">场景 · 复习数据为什么留不住</h3>
+        <p>三个不够 —— 不只是「理论上的问题」，是你 L4 上完后一定会撞到的具体场景。</p>
+        <details class="fold">
+          <summary>📖 三个真实场景 · 你会撞到哪个</summary>
+          <div class="fold-body">
+            <p><strong>场景 1：换电脑 / 换浏览器 = 数据归零</strong></p>
+            <p>L4 的数据存在 localStorage 里 —— 这是浏览器给每个网站分配的「小抽屉」。换浏览器、换电脑、清理浏览器数据，抽屉就没了。</p>
+            <p><strong>场景 2：AI 进不去你的复习历史</strong></p>
+            <p>你想让 AI 帮你分析「我哪类卡片总忘记」，AI 看不到你 localStorage 里的数据。AI 只能<strong>读文件</strong>，读不到浏览器的抽屉。</p>
+            <p><strong>场景 3：一学期下来数据爆掉</strong></p>
+            <p>localStorage 限额大约 5MB。听起来很大，但你加上「每次复习的时间戳」「每次的标记」「你自己的批注」，一学期下来可能到 4MB。再往下就报错。</p>
+            <p>三个场景共同指向一个解法：<strong>数据搬到独立的地方</strong>。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 步骤 2 -->
+    <div class="big-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3 class="step-title">概念 · 服务是什么</h3>
+        <p>服务 = 一个<strong>永远在跑的小店员</strong>。你走开它还在电脑里值班，浏览器给它发请求，它接得住。</p>
+        <details class="fold">
+          <summary>📖 服务是什么 · 怎么验证它在跑</summary>
+          <div class="fold-body">
+            <div class="diagram">
+              <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="浏览器通过服务访问数据库的三方关系图">
+                <!-- 左侧：浏览器 = 你（顾客） -->
+                <rect x="30" y="60" width="160" height="100" fill="#FFFFFF" stroke="#333333" stroke-width="1.5" rx="8"/>
+                <text x="110" y="92" font-size="14" fill="#333333" text-anchor="middle" font-weight="700">浏览器</text>
+                <text x="110" y="112" font-size="11" fill="#64748B" text-anchor="middle">= 你（顾客）</text>
+                <text x="110" y="130" font-size="10" fill="#64748B" text-anchor="middle">发请求</text>
+                <text x="110" y="146" font-size="10" fill="#64748B" text-anchor="middle">localhost:3000</text>
+
+                <!-- 中间：服务 = 小店员（永远在跑） -->
+                <rect x="280" y="50" width="160" height="120" fill="#F3A21C" opacity="0.10" stroke="#F3A21C" stroke-width="2" rx="8"/>
+                <text x="360" y="82" font-size="14" fill="#F3A21C" text-anchor="middle" font-weight="700">服务</text>
+                <text x="360" y="102" font-size="11" fill="#333333" text-anchor="middle">= 小店员</text>
+                <text x="360" y="122" font-size="10" fill="#64748B" text-anchor="middle">永远在跑</text>
+                <text x="360" y="138" font-size="10" fill="#64748B" text-anchor="middle">你走开它还在</text>
+                <text x="360" y="156" font-size="10" fill="#64748B" text-anchor="middle">关浏览器不关它</text>
+
+                <!-- 右侧：数据库 = 保险箱 -->
+                <rect x="530" y="60" width="160" height="100" fill="#FFFFFF" stroke="#333333" stroke-width="1.5" rx="8"/>
+                <text x="610" y="92" font-size="14" fill="#333333" text-anchor="middle" font-weight="700">数据库</text>
+                <text x="610" y="112" font-size="11" fill="#64748B" text-anchor="middle">= 保险箱</text>
+                <text x="610" y="130" font-size="10" fill="#64748B" text-anchor="middle">店员能打开</text>
+                <text x="610" y="146" font-size="10" fill="#64748B" text-anchor="middle">memory-cards.db</text>
+
+                <!-- 箭头：浏览器 → 服务 -->
+                <line x1="190" y1="110" x2="278" y2="110" stroke="#333333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                <text x="234" y="100" font-size="10" fill="#64748B" text-anchor="middle">请求</text>
+
+                <!-- 箭头：服务 → 数据库 -->
+                <line x1="440" y1="110" x2="528" y2="110" stroke="#333333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                <text x="484" y="100" font-size="10" fill="#64748B" text-anchor="middle">读 / 写</text>
+
+                <!-- 底部提示 -->
+                <text x="360" y="200" font-size="11" fill="#333333" text-anchor="middle">浏览器不能直接动保险箱 —— 必须让店员去开</text>
+
+                <defs>
+                  <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                    <polygon points="0 0, 8 4, 0 8" fill="#333333"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+            <p class="diagram-caption">数据不能浏览器直接改。必须经过中间这个"永远在跑"的服务。</p>
+            <p><strong>类比 · 永远在跑的小店员</strong></p>
+            <p>你可以这样想：</p>
+            <ul>
+              <li>浏览器 = 你（顾客）</li>
+              <li>服务 = 小店员（永远在店里）</li>
+              <li>数据库 = 保险箱（店员能打开）</li>
+              <li>你发请求 = 你对小店员说「把这条复习记录存保险箱」</li>
+              <li>店员存好 = 数据库里多了一条记录</li>
+            </ul>
+            <p><strong>服务的两个特征：</strong></p>
+            <ul>
+              <li><strong>有地址</strong> —— 通常是 <code>http://localhost:3000</code>，浏览器通过这个地址找到它</li>
+              <li><strong>永远在跑</strong> —— 你关掉浏览器它不关，除非电脑关机或你主动停止</li>
+            </ul>
+            <p><strong>怎么知道服务在跑？</strong></p>
+            <p>浏览器打开 <code>http://localhost:3000</code>，如果看到任何页面（哪怕是「服务运行中」一行字），说明服务在跑。看到「无法连接」说明服务没起。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 步骤 3 -->
+    <div class="big-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3 class="step-title">概念 · 数据库是什么</h3>
+        <p>数据库 = 一个<strong>比 localStorage 大得多的保险箱</strong>。可以存几万条记录，AI 也能读它。</p>
+        <details class="fold">
+          <summary>📖 数据库 vs localStorage · 关键区别</summary>
+          <div class="fold-body">
+            <p><strong>localStorage 的局限：</strong></p>
+            <ul>
+              <li>存 5MB 上限</li>
+              <li>只在浏览器里，换电脑就丢</li>
+              <li>AI 进不去</li>
+              <li>查询慢（要在所有数据里翻）</li>
+            </ul>
+            <p><strong>数据库的优势：</strong></p>
+            <ul>
+              <li>能存几 GB 甚至更多</li>
+              <li>是一个<strong>文件</strong>，可以拷到任何电脑</li>
+              <li>AI 能直接读（因为它是个文件）</li>
+              <li>查询快（按索引找）</li>
+            </ul>
+            <p><strong>数据库长什么样？</strong></p>
+            <p>对你来说，数据库就是一个文件 —— 比如 <code>memory-cards.db</code>。你不用关心里面怎么存，你只需要知道：</p>
+            <ul>
+              <li>它在硬盘上</li>
+              <li>服务能打开它</li>
+              <li>AI 能读它</li>
+              <li>它和 localStorage 的本质区别是「独立于浏览器」</li>
+            </ul>
+            <p><strong>你不需要懂 SQL</strong>。你只需要知道：让 AI 帮你写「存一条」「读一条」「统计一下」的请求就行。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 步骤 4 -->
+    <div class="big-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3 class="step-title">写 prompt · 让 AI 帮你搭起来</h3>
+        <p>整个升级过程不是你去敲命令、写代码，而是<strong>你写 prompt，AI 干脏活</strong>。但你得理解概念才能写出好的 prompt。</p>
+        <details class="fold">
+          <summary>📖 4.1 看一个 prompt 是什么样</summary>
+          <div class="fold-body">
+            <p>这是「让 AI 帮你检查 Node.js 是否安装」的一个 prompt 示例（仅展示，不要复制）：</p>
+            <div class="code-wrap">
+              <pre><code>你是我的电脑环境检查助手，不是通用聊天 AI。
+
+【角色】你懂 Node.js 安装和命令行
+【任务】帮我检查电脑是否安装了 Node.js
+【上下文】我是初中生，对命令行不熟，需要你一步步带我
+【输出要求】先告诉我检查思路，再告诉我具体敲哪条命令，最后把命令输出贴回来让我看</code></pre>
+              <button class="copy-btn">复制</button>
+            </div>
+            <p>这是「<strong>展示</strong>」，不是「<strong>模板</strong>」。看一遍就行，下一段拆解它的结构。</p>
+          </div>
+        </details>
+
+        <details class="fold">
+          <summary>📖 4.2 拆解 prompt · 四要素结构</summary>
+          <div class="fold-body">
+            <p>一个能用的 prompt 通常有四块。少一块 AI 就会跑偏。</p>
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>要素</th>
+                  <th>是什么</th>
+                  <th>示例里是哪一句</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><b>角色</b></td><td>告诉 AI 它是谁</td><td>「你是我的电脑环境检查助手，不是通用聊天 AI」</td></tr>
+                <tr><td><b>任务</b></td><td>要 AI 做什么</td><td>「帮我检查电脑是否安装了 Node.js」</td></tr>
+                <tr><td><b>上下文</b></td><td>你的背景 / 限制</td><td>「我是初中生，对命令行不熟，需要你一步步带我」</td></tr>
+                <tr><td><b>输出</b></td><td>AI 该怎么给结果</td><td>「先告诉我思路，再告诉我具体命令，最后贴回输出」</td></tr>
+              </tbody>
+            </table>
+            <p><strong>为什么四要素都要有？</strong></p>
+            <ul>
+              <li>少「角色」：AI 不知道自己该用什么口吻，可能给你讲一堆无关的</li>
+              <li>少「任务」：AI 不知道做什么，会泛泛而谈</li>
+              <li>少「上下文」：AI 默认你是工程师，给的命令你敲不动</li>
+              <li>少「输出」：AI 可能直接跑命令不告诉你，导致你看不到过程</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="fold">
+          <summary>📖 4.3 场景思考 · 你自己想写一个 prompt</summary>
+          <div class="fold-body">
+            <p>不需要你现在就写出来。但想一想这个场景：</p>
+            <div class="callout">
+              <p><strong>场景：</strong>你想让 AI 帮你启动一个本地服务，让浏览器能读写数据库。</p>
+              <p>你要发给 AI 的 prompt 里应该包含哪四块？每块大概写什么？</p>
+            </div>
+            <p>动手之前，先在脑子里过一遍：</p>
+            <ul>
+              <li><b>角色：</b>AI 是谁？「服务搭建助手」？「本地开发伙伴」？</li>
+              <li><b>任务：</b>要 AI 做什么？「帮我搭一个 Node 服务」？</li>
+              <li><b>上下文：</b>你的限制是什么？「我用 Node + SQLite」「我在 macOS」</li>
+              <li><b>输出：</b>AI 该给什么？「给我能跑的命令」「告诉我服务怎么验证在跑」</li>
+            </ul>
+            <p>下次真要搭的时候，按这个结构自己写一个 prompt —— 别复制，自己写。</p>
+          </div>
+        </details>
+
+        <details class="fold">
+          <summary>📖 4.4 验证 · 怎么知道 AI 做对了</summary>
+          <div class="fold-body">
+            <p>AI 执行完后，<strong>你</strong>要能验证它做对了。验证点：</p>
+            <ul>
+              <li><strong>服务在跑</strong> —— 浏览器打开 <code>http://localhost:3000</code> 看到页面</li>
+              <li><strong>数据库有内容</strong> —— 让 AI 给你看「数据库里有几条记录」</li>
+              <li><strong>浏览器能写</strong> —— L4 页面试着标一张卡为「✓」，让 AI 确认数据库里多了这条</li>
+              <li><strong>重启不丢</strong> —— 关掉服务再重启，数据还在</li>
+            </ul>
+            <p>任何一步不对，告诉 AI「这一步没成功」，让它排查。AI 会读日志 / 改命令 / 重新跑 —— <strong>这是你和 AI 协作的核心循环</strong>。</p>
+          </div>
+        </details>
+
+        <details class="fold">
+          <summary>📖 4.5 你要建的 3 张清单 · 字段定下来</summary>
+          <div class="fold-body">
+            <p>之前 L4 你做卡片时只有「问题 / 答案 / 章节」3 项，<strong>够用</strong>。但升级到数据库后，AI 要按固定结构写入数据 —— 字段必须一致，否则 AI 写不进去。</p>
+
+            <div class="callout" style="background:rgba(243,162,28,0.10);border-left:4px solid #F3A21C;padding:16px 20px;border-radius:8px;margin:16px 0;">
+              <p style="font-size:15px;font-weight:700;color:#F3A21C;margin:0 0 8px;">⚠️ L5 本地 SQLite 和 L6 云端 Supabase · 字段必须完全一致</p>
+              <p style="margin:6px 0;">下面是 L5 + L6 <strong>共用的字段定义</strong>。AI 在你本机建 SQLite 时，要按这个 schema 来建；L6 上云端时不会重建表，<strong>直接用同一份字段</strong>。</p>
+              <p style="margin:6px 0;font-size:13.5px;color:#64748B;">完整 schema 参考（你可以直接复制给 AI 让它检查建对了没）：</p>
+              <pre style="background:#FFFFFF;padding:10px 14px;border-radius:6px;font-size:12.5px;line-height:1.6;margin:6px 0 0;border:1px solid #EDEDED;overflow-x:auto;"><code>-- 第一张 students
+CREATE TABLE students (
+  id          BIGSERIAL,  -- 本地 SQLite 用 INTEGER PRIMARY KEY AUTOINCREMENT
+  name        TEXT        NOT NULL UNIQUE,
+  created_at  TIMESTAMPTZ DEFAULT now()  -- 本地用 CURRENT_TIMESTAMP
+);
+
+-- 第二张 cards
+CREATE TABLE cards (
+  id           BIGSERIAL,
+  student_name TEXT        NOT NULL,
+  subject      TEXT        NOT NULL,
+  question     TEXT        NOT NULL,
+  answer       TEXT        NOT NULL,
+  created_at   TIMESTAMPTZ DEFAULT now()
+);
+
+-- 第三张 reviews
+CREATE TABLE reviews (
+  id          BIGSERIAL,
+  card_id     BIGINT      NOT NULL,
+  mark        TEXT        CHECK (mark IN ('done','half','bad')),
+  reviewed_at TIMESTAMPTZ DEFAULT now()
+);</code></pre>
+              <p style="margin:8px 0 0;font-size:13px;color:#64748B;">⚠️ 注意：<code>BIGSERIAL</code> 是 Supabase 写法；SQLite 用 <code>INTEGER PRIMARY KEY AUTOINCREMENT</code>。<code>TIMESTAMPTZ</code> 是云端，本地用 <code>TEXT DEFAULT CURRENT_TIMESTAMP</code>。<strong>字段名必须一致，类型不同没关系</strong>。</p>
+            </div>
+
+            <p>下面是 3 张清单的<strong>字段定义</strong>（你和 AI 都会用到）：</p>
+
+            <div class="diagram">
+              <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="3 张数据库表的栈式包含关系图">
+                <!-- 第一张：students -->
+                <rect x="200" y="20" width="320" height="60" fill="#FFFFFF" stroke="#333333" stroke-width="2" rx="8"/>
+                <text x="360" y="46" font-size="14" fill="#333333" text-anchor="middle" font-weight="700">📋 第一张 · students（你）</text>
+                <text x="360" y="66" font-size="11" fill="#64748B" text-anchor="middle">name · created_at</text>
+
+                <!-- 第二张：cards -->
+                <rect x="160" y="120" width="400" height="60" fill="#FFFFFF" stroke="#333333" stroke-width="2" rx="8"/>
+                <text x="360" y="146" font-size="14" fill="#333333" text-anchor="middle" font-weight="700">📋 第二张 · cards（卡片）</text>
+                <text x="360" y="166" font-size="11" fill="#64748B" text-anchor="middle">student_name · subject · question · answer · created_at</text>
+
+                <!-- 第三张：reviews -->
+                <rect x="120" y="220" width="480" height="60" fill="#F3A21C" opacity="0.10" stroke="#F3A21C" stroke-width="2" rx="8"/>
+                <text x="360" y="246" font-size="14" fill="#F3A21C" text-anchor="middle" font-weight="700">📋 第三张 · reviews（复习）</text>
+                <text x="360" y="266" font-size="11" fill="#64748B" text-anchor="middle">card_id · mark (✓△✗) · reviewed_at</text>
+
+                <!-- 连接线 1：students → cards（左侧标签"属于谁"） -->
+                <line x1="280" y1="80" x2="280" y2="120" stroke="#333333" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <text x="210" y="106" font-size="10" fill="#64748B" text-anchor="middle">student_name</text>
+                <text x="210" y="118" font-size="9" fill="#64748B" text-anchor="middle">属于谁</text>
+
+                <!-- 连接线 2：cards → reviews（右侧标签"哪张卡"） -->
+                <line x1="460" y1="180" x2="460" y2="220" stroke="#F3A21C" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <text x="510" y="206" font-size="10" fill="#F3A21C" text-anchor="middle">card_id</text>
+                <text x="510" y="218" font-size="9" fill="#F3A21C" text-anchor="middle">哪张卡</text>
+
+                <!-- 底部提示 -->
+                <text x="360" y="304" font-size="11" fill="#333333" text-anchor="middle">上一张包含下一张：reviews 属于某张 card，card 属于某个 student</text>
+              </svg>
+            </div>
+            <p class="diagram-caption">3 张表是有"上下级"的：reviews 上面挂着 cards，cards 上面挂着 students。</p>
+
+            <h4>📋 第一张：谁是你（students）</h4>
+            <table class="compare-table">
+              <thead>
+                <tr><th>显示名</th><th>字段名</th><th>说明</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>名字</td><td><code>name</code></td><td>你的名字（你填）</td></tr>
+                <tr><td>加入时间</td><td><code>created_at</code></td><td>系统自动填</td></tr>
+              </tbody>
+            </table>
+
+            <h4>📋 第二张：你的卡片（cards）</h4>
+            <table class="compare-table">
+              <thead>
+                <tr><th>显示名</th><th>字段名</th><th>说明</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>属于谁</td><td><code>student_name</code></td><td>你的名字（和第一张关联）</td></tr>
+                <tr><td>学科</td><td><code>subject</code></td><td>数学 / 英语 / 物理……</td></tr>
+                <tr><td>问题</td><td><code>question</code></td><td>卡片的正面</td></tr>
+                <tr><td>答案</td><td><code>answer</code></td><td>卡片的反面</td></tr>
+                <tr><td>加卡时间</td><td><code>created_at</code></td><td>系统自动填</td></tr>
+              </tbody>
+            </table>
+
+            <h4>📋 第三张：你的复习（reviews）</h4>
+            <table class="compare-table">
+              <thead>
+                <tr><th>显示名</th><th>字段名</th><th>说明</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>哪张卡</td><td><code>card_id</code></td><td>第二张里的编号</td></tr>
+                <tr><td>标记</td><td><code>mark</code></td><td>✓ / △ / ✗</td></tr>
+                <tr><td>复习时间</td><td><code>reviewed_at</code></td><td>系统自动填</td></tr>
+              </tbody>
+            </table>
+
+            <details class="fold">
+              <summary>📖 发给 AI 的 prompt（让 AI 帮你建这 3 张清单）</summary>
+              <div class="fold-body">
+                <p>把下面这段话复制给 AI：</p>
+                <div class="code-wrap">
+                  <pre><code>请帮我在我的电脑上装一个本地数据库（SQLite），建以下 3 张清单。
+建完后告诉我是不是有 3 张清单 + 每张清单的字段是不是和下面一致。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+第一张：谁是你（students）
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 名字（name）：填你的名字
+- 加入时间（created_at）：系统自动填
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+第二张：你的卡片（cards）
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 属于谁（student_name）：填你的名字（和第一张关联）
+- 学科（subject）：填数学 / 英语等
+- 问题（question）：填卡片的正面
+- 答案（answer）：填卡片的反面
+- 加卡时间（created_at）：系统自动填
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+第三张：你的复习（reviews）
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 哪张卡（card_id）：填第二张里的编号
+- 标记（mark）：填 ✓ / △ / ✗
+- 复习时间（reviewed_at）：系统自动填</code></pre>
+                  <button class="copy-btn">复制</button>
+                </div>
+                <p><strong>注意：</strong>这是「<strong>展示</strong>」，不是「<strong>模板</strong>」。下次真的要让 AI 搭数据库时，自己写 —— 按 4.2 拆的四要素结构来。</p>
+              </div>
+            </details>
+
+            <details class="fold">
+              <summary>📖 验证 · AI 建好后怎么知道建对了</summary>
+              <div class="fold-body">
+                <p>完成后让 AI 告诉你：</p>
+                <ol>
+                  <li>是不是有 3 张清单（<code>students</code> / <code>cards</code> / <code>reviews</code>）</li>
+                  <li>每张清单的字段是不是和上面表格一致</li>
+                  <li>能不能看到「<code>name</code>」「<code>student_name</code>」「<code>mark</code>」这些字段</li>
+                </ol>
+                <p>任何一项不对，让 AI 重做。这是你和 AI 协作的核心循环。</p>
+              </div>
+            </details>
+
+            <div class="callout">
+              <p><strong>为什么字段必须一致？</strong></p>
+              <p>L6 上云端时也用同样的 3 张清单、同样的字段。你现在定义一次，L6 直接对接，<strong>不需要重新填数据</strong>。</p>
+            </div>
+
+            <details class="fold">
+              <summary>📖 4.6 把你之前的 md / json 转成表数据 · 直接复制用的 prompt</summary>
+              <div class="fold-body">
+                <p>之前 L3 你写过闪念本 .md、L4 你用过记忆卡片 .json、L4 复习页用过 localStorage。这些数据现在<strong>散在不同文件里</strong>。L5 要把它们<strong>整理成 3 张表的字段</strong>，L6 才好一次性搬上云。</p>
+
+                <p><strong>为什么不能直接搬？</strong></p>
+                <ul>
+                  <li><code>闪念本.md</code> 里的标题 / 段落 / bullet 不是表字段</li>
+                  <li><code>记忆卡片.json</code> 里的 <code>front</code> / <code>back</code> 键名跟 <code>cards.question</code> / <code>cards.answer</code> 不一样</li>
+                  <li><code>localStorage</code> 里的 ✓△✗ 存在浏览器里，AI 看不见</li>
+                </ul>
+                <p>所以要<strong>让 AI 帮你转换</strong>。转换规则已经定好，学生直接复制下面 prompt 给 AI，AI 会自动读你的文件 + 整理成 INSERT 语句。</p>
+
+                <h4>第一步 · 报名字</h4>
+                <div class="callout">
+                  <p>在 AI 对话开头打：</p>
+                  <p style="padding:6px 12px;background:#FFFFFF;border-radius:6px;font-family:monospace;font-size:13.5px;">我是 <strong style="color:#F3A21C;">your-name</strong>，本节课 L5 的学生</p>
+                  <p style="margin:6px 0;font-size:13px;color:#64748B;"><code>your-name</code> 是你名字<strong>后两个字的拼音</strong>（例如 haolin / xiaoyu / zhengheng / haobin / minjun / mingle）。</p>
+                </div>
+
+                <h4>第二步 · 复制 prompt 给 AI</h4>
+                <div class="code-wrap">
+                  <pre><code>你是本班的本地数据整理助手，不是通用聊天 AI。
+
+【角色】你懂 Markdown / JSON / SQLite 三种格式，能帮学生把分散的数据整理成数据库表的 INSERT 语句
+
+【任务】
+  1. 读我工作空间里的所有"知识数据"文件
+  2. 把内容整理成下面 schema 对应的 INSERT 语句（让我手动复制粘贴到本地 SQLite 跑）
+  3. 不要直接改我的任何文件，**只输出 INSERT 语句给我**
+
+【上下文】
+  - 我是初中生，姓名（后两个字拼音）：your-name（见开头我告诉你的）
+  - 我的数据散在 3 个来源里：
+    a) 闪念本 .md 文件（路径通常是 ~/我的工作空间/闪念本/ 或类似位置）
+    b) 记忆卡片 .json 文件（路径类似 ~/我的工作空间/记忆卡片/）
+    c) localStorage（我在 L4 复习页浏览器里存的 ✓△✗ 标记 —— 这部分我需要你告诉我怎么导出成 JSON）
+  - 目标 schema（**字段名必须严格一致**）：
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+students 表
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSERT INTO students (name) VALUES ('your-name');
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+cards 表（每张闪念本条目 / 每张记忆卡片 = 一行）
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSERT INTO cards (student_name, subject, question, answer) VALUES
+  ('your-name', '数学', '勾股定理的几何意义', 'a²+b²=c² 表示直角三角形两直角边平方和等于斜边平方'),
+  ('your-name', '数学', '...', '...'),
+  ...;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+reviews 表（每条 ✓△✗ = 一行）
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSERT INTO reviews (card_id, mark) VALUES
+  (1, 'done'),   -- ✓ 已掌握
+  (2, 'half'),   -- △ 半掌握
+  (3, 'bad');    -- ✗ 未掌握
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【转换规则 · 必须遵守】
+  - cards 表的 student_name 全部填你自己的拼音，不要写别人
+  - 闪念本 .md 里"AI 给的好解释"每一条 bullet = cards 表一行（question 用 bullet 标题，answer 用 bullet 内容）
+  - 记忆卡片 .json 的 front → cards.question，back → cards.answer，mark → reviews.mark
+  - localStorage 里的 mark 字段：✓ = 'done'，△ = 'half'，✗ = 'bad'
+  - card_id 是 cards 插入后 AI 给我返回的 id 列表，要按那个顺序插 reviews
+  - 如果某条数据你看不懂、字段对不上，**停下来告诉我不要自己猜**
+
+【输出要求】
+  - 第一步：列出你找到的所有文件路径 + 每个文件有几条数据
+  - 第二步：告诉我 localStorage 数据怎么导出（具体步骤、点哪个按钮）
+  - 第三步：等我确认后，输出完整的 INSERT 语句（按上面的 schema）
+  - 任何一步报错，把错误原文贴回来
+
+【验证】
+  - INSERT 语句生成后，你自己用 SQLite 跑一遍（在你的环境里跑，**不要动我本机文件**），跑通了告诉我每张表有几行
+  - 我再自己用 sqlite3 命令行跑一次，最终以我跑出来的为准</code></pre>
+                  <button class="copy-btn">复制</button>
+                </div>
+
+                <h4>第三步 · 拿到 INSERT 语句后，自己跑</h4>
+                <p>AI 会给你一段 INSERT 语句，你<strong>复制到终端跑</strong>（不是直接让 AI 跑）：</p>
+                <div class="code-wrap">
+                  <pre><code># 在你电脑的 SQLite 数据库文件路径下（先问 AI 这个文件在哪）
+sqlite3 ~/你的路径/memory-cards.db &lt; generated_inserts.sql
+
+# 跑完后看一下结果
+sqlite3 ~/你的路径/memory-cards.db "SELECT COUNT(*) FROM students; SELECT COUNT(*) FROM cards; SELECT COUNT(*) FROM reviews;"</code></pre>
+                  <button class="copy-btn">复制</button>
+                </div>
+
+                <p><strong>注意：</strong>这是 <strong>真实可用的 prompt</strong>，不是示例。把 <code>your-name</code> 换成你自己的拼音就能用。改的过程你会注意到"为什么要写这些字段"。</p>
+
+                <div class="callout">
+                  <p><strong>做完 L5 这一步 → L6 就简单了：</strong>本地 SQLite 已经有数据，且字段和云端一致。L6 上云时 AI 只需要读本地 SQLite → HTTP 请求发给云端，<strong>不用再转格式</strong>。</p>
+                </div>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--line);margin:32px 0;">
+
+    <!-- ============ 完成检查 ============ -->
+    <h2>✅ 完成检查</h2>
+    <p>做完后自己打勾：</p>
+    <ul class="checklist">
+      <li><label><input type="checkbox"> 我能用一句话解释「localStorage 和数据库的区别」</label></li>
+      <li><label><input type="checkbox"> 我能用类比解释「服务是什么」</label></li>
+      <li><label><input type="checkbox"> 我知道为什么 L4 的数据换电脑会丢</label></li>
+      <li><label><input type="checkbox"> 我能拆解一个 prompt 的四要素（角色 / 任务 / 上下文 / 输出）</label></li>
+      <li><label><input type="checkbox"> 我知道怎么验证 AI 帮我搭的服务在跑</label></li>
+    </ul>
+
+  </article>
+
+  <!-- ============ 章节底部导航 ============ -->
+  <nav class="ch-bottom-nav">
+    <a class="ch-nav-link" href="lesson-4.html">← 上一章 · L4 记忆卡片</a>
+    <a class="ch-nav-link" href="lesson-ai-capabilities.html">回到 AI 能力全景图 →</a>
+  </nav>
+
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
