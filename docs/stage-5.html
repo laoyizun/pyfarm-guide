@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S5 排序算法 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S5</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S5</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 5 阶段 · 第一次爬算法坡</div>
+      <h1 class="ch-h">嵌套 for / 状态标记 / swap / 方向</h1>
+      <p class="ch-d">S5 是第一个难度台阶。这一关不排好序，几乎收不到奖励——但学生必须自己把冒泡排序"翻译"成农场操作。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="5" data-total="4">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 仙人掌规则</h2>
+    <div class="stage-card">
+      <h4>📌 仙人掌的特殊之处</h4>
+      <ul>
+        <li>每株仙人掌有个"尺寸"，范围 <strong>0~9</strong>，用 <code>measure()</code> 读自己，<code>measure(East)</code> 读右邻居。</li>
+        <li>判断"排好"：<strong>北和东的邻居都 ≥ 自己，南和西的邻居都 ≤ 自己</strong>。</li>
+        <li>排好前是棕色，排好后变绿。</li>
+        <li>收一株排好且连成片的，<strong>整片一起被收，产量是 n²</strong>（n 是连片大小），不排好几乎白种。</li>
+      </ul>
+    </div>
+
+    <h2>📖 知识卡 · 4 张</h2>
+
+    <h3>① 嵌套 for：行列都要扫</h3>
+    <p>扫一个二维网格，需要 for 套 for——外层管行，内层管列。</p>
+    <div class="code-wrap"><pre><code>size = get_world_size()
+for y in range(size):           # 每一行
+    for x in range(size):       # 每一列
+        # 当前在 (x, y)
+        move(East)
+    move(North)</code></pre></div>
+
+    <h3>② 状态标记：changed = True/False</h3>
+    <p>排序要做"反复扫直到稳定"。"稳定"是看不出来的——用一个布尔变量记"这一轮有没有交换"。</p>
+    <div class="code-wrap"><pre><code>changed = True
+while changed:                 # 还要继续
+    changed = False            # 默认这一轮不动
+    for y in range(size):
+        for x in range(size - 1):
+            if measure() &gt; measure(East):
+                swap(East)
+                changed = True # 发生了交换</code></pre></div>
+
+    <h3>③ swap(方向)：和邻居交换</h3>
+    <p>和 <code>move</code> 不同，<code>swap</code> 是"我和邻居换位"——是这一关的"魔法指令"。</p>
+    <div class="code-wrap"><pre><code>if measure() &gt; measure(East):
+    swap(East)    # 我比右边大，右边比我小 → 交换
+# 交换后 measure() 现在是原来右边的值</code></pre></div>
+
+    <h3>④ 反向：用一个函数处理方向</h3>
+    <p>蛇形扫描需要"这一行从左到右、下一行从右到左"。用 <code>reverse()</code> 把 East 变 West：</p>
+    <div class="code-wrap"><pre><code>def reverse(d):
+    if d == East:  return West
+    if d == West:  return East
+    if d == North: return South
+    return North
+
+dir = East
+# ... 扫完一行后
+dir = reverse(dir)    # 东变西，西变东</code></pre></div>
+
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>横向冒泡（一行排好）</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        只做"横向排序"：每一行从左到右，大的在右。最终每一行从左到右是<strong>从小到大</strong>。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">嵌套 for</span>
+        <span class="order-must-chip">用 swap(East)</span>
+        <span class="order-must-chip">用状态变量</span>
+        <span class="order-must-chip">用 while 重复</span>
+      </div>
+      <p class="tip">先只做横向一关，<strong>不要加纵向</strong>。一次写完两向会乱，先把横向练熟。</p>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>二维冒泡：行 + 列</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        在订单 1 的基础上加纵向：每一列从上到下也是从小到大。两向同时满足才算排好。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">横竖两向都做</span>
+        <span class="order-must-chip">用 reverse 函数</span>
+        <span class="order-must-chip">全部变绿才算成功</span>
+      </div>
+      <p class="tip">当整片变绿，<code>harvest()</code> 一次会拿到 n² 倍的仙人掌。</p>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 3（挑战）</span>
+        <h3>把它写成函数</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        把订单 2 全部打包成一个函数 <code>sort_cactus(size)</code>，主循环调用即可。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">def + 参数</span>
+        <span class="order-must-chip">主循环 ≤ 10 行</span>
+        <span class="order-must-chip">可以传入任意 size</span>
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>measure() 在最后一列报 None</b> → 边界越界。最后一列没有东邻居，需要判断 <code>x != size - 1</code> 再 measure。</p>
+        <p><b>无人机越扫越乱，永远不停</b> → <code>changed</code> 没在合适的时候重置，或者 while 条件写成了 <code>while True</code>。</p>
+        <p><b>死循环：无人机原地不动</b> → 扫完一行忘了 <code>move(North)</code>，或者 <code>move(East)</code> 漏了。</p>
+        <p><b>整片没变绿，产量很低</b> → 横向是从大到小，纵向是从小到大——<strong>两个方向要选对大小比较</strong>。</p>
+      </div>
+    </details>
+
+    <h2>🚪 自查门</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 4 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s5_k1"> 我能用嵌套 <code>for</code> 扫完一个二维网格</label></li>
+        <li><label><input type="checkbox" data-key="farm_s5_k2"> 我能用 <code>while changed:</code> 实现"反复扫直到稳定"</label></li>
+        <li><label><input type="checkbox" data-key="farm_s5_k3"> 我能解释 <code>swap()</code> 和 <code>move()</code> 的区别</label></li>
+        <li><label><input type="checkbox" data-key="farm_s5_k4"> 我能把横向一维冒泡改成二维横竖都排</label></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">教学提示 · 这一关分两步走</span>S5 是第一个难度台阶。<strong>先只做横向一维排序</strong>（订单 1），跑通 10 分钟再叠加纵向。不要一次讲完两向——学生脑子会炸。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-4.html" class="prev"><span class="arrow">←</span><span class="text">S4 函数</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="stage-6.html" class="next"><span class="text">S6 迷宫 + 恐龙</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    排序是算法的入口 · 一维先练通再上二维 · 脑子要炸就回 S4<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

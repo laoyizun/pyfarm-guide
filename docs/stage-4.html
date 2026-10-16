@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S4 拆出可复用的函数 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S4</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S4</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 4 阶段 · 拆出可复用的函数</div>
+      <h1 class="ch-h">def / 参数 / return / 复用</h1>
+      <p class="ch-d">S3 的轮作田做多了，复制粘贴会爆炸。这一关要学"用函数把代码打包"——这是写 50 行以上脚本的门槛。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="4" data-total="4">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 这一关解锁什么</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>水</strong>（<code>Items.Water</code>）——水能 5 倍速生长，是巨型南瓜的关键。</li>
+        <li>解锁 <strong>施肥（Fertilizer）</strong>——配合水能种巨型南瓜。</li>
+        <li>试试看：种 9 颗南瓜全田，等所有都熟了再收——会发现自动聚合成巨大南瓜。</li>
+        <li>记一个重要特性：<strong>约 1/5 的南瓜长大时会枯死</strong>，留下一个烂格，整个巨大南瓜就合不出来。</li>
+      </ul>
+    </div>
+
+    <h2>📖 知识卡 · 4 张</h2>
+
+    <h3>① def：定义一个函数</h3>
+    <p>函数是把一段代码打包起来，以后想用就叫它一次。</p>
+    <div class="code-wrap"><pre><code>def hello():
+    print("hi")
+    print("hello")
+
+hello()    # 调用一次
+hello()    # 又调用一次</code></pre></div>
+    <p class="tip">函数要"先定义再调用"。把 <code>def</code> 写在文件前面，调用写在 <code>while True</code> 里。</p>
+
+    <h3>② 参数：让函数接收输入</h3>
+    <div class="code-wrap"><pre><code>def plant_crop(crop):
+    # crop 是一个参数，调用时传什么就是什么
+    if get_ground_type() != Grounds.Soil:
+        till()
+    plant(crop)
+
+plant_crop(Entities.Carrot)    # 这次 crop = 胡萝卜
+plant_crop(Entities.Pumpkin)   # 这次 crop = 南瓜</code></pre></div>
+
+    <h3>③ return：让函数返回结果</h3>
+    <p>函数可以算完一个值交回来。</p>
+    <div class="code-wrap"><pre><code>def add(a, b):
+    return a + b
+
+result = add(3, 5)    # result = 8
+# 多个返回值用 , 分开
+def pos():
+    return get_pos_x(), get_pos_y()
+x, y = pos()          # 解包</code></pre></div>
+
+    <h3>④ 把"全田扫描"和"种南瓜"打包成函数</h3>
+    <p>巨型南瓜的关键是"烂格清单"——要飞回特定坐标补种。需要一个"走到指定位置"的函数：</p>
+    <div class="code-wrap"><pre><code>def go_to(x, y):
+    while get_pos_x() != x or get_pos_y() != y:
+        if get_pos_x() &lt; x:
+            move(East)
+        elif get_pos_x() &gt; x:
+            move(West)
+        elif get_pos_y() &lt; y:
+            move(North)
+        else:
+            move(South)</code></pre></div>
+    <p class="tip">这是 S4 最常用的函数模板。把它练到能默写，背会后再做订单。</p>
+
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>重构 S3 的轮作田</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        把 S3 的轮作代码重构：抽 3 个函数——<code>plant_crop(crop)</code>、<code>go_to(x, y)</code>、<code>move_to_next()</code>（处理换行）。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 def</span>
+        <span class="order-must-chip">至少 2 个带参数的函数</span>
+        <span class="order-must-chip">主循环 ≤ 15 行</span>
+        <span class="order-must-chip">每个函数被调用 ≥ 2 次</span>
+      </div>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>巨型南瓜：烂格清单</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        全田种一遍南瓜，枯死的格子坐标记进两个列表（<code>bx</code> 存列、<code>by</code> 存行），然后只飞回这些格子补种，直到列表清空再 <code>harvest()</code>。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 def go_to()</span>
+        <span class="order-must-chip">必须用 2 个平行列表记账</span>
+        <span class="order-must-chip">用 while 循环 + len()</span>
+        <span class="order-must-chip">用 list.remove() 销账</span>
+      </div>
+      <p class="tip">新手常踩的坑：<code>list.remove(x)</code> 只会移除第一个匹配项，要确保每次只删一个。</p>
+    </div>
+
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>NameError: name 'go_to' is not defined</b> → 函数写在调用后面了，Python 必须先 def 才能调用。</p>
+        <p><b>无人机撞墙或越界</b> → <code>go_to</code> 函数的 while 条件没写对。<code>!=</code> 写在 while 里要小心死循环。</p>
+        <p><b>list.remove 报错说找不到</b> → 要么列表里没有这个值，要么这个值的类型不匹配（int 和 str 不能 remove 同一个）。</p>
+        <p><b>函数里用了外面没传的变量</b> → 把变量当参数传进去，或者用 <code>global</code>（不推荐）。</p>
+      </div>
+    </details>
+
+    <h2>🚪 自查门</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 4 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s4_k1"> 我能定义一个无参数函数 <code>def hello():</code> 并调用它</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k2"> 我能定义一个带参数的函数 <code>def plant(crop):</code> 并传不同的值进去</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k3"> 我能用 <code>return</code> 把一个值"交回去"，并能用 <code>x, y = pos()</code> 解包</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k4"> 我能把 S3 的代码改写成"主循环 ≤ 15 行 + 至少 3 个函数"</label></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">换需求测试 · 真会了才过</span>把"3 种作物"改成"5 种"、把"3×3 田"改成"5×5 田"，30 秒内改完才说明你真的会用函数和列表。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-3.html" class="prev"><span class="arrow">←</span><span class="text">S3 把数据存起来</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="stage-5.html" class="next"><span class="text">S5 排序算法</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    函数不是"省事"，是"组织代码的方式" · 主循环越短越好<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

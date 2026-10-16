@@ -17,6 +17,7 @@ Thumbs.db
 
 # 编程农场指导手册 · 本地预览页（不上 git page）
 编程农场指导手册/preview-figures.html
+preview-figures.html
 
 # 临时 / 调试文件
 *.log

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S3 把数据存起来 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">S3</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">S3</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">第 3 阶段 · 把数据存起来</div>
+      <h1 class="ch-h">列表 / 索引 / append / len / 遍历</h1>
+      <p class="ch-d">当订单从"种一种作物"变成"按列种 5 种作物"，你就会发现 if 链会爆炸——这时必须用列表。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="3" data-total="4">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 这一关解锁什么</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>南瓜（Pumpkin）</strong>——需要先把所有格子种满，成熟后会自动聚合成巨大南瓜。</li>
+        <li>解锁 <strong>向日葵（Sunflower）</strong>——花瓣数越多能量越大。能量用来加速无人机。</li>
+        <li>试试只种 1 种南瓜，看产量；再试试种向日葵，量一下有几片花瓣。</li>
+        <li>记住 <code>measure()</code> 会在向日葵上返回花瓣数（整数）。</li>
+      </ul>
+    </div>
+
+    <h2>📖 知识卡 · 4 张</h2>
+
+    <h3>① 列表：用 [] 装一组数据</h3>
+    <p>列表就像一组编号的小格子，按下标（从 0 开始）取东西。</p>
+    <div class="code-wrap"><pre><code>crops = [Entities.Carrot, Entities.Pumpkin, Entities.Sunflower]
+petals = [5, 8, 3, 12, 7]
+empty = []          # 空列表</code></pre></div>
+
+    <h3>② 索引：crops[0] 是第一个</h3>
+    <p>下标从 <strong>0</strong> 开始，<code>crops[0]</code> 是第一个，<code>crops[1]</code> 是第二个。<strong>不要写 <code>crops[1]</code> 当成第二个，错的话报 <code>IndexError</code>。</strong></p>
+    <div class="code-wrap"><pre><code>crops = ["胡萝卜", "南瓜", "向日葵"]
+print(crops[0])     # 胡萝卜（第一个）
+print(crops[1])     # 南瓜（第二个）
+print(crops[2])     # 向日葵（第三个）
+print(crops[3])     # 报错：IndexError: list index out of range</code></pre></div>
+
+    <h3>③ append / len：往里加、问多长</h3>
+    <div class="code-wrap"><pre><code>petals = []
+petals.append(5)        # 列表变成 [5]
+petals.append(8)        # 列表变成 [5, 8]
+petals.append(3)        # 列表变成 [5, 8, 3]
+print(len(petals))      # 3，列表长度
+print(max(petals))      # 8，最大值
+print(sum(petals))      # 16，总和</code></pre></div>
+
+    <h3>④ for x in list：遍历列表</h3>
+    <p>这是把"列表学完"的关键用法：<strong>遍历</strong>就是把列表里每个东西挨个拿出来一次。</p>
+    <div class="code-wrap"><pre><code>crops = ["胡萝卜", "南瓜", "向日葵"]
+for c in crops:
+    print(c)
+# 输出三行：胡萝卜 / 南瓜 / 向日葵</code></pre></div>
+    <p class="tip">这一关的精髓是<strong>组合</strong>：用 <code>len()</code> 取列表长度，用 <code>%</code> 取余，用 <code>[]</code> 取元素——一行代码替代一堆 if。</p>
+
+    <h2>🚜 农场订单 · 闯关任务</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 1</span>
+        <h3>三色轮作田（增删皆宜）</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        在 3×3 田里按"列"轮种：第 0 列胡萝卜、第 1 列南瓜、第 2 列向日葵。<strong>不允许写 3 个 if 判断 x 的值</strong>。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用列表</span>
+        <span class="order-must-chip">必须用 % 取余</span>
+        <span class="order-must-chip">必须用 len()</span>
+        <span class="order-must-chip">不能写 if x==0 / x==1 / x==2</span>
+      </div>
+      <p class="tip">加成题：把列表改成 5 种作物，看谁的代码只改一行就搞定。</p>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 2</span>
+        <h3>向日葵花瓣清单</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        扫一遍全田，把每朵向日葵的花瓣数 <code>append</code> 进列表，最后用 <code>quick_print</code> 打出"花瓣清单 + 最大值 + 朵数"。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 append</span>
+        <span class="order-must-chip">必须用 len()</span>
+        <span class="order-must-chip">必须用 max() 或 for 找最大</span>
+        <span class="order-must-chip">for i in range()</span>
+      </div>
+      <p class="tip"><code>range(n)</code> 会生成 0~n-1 的数字序列，配合 <code>get_world_size()</code> 用可以扫全田。</p>
+    </div>
+
+    <details class="fold">
+      <summary>🔧 常见报错 · 卡住了先看这里</summary>
+      <div class="fold-body">
+        <p><b>IndexError: list index out of range</b> → 下标越界。3 个元素的列表最大下标是 2，写 3 就报错。</p>
+        <p><b>只种了第 0 列的作物</b> → 列表写成了 <code>(...)</code>（元组）而不是 <code>[...]</code>（列表）。游戏里元组不可改。</p>
+        <p><b>append 不生效</b> → 写成 <code>crops = crops.append(x)</code>，这是错的。append 不会返回新列表，它直接改原来的。</p>
+        <p><b>为什么 <code>crops[1]</code> 是"南瓜"不是"胡萝卜"</b> → 下标从 0 开始。<strong>0 才是第一个</strong>。</p>
+      </div>
+    </details>
+
+    <h2>🚪 自查门</h2>
+    <div class="gate">
+      <span class="gate-label">✓ 4 个知识点 · 真的会了才勾</span>
+      <ul>
+        <li><label><input type="checkbox" data-key="farm_s3_k1"> 我能定义一个列表、修改元素、添加元素</label></li>
+        <li><label><input type="checkbox" data-key="farm_s3_k2"> 我能用下标 0/1/2 取到正确的元素，并且能解释"下标从 0 开始"</label></li>
+        <li><label><input type="checkbox" data-key="farm_s3_k3"> 我能用 <code>for x in list:</code> 遍历列表里所有元素</label></li>
+        <li><label><input type="checkbox" data-key="farm_s3_k4"> 我能把订单 1 的"3 个 if"改成"列表 + 取余"，且代码行数更少</label></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">口述题 · 检验真会了</span>把代码里的列表 + 取余删掉，换成 3 个 if 判断 x 的值——代码会变长还是变短？为什么？这就是"为什么需要列表"的答案。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-2.html" class="prev"><span class="arrow">←</span><span class="text">S2 算一算再种田</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="stage-4.html" class="next"><span class="text">S4 拆出可复用的函数</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    列表是这一关的钥匙 · 加一种作物只改一行代码 = 真的会了<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
