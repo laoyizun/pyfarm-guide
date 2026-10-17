@@ -52,7 +52,7 @@
     </div>
 
     <!-- 2. 知识卡 -->
-    <h2>📖 知识卡 · 4 张</h2>
+    <h2>📖 知识卡 · 5 张</h2>
 
     <h3>① while True：让无人机不停干活</h3>
     <p>这一关只需要两个动作：<strong>循环</strong>和<strong>判断</strong>。<code>while True</code> 的意思是"永远循环下去"，是自动化脚本的标准开头。</p>
@@ -76,39 +76,47 @@ else:
 y = get_pos_y()
 # x 和 y 就是变量，里面存着当前位置的数字</code></pre></div>
 
-    <h3>④ 走遍全田：到行末就换行</h3>
-    <p>田是一格一格的，无人机走到最右边怎么办？答案是判断 <code>get_pos_x() == 0</code> 时向下走一格（注意：游戏里走到行末会自动绕回 0）。</p>
-    <div class="code-wrap"><pre><code>move(East)
-if get_pos_x() == 0:        # 走到行末自动绕回
-    move(North)              # 往下一行走</code></pre></div>
+    <h3>④ 行末回头：一行走到头就掉头</h3>
+    <p>一行只有 3 格，走到第 2 格就不能再 <code>move(East)</code> 了——要先回头走 <code>West</code>，回到第 0 格。判断边界用 <code>get_pos_x() == 2</code>（或 <code>== size - 1</code>）。</p>
+    <div class="code-wrap"><pre><code>if get_pos_x() == 2:    # 走到行末
+    move(West)            # 掉头
+else:
+    move(East)            # 没到行末就继续往东</code></pre></div>
+    <p class="tip">订单 2 用这招：到第 2 格就 <code>move(West)</code>，到第 0 格就 <code>move(East)</code>。看起来像"原地踏步收草"，库存会一直涨。</p>
+
+    <h3>⑤ for i in range：为什么要 for？</h3>
+    <p>while 是"不知道要循环几次"的时候用，<strong>for 是"我清楚地知道要循环 N 次"</strong>的时候用——比如"扫 3 行 3 列共 9 格"。</p>
+    <div class="code-wrap"><pre><code>for i in range(3):       # i 会依次变成 0, 1, 2
+    for j in range(3):    # j 也会依次变成 0, 1, 2
+        do_something()    # 这行会跑 3 × 3 = 9 次</code></pre></div>
+    <p>📌 <strong>range(n)</strong> 产生 <code>0, 1, 2, ..., n-1</code> 共 n 个数。<code>range(get_world_size())</code> 适配任何大小的田。</p>
+    <p class="tip">订单 3 用 <code>for i in range(get_world_size())</code> 套 <code>for j in range(get_world_size())</code> 扫全田——比 while 嵌套手动维护 i、j 干净 10 倍。</p>
 
     <!-- 3. 订单 -->
-    <h2>🚜 农场订单 · 闯关任务</h2>
+    <h2>🚜 农场订单 · 3 个由小到大</h2>
 
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 1</span>
-        <h3>最简版自动收获</h3>
+        <h3>1×1：单格反复收草</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        让无人机在 3×3 田里不停地扫，能收就收。运行 2 分钟不报错、产量稳定上升就算交付。
+        把世界大小调到 1×1（<code>set_world_size(1)</code>），无人机站在唯一的一格里，<strong>不停地收草</strong>，直到库存超过 50。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 while True</span>
-        <span class="order-must-chip">必须用 if</span>
-        <span class="order-must-chip">必须用 move(East)</span>
+        <span class="order-must-chip">必须用 if can_harvest()</span>
+        <span class="order-must-chip">不许用 for</span>
       </div>
       <details class="fold">
         <summary>起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre>while True:
+<pre><span class="blank">__________</span>                # 调成 1×1
+while True:
     if <span class="blank">__________</span>:
-        <span class="blank">__________</span>
-    move(<span class="blank">__________</span>)
-    if get_pos_x() == 0:
         <span class="blank">__________</span></pre>
           </div>
         </div>
@@ -118,36 +126,64 @@ if get_pos_x() == 0:        # 走到行末自动绕回
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>全田种灌木（带自动浇水）</h3>
+        <h3>1×3：一行收草（行末回头）</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        无人机在 3×3 田里"全种同一种作物"——灌木。每一格都做 3 件事：<strong>能收就收 → 种灌木 → 缺水就浇水</strong>。跑 2 分钟不报错，库存稳步上升。
+        把世界大小调到 1×3，无人机在这一行里来回走，<strong>每格都收草</strong>。到第 2 格要掉头回第 0 格，再回第 2 格……库存涨到 100 算交付。
       </div>
       <div class="order-must">
-        <span class="order-must-chip">必须用 plant(Entities.Bush)</span>
-        <span class="order-must-chip">必须用 get_water() / use_item</span>
-        <span class="order-must-chip">必须嵌套 if</span>
+        <span class="order-must-chip">必须用 while True</span>
+        <span class="order-must-chip">必须用 get_pos_x() 判断行末</span>
+        <span class="order-must-chip">必须用 move(West) 掉头</span>
+        <span class="order-must-chip">不许用 for</span>
       </div>
-      <figure class="order-fig">
-        <img src="images/s1-bush-field.svg" alt="全田种植灌木示意图：3×3 田里每格都是灌木，右侧说明每格做收/种/浇 3 件事" loading="lazy">
-        <figcaption>图：3×3 全田种灌木的最终效果。每格重复 3 步——<code>harvest()</code> → <code>plant(Entities.Bush)</code> → <code>use_item(Items.Water)</code>。</figcaption>
-      </figure>
       <details class="fold">
         <summary>起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre>while True:
+<pre><span class="blank">__________</span>                # 调成 1×3
+while True:
     if <span class="blank">__________</span>:
         <span class="blank">__________</span>
-    <span class="blank">__________</span>(Entities.Bush)
-    if get_water() &lt; <span class="blank">__________</span>:
-        <span class="blank">__________</span>(Items.Water)
-    move(East)
-    if get_pos_x() == 0:
-        move(North)</pre>
+    if <span class="blank">__________</span> == 2:   # 走到最右
+        <span class="blank">__________</span>     # 掉头
+    elif <span class="blank">__________</span> == 0:  # 走到最左
+        <span class="blank">__________</span>     # 掉头</pre>
           </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 3</span>
+        <h3>3×3：全田扫一遍（for 循环登场）</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        把世界大小调到 3×3，<strong>用 <code>for i in range(3)</code> 嵌套 <code>for j in range(3)</code> 扫全田</strong>，每格能收就收。跑完一轮 9 格后停止。
+      </div>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 for i in range(3)</span>
+        <span class="order-must-chip">必须嵌套 for j in range(3)</span>
+        <span class="order-must-chip">必须用 if can_harvest()</span>
+        <span class="order-must-chip">不许用 while</span>
+      </div>
+      <details class="fold">
+        <summary>起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre>for i in <span class="blank">__________</span>:           # 外层：3 行
+    for j in <span class="blank">__________</span>:       # 内层：3 列
+        if <span class="blank">__________</span>:
+            <span class="blank">__________</span>
+        move(East)                # 内层循环：每行从左走到右
+    move(North)                   # 外层循环：走完一行就往北换行</pre>
+          </div>
+          <p class="tip">跑通后试着把 <code>range(3)</code> 改成 <code>range(get_world_size())</code>，然后用 5×5、10×10 的世界再跑——代码一行不用动，适配任何大小的田。这就是 for 循环存在的意义。</p>
         </div>
       </details>
     </div>
