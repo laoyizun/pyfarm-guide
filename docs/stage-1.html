@@ -99,21 +99,6 @@ if get_pos_x() == 0:        # 走到行末自动绕回
         <span class="order-must-chip">必须用 if</span>
         <span class="order-must-chip">必须用 move(East)</span>
       </div>
-      <div class="fig">
-        <div class="fig-bar">
-          <span class="fig-tag">种植模板图</span>
-          <span class="fig-name">订单 1 · 全田扫描收获</span>
-          <span class="fig-hint">images/order-1-scan.png</span>
-        </div>
-        <div class="fig-body">
-          <div class="fig-empty">
-            <span class="ico">🖼️</span>
-            <span>放一张 3×3 农场的俯视图</span>
-            <span class="path">images/order-1-scan.png</span>
-            <span class="sub">建议尺寸 720×540，无图时留空</span>
-          </div>
-        </div>
-      </div>
       <details class="fold">
         <summary>起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
@@ -133,34 +118,38 @@ if get_pos_x() == 0:        # 走到行末自动绕回
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>打印"无人机体检报告"</h3>
+        <h3>全田种灌木（带自动浇水）</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        把当前坐标和已经收获过的数量用 <code>quick_print()</code> 打印出来。打印时要有"位置"和"次数"两个字段。
+        无人机在 3×3 田里"全种同一种作物"——灌木。每一格都做 3 件事：<strong>能收就收 → 种灌木 → 缺水就浇水</strong>。跑 2 分钟不报错，库存稳步上升。
       </div>
       <div class="order-must">
-        <span class="order-must-chip">用变量</span>
-        <span class="order-must-chip">用 quick_print</span>
-        <span class="order-must-chip">至少 2 个变量</span>
+        <span class="order-must-chip">必须用 plant(Entities.Bush)</span>
+        <span class="order-must-chip">必须用 get_water() / use_item</span>
+        <span class="order-must-chip">必须嵌套 if</span>
       </div>
-      <div class="fig">
-        <div class="fig-bar">
-          <span class="fig-tag">报告样例</span>
-          <span class="fig-name">订单 2 · 无人机体检报告样例</span>
-          <span class="fig-hint">images/order-1-report.png</span>
-        </div>
-        <div class="fig-body">
-          <div class="fig-empty">
-            <span class="ico">🖼️</span>
-            <span>贴一张控制台打印样例的截图</span>
-            <span class="path">images/order-1-report.png</span>
-            <span class="sub">建议尺寸 720×400，无图时留空</span>
+      <figure class="order-fig">
+        <img src="images/s1-bush-field.svg" alt="全田种植灌木示意图：3×3 田里每格都是灌木，右侧说明每格做收/种/浇 3 件事" loading="lazy">
+        <figcaption>图：3×3 全田种灌木的最终效果。每格重复 3 步——<code>harvest()</code> → <code>plant(Entities.Bush)</code> → <code>use_item(Items.Water)</code>。</figcaption>
+      </figure>
+      <details class="fold">
+        <summary>起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre>while True:
+    if <span class="blank">__________</span>:
+        <span class="blank">__________</span>
+    <span class="blank">__________</span>(Entities.Bush)
+    if get_water() &lt; <span class="blank">__________</span>:
+        <span class="blank">__________</span>(Items.Water)
+    move(East)
+    if get_pos_x() == 0:
+        move(North)</pre>
           </div>
         </div>
-        <div class="fig-cap">报告里至少出现"位置"和"次数"两个字段</div>
-      </div>
-      <p class="tip">用 <code>num_items(Items.Hay)</code> 可以拿到干草库存，库存是 int（整数）。打印别用 <code>print()</code>——它每打印一次要花 1 秒，会卡死循环。用 <code>quick_print()</code>。</p>
+      </details>
     </div>
 
     <!-- 4. 常见报错 -->
