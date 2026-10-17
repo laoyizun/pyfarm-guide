@@ -97,6 +97,10 @@ num_items(Items.Hay) # 整数，比如 250</code></pre></div>
         <b>📋 客户要求</b>
         在 3×3 田里"黑格"种树、"白格"种灌木。树不能相邻，所以必须是棋盘格图案（(0,0) 树、(0,1) 灌木、(0,2) 树）。
       </div>
+      <figure class="order-fig">
+        <img src="images/s2-checkerboard.svg" alt="棋盘格种植示意图：3×3 田里黑格种树、白格种灌木，右侧标注 x%2 与 y%2 的判断条件" loading="lazy">
+        <figcaption>图：3×3 田的棋盘格效果，黑色格子是树，白色格子是灌木。判断条件是 <code>(x + y) % 2 == 0</code>，或分别取余后用 <code>and</code>/<code>or</code>。</figcaption>
+      </figure>
       <div class="order-must">
         <span class="order-must-chip">必须用 %（取余）</span>
         <span class="order-must-chip">必须用 and / or</span>

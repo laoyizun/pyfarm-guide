@@ -89,6 +89,10 @@ harvest()              # 到了！收宝箱</code></pre></div>
         <b>📋 客户要求</b>
         生成一个新迷宫，无脑"左手扶墙"走到宝箱。具体规则：能左转就左转，否则直走，都不行就右转。站上宝箱时 <code>harvest()</code>。
       </div>
+      <figure class="order-fig">
+        <img src="images/s6-maze-wallfollow.svg" alt="左手扶墙解迷宫示意图：5×5 迷宫俯视图，红线标出从起点到宝箱的完整路径，左侧说明左手贴墙规则" loading="lazy">
+        <figcaption>图：5×5 迷宫的"左手扶墙"路径。算法会从起点一直绕到宝箱，<strong>保证无环迷宫必到</strong>，不需要你规划路线。</figcaption>
+      </figure>
       <div class="order-must">
         <span class="order-must-chip">用方向列表</span>
         <span class="order-must-chip">用 % 4 防越界</span>

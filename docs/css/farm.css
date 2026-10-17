@@ -947,3 +947,35 @@ details.fold > .fold-body li { margin: 4px 0; }
   .site-nav { padding: 10px 16px; }
   .site-nav-stage { display: none; }
 }
+
+/* ===== 订单配图 ===== */
+.order-fig {
+  margin: 16px 0 18px;
+  padding: 12px 14px 10px;
+  background: #fffbf2;
+  border: 1px solid var(--c-border, #f0e0c0);
+  border-radius: 12px;
+  text-align: center;
+}
+.order-fig img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 8px;
+  border-radius: 8px;
+}
+.order-fig figcaption {
+  font-size: 13px;
+  color: var(--c-muted, #6b5a3a);
+  line-height: 1.6;
+  text-align: left;
+  margin-top: 4px;
+}
+.order-fig figcaption code {
+  background: #fff;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid #f0e0c0;
+  font-size: 12px;
+}
