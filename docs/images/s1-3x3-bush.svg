@@ -4,10 +4,10 @@
 
   <!-- 标题 -->
   <text x="360" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#5a4a2a">订单 3 · 3×3 全田种灌木</text>
-  <text x="360" y="54" text-anchor="middle" font-size="13" fill="#8a7a5a">3 行 3 列共 9 格，全是灌木，for 循环扫描全田并收草</text>
+  <text x="360" y="54" text-anchor="middle" font-size="13" fill="#8a7a5a">3 行 3 列共 9 格，全是灌木</text>
 
-  <!-- 3×3 田 -->
-  <g transform="translate(140,90)">
+  <!-- 3×3 田（居中放大） -->
+  <g transform="translate(180,80)">
     <!-- 外框 -->
     <rect x="0" y="0" width="360" height="360" fill="#c8a06b" stroke="#8a6a3a" stroke-width="3" rx="6"/>
 
@@ -97,29 +97,5 @@
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
     </g>
-  </g>
-
-  <!-- 右侧说明 -->
-  <g transform="translate(530,100)">
-    <text x="0" y="0" font-size="14" font-weight="700" fill="#5a4a2a">扫描顺序</text>
-    <text x="0" y="22" font-size="12" fill="#6b5a3a">for i in range(3):</text>
-    <text x="14" y="40" font-size="12" fill="#6b5a3a">for j in range(3):</text>
-    <text x="28" y="58" font-size="12" fill="#6b5a3a">harvest()</text>
-    <text x="28" y="76" font-size="12" fill="#6b5a3a">move(East)</text>
-    <text x="14" y="94" font-size="12" fill="#6b5a3a">move(North)</text>
-
-    <text x="0" y="130" font-size="14" font-weight="700" fill="#5a4a2a">9 格全是灌木</text>
-    <text x="0" y="152" font-size="12" fill="#6b5a3a">无需翻土</text>
-    <text x="0" y="172" font-size="12" fill="#6b5a3a">无需浇水</text>
-    <text x="0" y="192" font-size="12" fill="#6b5a3a">每次跑 1 轮 = 收 9 次</text>
-  </g>
-
-  <!-- 底部说明 -->
-  <g transform="translate(40,420)">
-    <rect x="0" y="0" width="640" height="32" fill="#fff3d6" stroke="#F3A21C" stroke-width="1" rx="6"/>
-    <text x="14" y="20" font-size="12" fill="#8a6a2a">
-      <tspan font-weight="700">关键：</tspan>
-      <tspan>用 <tspan font-family="ui-monospace, Menlo, monospace">range(3)</tspan> 写死 = 只能 3×3；改成 <tspan font-family="ui-monospace, Menlo, monospace">range(get_world_size())</tspan> = 适配任何田。这就是 for 循环相对 while 的优势。</tspan>
-    </text>
   </g>
 </svg>

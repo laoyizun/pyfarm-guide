@@ -52,7 +52,7 @@
     </div>
 
     <!-- 2. 知识卡 -->
-    <h2>📖 知识卡 · 5 张</h2>
+    <h2>📖 知识卡 · 3 张</h2>
 
     <h3>① while True：让无人机不停干活</h3>
     <p>这一关只需要两个动作：<strong>循环</strong>和<strong>判断</strong>。<code>while True</code> 的意思是"永远循环下去"，是自动化脚本的标准开头。</p>
@@ -70,21 +70,7 @@
 else:
     pass                 # 不能就算了（pass 是"什么都不做"）</code></pre></div>
 
-    <h3>③ 变量存坐标：get_pos_x() / get_pos_y()</h3>
-    <p>想知道无人机站在哪一行哪一列，用 <code>get_pos_x()</code>（列号，0 开始）和 <code>get_pos_y()</code>（行号）。返回值是整数。</p>
-    <div class="code-wrap"><pre><code>x = get_pos_x()
-y = get_pos_y()
-# x 和 y 就是变量，里面存着当前位置的数字</code></pre></div>
-
-    <h3>④ 行末回头：一行走到头就掉头</h3>
-    <p>一行只有 3 格，走到第 2 格就不能再 <code>move(East)</code> 了——要先回头走 <code>West</code>，回到第 0 格。判断边界用 <code>get_pos_x() == 2</code>（或 <code>== size - 1</code>）。</p>
-    <div class="code-wrap"><pre><code>if get_pos_x() == 2:    # 走到行末
-    move(West)            # 掉头
-else:
-    move(East)            # 没到行末就继续往东</code></pre></div>
-    <p class="tip">订单 2 用这招：到第 2 格就 <code>move(West)</code>，到第 0 格就 <code>move(East)</code>。看起来像"原地踏步收草"，库存会一直涨。</p>
-
-    <h3>⑤ for i in range：为什么要 for？</h3>
+    <h3>③ for i in range：为什么要 for？</h3>
     <p>while 是"不知道要循环几次"的时候用，<strong>for 是"我清楚地知道要循环 N 次"</strong>的时候用——比如"扫 3 行 3 列共 9 格"。</p>
     <div class="code-wrap"><pre><code>for i in range(3):       # i 会依次变成 0, 1, 2
     for j in range(3):    # j 也会依次变成 0, 1, 2
@@ -114,10 +100,10 @@ else:
         <div class="fold-body">
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre><span class="blank">__________</span>                # 调成 1×1
+<pre>set_world_size(<span class="blank">__________</span>)   # 1×1
 while True:
-    if <span class="blank">__________</span>:
-        <span class="blank">__________</span></pre>
+    if <span class="blank">__________</span>():
+        <span class="blank">__________</span>()</pre>
           </div>
         </div>
       </details>
@@ -126,35 +112,32 @@ while True:
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>1×3：一行收草（行末回头）</h3>
+        <h3>1×3：走 3 步扫一行</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        把世界大小调到 1×3，无人机在这一行里来回走，<strong>每格都收草</strong>。到第 2 格要掉头回第 0 格，再回第 2 格……库存涨到 100 算交付。
+        把世界大小调到 1×3，无人机在 3 格上扫一遍。每格都收一次草，<strong>走 3 步就回到原位</strong>。库存涨到 30 算交付。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 while True</span>
-        <span class="order-must-chip">必须用 get_pos_x() 判断行末</span>
-        <span class="order-must-chip">必须用 move(West) 掉头</span>
+        <span class="order-must-chip">必须用 if can_harvest()</span>
+        <span class="order-must-chip">必须用 move(East)</span>
         <span class="order-must-chip">不许用 for</span>
       </div>
       <figure class="order-fig">
-        <img src="images/s1-1x3-bush.svg" alt="1×3 全田种植灌木示意图：一行 3 格全是灌木，无人机在 0→1→2 之间来回走并收草" loading="lazy">
-        <figcaption>图：1×3 田里 3 格都是灌木。<code>get_pos_x() == 2</code> 时掉头往西，<code>== 0</code> 时掉头往东——无人机在 3 格间来回走并收草。</figcaption>
+        <img src="images/s1-1x3-bush.svg" alt="1×3 全田种植灌木示意图：一行 3 格全是灌木，无人机走 3 步扫一遍回到原位" loading="lazy">
+        <figcaption>图：1×3 田里 3 格都是灌木。无人机在 0 → 1 → 2 → 0 之间扫，每到一格先收草再走 1 步。</figcaption>
       </figure>
       <details class="fold">
         <summary>起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre><span class="blank">__________</span>                # 调成 1×3
+<pre>set_world_size(1, 3)             # 1 行 3 列
 while True:
-    if <span class="blank">__________</span>:
-        <span class="blank">__________</span>
-    if <span class="blank">__________</span> == 2:   # 走到最右
-        <span class="blank">__________</span>     # 掉头
-    elif <span class="blank">__________</span> == 0:  # 走到最左
-        <span class="blank">__________</span>     # 掉头</pre>
+    if <span class="blank">__________</span>():
+        <span class="blank">__________</span>()
+    <span class="blank">__________</span>(East)          # 走 1 步；走 3 步后自动绕回起点</pre>
           </div>
         </div>
       </details>
