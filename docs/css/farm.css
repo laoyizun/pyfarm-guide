@@ -465,8 +465,9 @@ body {
   overflow-wrap: anywhere;
 }
 .tip code {
-  white-space: nowrap;
-  word-break: keep-all;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* 任务提示：订单卡里的提示，蓝色 📌 */
@@ -494,8 +495,9 @@ body {
   overflow-wrap: anywhere;
 }
 .tip-task code {
-  white-space: nowrap;
-  word-break: keep-all;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* 警告提示：报错/易错点，红色 ⚠️ */
