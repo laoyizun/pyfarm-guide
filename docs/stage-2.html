@@ -132,18 +132,19 @@ num_items(Items.Hay) # 整数，比如 250</code></pre></div>
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>智能浇水 + 自动补货</h3>
+        <h3>智能浇水：缺水才浇、没水不浇</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        当 <code>get_water() &lt; 0.75</code> 且 <code>num_items(Items.Water) &gt; 0</code> 时浇水。当胡萝卜库存低于 200 才种胡萝卜。
+        在订单 1 的棋盘格田上继续。每一格：<strong>先收 → 再种 → 缺水才浇</strong>。缺水（<code>get_water() &lt; 0.5</code>）且水库存够（<code>num_items(Items.Water) &gt;= 1</code>）才调 <code>use_item(Items.Water)</code>。水不够或水分已经够都不浇。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 and</span>
-        <span class="order-must-chip">必须用 &lt; / &gt; 比较</span>
-        <span class="order-must-chip">用到 not</span>
+        <span class="order-must-chip">必须用 &lt; / &gt;=</span>
+        <span class="order-must-chip">必须用 num_items(Items.Water)</span>
+        <span class="order-must-chip">必须用 get_water()</span>
       </div>
-      <p class="tip">浇水后生长速度 5 倍，是这一关效率的关键。注意：在田里翻土用 <code>till()</code>，种胡萝卜前要先把草变成 <code>Grounds.Soil</code>。</p>
+      <p class="tip">把"判断条件"先写在纸上：什么情况下才浇水？两个条件都满足才浇——这叫"复合条件"，是这一关的关键。</p>
     </div>
 
     <details class="fold">
