@@ -87,11 +87,11 @@ for c in crops:
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        在 3×3 田里按"列"轮种：第 0 列胡萝卜、第 1 列南瓜、第 2 列向日葵。<strong>不允许写 3 个 if 判断 x 的值</strong>。
+        在 4×4（解锁 Larger Field 后可调 6×6）的田里按"列"轮种：第 0 列<strong>草</strong>、第 1 列<strong>灌木</strong>、第 2 列<strong>胡萝卜</strong>。3 种作物一高一低搭配，保持产出-消耗平衡。<strong>不允许写 3 个 if 判断 x 的值</strong>。
       </div>
       <figure class="order-fig">
-        <img src="images/s3-rotation.svg" alt="三色轮作田示意图：3×3 田里按列分三种作物，每列颜色不同，最右侧说明加一种作物只需改列表" loading="lazy">
-        <figcaption>图：3×3 田的轮作效果。每一列是一种作物，加一种作物只需在列表里加一项，<strong>代码其它部分不用动</strong>。</figcaption>
+        <img src="images/s3-rotation.svg" alt="三色轮作田示意图：田里按列分 3 种作物（草/灌木/胡萝卜），加一种作物只需改列表" loading="lazy">
+        <figcaption>图：田里按列轮种 3 种作物。加一种作物只需在列表里加一项，<strong>代码其它部分不用动</strong>。</figcaption>
       </figure>
       <div class="order-must">
         <span class="order-must-chip">必须用列表</span>
@@ -99,25 +99,25 @@ for c in crops:
         <span class="order-must-chip">必须用 len()</span>
         <span class="order-must-chip">不能写 if x==0 / x==1 / x==2</span>
       </div>
-      <p class="tip">加成题：把列表改成 5 种作物，看谁的代码只改一行就搞定。</p>
+      <p class="tip-task">加成题：把列表改成 5 种作物，看谁的代码只改一行就搞定。</p>
     </div>
 
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>向日葵花瓣清单</h3>
+        <h3>烂格记账：列表第一次当账本</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        扫一遍全田，把每朵向日葵的花瓣数 <code>append</code> 进列表，最后用 <code>quick_print</code> 打出"花瓣清单 + 最大值 + 朵数"。
+        解锁南瓜（Pumpkin）后，<strong>全田种南瓜</strong>。南瓜长大时会随机"枯死"，要凑成"巨大南瓜"必须<strong>没有烂格</strong>。任务：扫一遍全田，<strong>把烂格的坐标（x, y）append 进列表</strong>，再用 for 循环 <code>for x, y in bad:</code> <strong>解包</strong>，走回烂格补种，直到列表清空，最后整片一起收。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 append</span>
-        <span class="order-must-chip">必须用 len()</span>
-        <span class="order-must-chip">必须用 max() 或 for 找最大</span>
-        <span class="order-must-chip">for i in range()</span>
+        <span class="order-must-chip">必须用列表 [x, y] 存坐标</span>
+        <span class="order-must-chip">必须用 for x, y in bad: 解包</span>
+        <span class="order-must-chip">必须用 while len(bad) &gt; 0</span>
       </div>
-      <p class="tip"><code>range(n)</code> 会生成 0~n-1 的数字序列，配合 <code>get_world_size()</code> 用可以扫全田。</p>
+      <p class="tip-task">解包：<code>for x, y in bad:</code> 会把 <code>[2, 1]</code> 拆成 <code>x = 2, y = 1</code> 两个变量——这是 L4 函数的"参数解包"前身，先在这里熟悉手感。</p>
     </div>
 
     <details class="fold">

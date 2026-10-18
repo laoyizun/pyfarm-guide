@@ -2,17 +2,17 @@
   <rect width="720" height="440" fill="#F9FAFB"/>
 
   <!-- 标题 -->
-  <text x="360" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#333">S3 订单 1 · 三色轮作田（3×3）</text>
-  <text x="360" y="60" text-anchor="middle" font-size="13" fill="#64748B">按列轮种：列 0 胡萝卜 🥕 · 列 1 南瓜 🎃 · 列 2 向日葵 🌻</text>
+  <text x="360" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#333">订单 1 · 三色轮作田（4×4 或 6×6）</text>
+  <text x="360" y="60" text-anchor="middle" font-size="13" fill="#64748B">按列轮种：列 0 草 🌱 · 列 1 灌木 � · 列 2 胡萝卜 🥕</text>
 
   <!-- 网格 3×3，单元格 110×110，左上 (90, 100) -->
   <g transform="translate(90, 100)">
     <!-- 田底色（深色土壤） -->
     <rect width="330" height="330" fill="#7a5a32" rx="6"/>
     <!-- 三列不同色背景 -->
-    <rect x="0"   y="0" width="110" height="330" fill="#c97f3a" opacity="0.55"/>
-    <rect x="110" y="0" width="110" height="330" fill="#7e9c3a" opacity="0.55"/>
-    <rect x="220" y="0" width="110" height="330" fill="#d4a83a" opacity="0.55"/>
+    <rect x="0"   y="0" width="110" height="330" fill="#a0c45a" opacity="0.5"/>  <!-- 草：浅绿 -->
+    <rect x="110" y="0" width="110" height="330" fill="#6f9a3a" opacity="0.55"/> <!-- 灌木：深绿 -->
+    <rect x="220" y="0" width="110" height="330" fill="#d6884a" opacity="0.55"/> <!-- 胡萝卜：橙棕 -->
 
     <!-- 网格线 -->
     <g stroke="#3a2a10" stroke-width="1.5" fill="none">
@@ -25,27 +25,30 @@
 
     <!-- 作物 emoji -->
     <g font-size="48" text-anchor="middle" dominant-baseline="central">
-      <text x="55"  y="55">🥕</text>
-      <text x="55"  y="165">🥕</text>
-      <text x="55"  y="275">🥕</text>
+      <!-- 列 0 草 -->
+      <text x="55"  y="55">🌱</text>
+      <text x="55"  y="165">🌱</text>
+      <text x="55"  y="275">🌱</text>
 
-      <text x="165" y="55">🎃</text>
-      <text x="165" y="165">🎃</text>
-      <text x="165" y="275">🎃</text>
+      <!-- 列 1 灌木 -->
+      <text x="165" y="55">�</text>
+      <text x="165" y="165">�</text>
+      <text x="165" y="275">�</text>
 
-      <text x="275" y="55">🌻</text>
-      <text x="275" y="165">🌻</text>
-      <text x="275" y="275">🌻</text>
+      <!-- 列 2 胡萝卜 -->
+      <text x="275" y="55">🥕</text>
+      <text x="275" y="165">🥕</text>
+      <text x="275" y="275">🥕</text>
     </g>
 
     <!-- 列标签 -->
     <g font-size="13" fill="#fff" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">
-      <rect x="20"  y="-30" width="70" height="22" rx="11" fill="#c97f3a"/>
-      <text x="55"  y="-15">x=0 胡</text>
-      <rect x="130" y="-30" width="70" height="22" rx="11" fill="#7e9c3a"/>
-      <text x="165" y="-15">x=1 南</text>
-      <rect x="240" y="-30" width="70" height="22" rx="11" fill="#d4a83a"/>
-      <text x="275" y="-15">x=2 向</text>
+      <rect x="20"  y="-30" width="70" height="22" rx="11" fill="#6f9a3a"/>
+      <text x="55"  y="-15">x=0 草</text>
+      <rect x="130" y="-30" width="70" height="22" rx="11" fill="#4a6f25"/>
+      <text x="165" y="-15">x=1 灌</text>
+      <rect x="240" y="-30" width="70" height="22" rx="11" fill="#a85a25"/>
+      <text x="275" y="-15">x=2 胡</text>
     </g>
 
     <!-- 行标签 -->
@@ -59,24 +62,23 @@
     </g>
   </g>
 
-  <!-- 右侧说明 -->
+  <!-- 右侧说明（只展示轮作效果，不含代码答案） -->
   <g transform="translate(470, 100)">
     <rect width="220" height="320" fill="#fff" stroke="#EDEDED" rx="10"/>
-    <text x="20" y="30" font-size="14" font-weight="700" fill="#F3A21C">🟧 一行代码顶三个 if</text>
+    <text x="20" y="30" font-size="14" font-weight="700" fill="#F3A21C">🟧 田里看上去是什么样</text>
 
-    <text x="20" y="60" font-size="12" font-weight="600" fill="#333">crops 列表：</text>
-    <rect x="20" y="68" width="180" height="44" rx="6" fill="#1f1f1f"/>
-    <text x="28" y="86" font-size="9.5" fill="#e8e8e8" font-family="ui-monospace, Menlo, monospace">[胡萝卜, 南瓜, 向日葵]</text>
-    <text x="28" y="102" font-size="9.5" fill="#7a8" font-family="ui-monospace, Menlo, monospace">  ↑ 索引 0   1      2</text>
+    <text x="20" y="60" font-size="12" font-weight="600" fill="#333">3 列 3 种作物：</text>
+    <text x="20" y="80" font-size="11" fill="#333">列 0：🌱 草（无需翻土）</text>
+    <text x="20" y="100" font-size="11" fill="#333">列 1：🌿 灌木（无需翻土）</text>
+    <text x="20" y="120" font-size="11" fill="#333">列 2：🥕 胡萝卜（需要翻土）</text>
 
-    <text x="20" y="138" font-size="12" font-weight="600" fill="#F3A21C">🟧 关键代码：</text>
-    <rect x="20" y="146" width="180" height="40" rx="6" fill="#1f1f1f"/>
-    <text x="28" y="170" font-size="10.5" fill="#e8e8e8" font-family="ui-monospace, Menlo, monospace">plant(crops[x % len(crops)])</text>
+    <text x="20" y="160" font-size="12" font-weight="600" fill="#F3A21C">🟧 为什么这样选？</text>
+    <text x="20" y="180" font-size="11" fill="#333">草 + 灌木：零维护，自动长</text>
+    <text x="20" y="200" font-size="11" fill="#333">胡萝卜：换"产出"，但要翻土</text>
+    <text x="20" y="220" font-size="11" font-weight="600" fill="#3a6b3a">✓ 三者产出-消耗平衡</text>
+    <text x="20" y="240" font-size="11" font-weight="600" fill="#3a6b3a">✓ 不会让单种作物压库存</text>
 
-    <text x="20" y="208" font-size="12" font-weight="600" fill="#F3A21C">🟧 加一种作物怎么改？</text>
-    <text x="20" y="228" font-size="11" fill="#333">列表加一项就行：</text>
-    <text x="20" y="248" font-size="11" fill="#333">crops = [胡, 南, 向, 仙人掌]</text>
-    <text x="20" y="268" font-size="11" font-weight="600" fill="#3a6b3a">✓ 不动循环代码</text>
-    <text x="20" y="288" font-size="11" font-weight="600" fill="#3a6b3a">✓ 4 列轮作，零修改</text>
+    <text x="20" y="280" font-size="12" font-weight="600" fill="#F3A21C">🟧 怎么用代码实现？</text>
+    <text x="20" y="300" font-size="11" fill="#64748B" font-style="italic">见订单 1 的起步骨架</text>
   </g>
 </svg>
