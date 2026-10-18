@@ -457,7 +457,17 @@ body {
   content: "💡";
   flex-shrink: 0;
 }
-.tip p { margin: 0; }
+.tip p {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.tip code {
+  white-space: nowrap;
+  word-break: keep-all;
+}
 
 /* ============ 代码块 + 复制按钮 ============ */
 .code-wrap {
