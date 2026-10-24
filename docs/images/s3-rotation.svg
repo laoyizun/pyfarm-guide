@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans CJK SC', sans-serif">
-  <rect width="720" height="440" fill="#F9FAFB"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 470" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans CJK SC', sans-serif">
+  <rect width="720" height="470" fill="#F9FAFB"/>
 
   <!-- 标题 -->
   <text x="360" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#333">订单 1 · 三色轮作田（4×4 或 6×6）</text>
@@ -41,7 +41,7 @@
       <text x="275" y="275">🎃</text>
     </g>
 
-    <!-- 列标签 -->
+    <!-- 坐标轴：x 向右（底部 0→2），y 向上（左侧 0→2），原点 (0,0) 在左下角 -->
     <g font-size="13" fill="#fff" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">
       <rect x="20"  y="-30" width="70" height="22" rx="11" fill="#6f9a3a"/>
       <text x="55"  y="-15">x=0 草</text>
@@ -51,14 +51,20 @@
       <text x="275" y="-15">x=2 南</text>
     </g>
 
-    <!-- 行标签 -->
+    <!-- 行标签：y 从下往上 0,1,2 -->
     <g font-size="11" fill="#fff" font-weight="600" font-family="ui-monospace, Menlo, monospace">
-      <rect x="-30" y="40"  width="22" height="30" rx="4" fill="#3a2a10" opacity="0.6"/>
-      <text x="-19" y="60"  text-anchor="middle">y=0</text>
+      <rect x="-30" y="260" width="22" height="30" rx="4" fill="#3a2a10" opacity="0.6"/>
+      <text x="-19" y="280" text-anchor="middle">y=0</text>
       <rect x="-30" y="150" width="22" height="30" rx="4" fill="#3a2a10" opacity="0.6"/>
       <text x="-19" y="170" text-anchor="middle">y=1</text>
-      <rect x="-30" y="260" width="22" height="30" rx="4" fill="#3a2a10" opacity="0.6"/>
-      <text x="-19" y="280" text-anchor="middle">y=2</text>
+      <rect x="-30" y="40"  width="22" height="30" rx="4" fill="#3a2a10" opacity="0.6"/>
+      <text x="-19" y="60"  text-anchor="middle">y=2</text>
+    </g>
+
+    <!-- 原点标记 -->
+    <g>
+      <circle cx="0" cy="330" r="9" fill="#F3A21C" stroke="#fff" stroke-width="2"/>
+      <text x="14" y="334" font-size="10.5" font-weight="700" fill="#8a6a2a" font-family="ui-monospace, Menlo, monospace">(0,0)</text>
     </g>
   </g>
 

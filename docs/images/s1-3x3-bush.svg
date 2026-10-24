@@ -5,6 +5,7 @@
   <!-- 标题 -->
   <text x="360" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#5a4a2a">订单 3 · 3×3 全田种灌木</text>
   <text x="360" y="54" text-anchor="middle" font-size="13" fill="#8a7a5a">3 行 3 列共 9 格，全是灌木</text>
+  <text x="360" y="74" text-anchor="middle" font-size="11.5" fill="#a09070">编程农场坐标：原点在<tspan font-weight="700" fill="#F3A21C">左下角</tspan>，x 向右、y 向上</text>
 
   <!-- 3×3 田（居中放大） -->
   <g transform="translate(180,80)">
@@ -12,7 +13,7 @@
     <rect x="0" y="0" width="360" height="360" fill="#c8a06b" stroke="#8a6a3a" stroke-width="3" rx="6"/>
 
     <!-- 行 0 -->
-    <g transform="translate(0,0)">
+    <g transform="translate(0,240)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(0,0)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -20,8 +21,8 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
-    <g transform="translate(120,0)">
+    
+    <g transform="translate(120,240)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(1,0)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -29,8 +30,8 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
-    <g transform="translate(240,0)">
+    
+    <g transform="translate(240,240)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(2,0)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -38,7 +39,7 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
+    
 
     <!-- 行 1 -->
     <g transform="translate(0,120)">
@@ -49,7 +50,7 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
+    
     <g transform="translate(120,120)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(1,1)</text>
@@ -58,7 +59,7 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
+    
     <g transform="translate(240,120)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(2,1)</text>
@@ -67,10 +68,10 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
+    
 
     <!-- 行 2 -->
-    <g transform="translate(0,240)">
+    <g transform="translate(0,0)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(0,2)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -78,8 +79,8 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
-    <g transform="translate(120,240)">
+    
+    <g transform="translate(120,0)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(1,2)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -87,8 +88,8 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
-    <g transform="translate(240,240)">
+    
+    <g transform="translate(240,0)">
       <rect x="6" y="6" width="108" height="108" fill="#a08050" stroke="#7a5a30" stroke-width="1.5" rx="4"/>
       <text x="60" y="26" text-anchor="middle" font-size="11" fill="#fff8e0" font-weight="600">(2,2)</text>
       <circle cx="40" cy="60" r="12" fill="#6fa84a"/>
@@ -96,6 +97,6 @@
       <circle cx="80" cy="64" r="11" fill="#6fa84a"/>
       <circle cx="52" cy="78" r="10" fill="#84c25a"/>
       <circle cx="74" cy="84" r="9" fill="#6fa84a"/>
-    </g>
+    
   </g>
 </svg>

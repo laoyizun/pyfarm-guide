@@ -48,34 +48,152 @@
     <h2>📖 知识卡 · 5 张</h2>
 
     <h3>① 算术运算符：+ - * / % // **</h3>
-    <div class="code-wrap"><pre><code>5 + 3     # 8
-5 - 3     # 2
-5 * 3     # 15
-5 / 3     # 1.6666...（除法是浮点数！）
-5 // 2    # 2（整除，向下取整）
-5 % 2     # 1（取余，5 除以 2 余 1）
-2 ** 10   # 1024（幂）</code></pre></div>
+    <p>算术运算符把两个数<strong>算成一个新的数</strong>。左边和右边都是"数"，结果是"数"。</p>
+    <table class="op-table">
+      <thead>
+        <tr><th>符号</th><th>叫什么</th><th>怎么用</th><th>举例</th><th>注意</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="op-sym">+</td><td class="op-name">加</td>
+          <td>两个数相加</td><td class="op-eg">5 + 3 → 8</td>
+          <td class="op-note">也能拼字符串</td>
+        </tr>
+        <tr>
+          <td class="op-sym">-</td><td class="op-name">减</td>
+          <td>左边减右边</td><td class="op-eg">5 - 3 → 2</td>
+          <td class="op-note">写 <code>-</code> 是减法</td>
+        </tr>
+        <tr>
+          <td class="op-sym">*</td><td class="op-name">乘</td>
+          <td>两个数相乘</td><td class="op-eg">5 * 3 → 15</td>
+          <td class="op-note">写 <code>x</code> 是乘不是变量 x</td>
+        </tr>
+        <tr>
+          <td class="op-sym">/</td><td class="op-name">除</td>
+          <td>左边除以右边</td><td class="op-eg">5 / 3 → 1.6667</td>
+          <td class="op-note"><strong>永远返回小数</strong></td>
+        </tr>
+        <tr>
+          <td class="op-sym">//</td><td class="op-name">整除</td>
+          <td>除完只留整数部分</td><td class="op-eg">5 // 3 → 1</td>
+          <td class="op-note">要整数就用它</td>
+        </tr>
+        <tr>
+          <td class="op-sym">%</td><td class="op-name">取余</td>
+          <td>除不尽剩下的部分</td><td class="op-eg">5 % 3 → 2</td>
+          <td class="op-note"><strong>本关最常用</strong></td>
+        </tr>
+        <tr>
+          <td class="op-sym">**</td><td class="op-name">幂（次方）</td>
+          <td>左边 的 右次方</td><td class="op-eg">2 ** 3 → 8</td>
+          <td class="op-note">读作"2 的 3 次方"</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="code-wrap"><pre><code># 农场里最常用的两种：
+
+x % 2 == 0        # x 是偶数 → 棋盘格判断
+crops[x % 3]      # 按 3 列轮作 → 列表轮作</code></pre></div>
     <p class="tip"><code>%</code> 取余是这一关最常用的——判断奇偶、棋盘格、轮作都靠它。<code>/</code> 永远返回浮点数，要整数得用 <code>//</code>。</p>
 
     <h3>② 比较运算符：== != &gt; &lt; &gt;= &lt;=</h3>
-    <p>比较返回 <code>True</code> 或 <code>False</code>。<strong>注意是 <code>==</code>，不是 <code>=</code></strong>。单个 <code>=</code> 是"赋值"。</p>
-    <div class="code-wrap"><pre><code>5 == 3     # False
-5 != 3     # True
-5 &gt; 3      # True
-3 &lt;= 3     # True（小于等于）</code></pre></div>
+    <p>比较运算符把两个值<strong>比一下</strong>，结果不是数字，而是 <code>True</code>（真）或 <code>False</code>（假）。</p>
+    <table class="op-table">
+      <thead>
+        <tr><th>符号</th><th>叫什么</th><th>怎么用</th><th>举例</th><th>注意</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="op-sym">==</td><td class="op-name">等于</td>
+          <td>两边一样吗</td><td class="op-eg">5 == 5 → True</td>
+          <td class="op-note"><strong>两个等号</strong></td>
+        </tr>
+        <tr>
+          <td class="op-sym">!=</td><td class="op-name">不等于</td>
+          <td>两边不一样吗</td><td class="op-eg">5 != 3 → True</td>
+          <td class="op-note">感叹号表示"非"</td>
+        </tr>
+        <tr>
+          <td class="op-sym">&gt;</td><td class="op-name">大于</td>
+          <td>左边比右边大吗</td><td class="op-eg">5 &gt; 3 → True</td>
+          <td class="op-note">&gt; 朝左开口</td>
+        </tr>
+        <tr>
+          <td class="op-sym">&lt;</td><td class="op-name">小于</td>
+          <td>左边比右边小吗</td><td class="op-eg">3 &lt; 5 → True</td>
+          <td class="op-note">&lt; 朝右开口</td>
+        </tr>
+        <tr>
+          <td class="op-sym">&gt;=</td><td class="op-name">大于等于</td>
+          <td>左边不小于右边吗</td><td class="op-eg">5 &gt;= 5 → True</td>
+          <td class="op-note">包含"等于"</td>
+        </tr>
+        <tr>
+          <td class="op-sym">&lt;=</td><td class="op-name">小于等于</td>
+          <td>左边不大于右边吗</td><td class="op-eg">3 &lt;= 3 → True</td>
+          <td class="op-note">包含"等于"</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="code-wrap"><pre><code># 一个 = 是赋值，两个 == 才是比较：
+
+x = 5            # 把 5 放进变量 x
+if x == 5:    # 判断 x 是不是 5
+    quick_print("库存正好 5")</code></pre></div>
+    <p class="tip">最常见的报错：<code>if x = 5:</code>（只写一个等号）→ 报 <code>SyntaxError</code>。记住：<strong>左边是变量、右边是值，用两个等号</strong>。</p>
 
     <h3>③ 逻辑运算符：and / or / not</h3>
-    <p>把多个条件组合起来。<code>and</code> 要求都对，<code>or</code> 一个对就够，<code>not</code> 反过来。</p>
-    <div class="code-wrap"><pre><code>a = 10
-if a &gt; 5 and a &lt; 20:        # 同时满足
-    pass
-if a &lt; 0 or a &gt; 100:        # 满足一个就行
-    pass
-if not can_harvest():        # 没熟
-    pass</code></pre></div>
+    <p>逻辑运算符把<strong>多个 True/False 组合成一个</strong>，用来表达"两个条件都要满足"这类复合要求。</p>
+    <table class="op-table">
+      <thead>
+        <tr><th>符号</th><th>叫什么</th><th>怎么用</th><th>举例</th><th>农场里的用法</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="op-sym">and</td><td class="op-name">并且</td>
+          <td>两边<strong>都</strong>是 True 才 True</td>
+          <td class="op-eg">True and False → False</td>
+          <td>有水 <strong>and</strong> 缺水才浇</td>
+        </tr>
+        <tr>
+          <td class="op-sym">or</td><td class="op-name">或者</td>
+          <td>只要<strong>一边</strong>是 True 就 True</td>
+          <td class="op-eg">True or False → True</td>
+          <td>是树 <strong>or</strong> 是灌木都收</td>
+        </tr>
+        <tr>
+          <td class="op-sym">not</td><td class="op-name">不是 / 取反</td>
+          <td>True 变 False，反之亦然</td>
+          <td class="op-eg">not True → False</td>
+          <td><strong>not</strong> can_harvest() 没熟</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="code-wrap"><pre><code># 复合条件：两个条件都满足才浇水
+if num_items(Items.Water) &gt; 0 and get_water() &lt; 0.5:
+    use_item(Items.Water)
+
+# 取反：还没成熟才补种
+if not can_harvest():
+    plant(Entities.Bush)</code></pre></div>
+    <p class="tip">写复杂条件时<strong>宁可多打括号</strong>：<code>if (x % 2 == 0) and (y % 2 == 0):</code> 比 <code>if x % 2 == 0 and y % 2 == 0:</code> 清楚得多。</p>
 
     <h3>④ 优先级：拿不准就加括号</h3>
-    <p>从高到低：<strong>括号 &gt; 幂 &gt; 乘除 &gt; 加减 &gt; 比较 &gt; 逻辑</strong>。</p>
+    <p>一行里有多个运算符时，按<strong>优先级</strong>决定先算哪个。顺序如下（从高到低）：</p>
+    <table class="op-table">
+      <thead>
+        <tr><th>优先级</th><th>运算符</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1（最高）</td><td class="op-sym">( )</td><td>括号：括号里的先算</td></tr>
+        <tr><td>2</td><td class="op-sym">**</td><td>幂</td></tr>
+        <tr><td>3</td><td class="op-sym">* / // %</td><td>乘除、取余</td></tr>
+        <tr><td>4</td><td class="op-sym">+ -</td><td>加减</td></tr>
+        <tr><td>5</td><td class="op-sym">== != &gt; &lt; &gt;= &lt;=</td><td>比较</td></tr>
+        <tr><td>6（最低）</td><td class="op-sym">not → and → or</td><td>逻辑</td></tr>
+      </tbody>
+    </table>
     <div class="code-wrap"><pre><code>2 + 3 * 4           # 14，先乘后加
 (2 + 3) * 4         # 20，括号优先
 # 在农场里这么写：if (x % 2 == 0) and (y % 2 == 0):</code></pre></div>

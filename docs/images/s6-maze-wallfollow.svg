@@ -80,12 +80,14 @@
     <text x="55" y="206" font-size="10" font-weight="700" fill="#e74c3c">左手</text>
     <text x="55" y="220" font-size="10" font-weight="700" fill="#e74c3c">贴墙</text>
 
-    <!-- 坐标 -->
+    <!-- 坐标：原点在左下角，x 向右，y 向上 -->
     <g font-size="9" fill="#fff" font-family="ui-monospace, Menlo, monospace" opacity="0.7">
       <text x="8" y="345">(0,4)</text>
       <text x="338" y="345">(4,4)</text>
       <text x="8" y="14">(0,0)</text>
     </g>
+    <circle cx="0" cy="350" r="8" fill="#F3A21C" stroke="#fff" stroke-width="1.5" opacity="1"/>
+    <text x="14" y="347" font-size="9" font-weight="700" fill="#F3A21C" font-family="ui-monospace, Menlo, monospace" opacity="1">原点</text>
   </g>
 
   <!-- 右侧：左手扶墙三规则 -->

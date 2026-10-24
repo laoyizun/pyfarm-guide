@@ -6,7 +6,8 @@
   <text x="360" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#333">S2 订单 1 · 棋盘格种植模板（3×3）</text>
   <text x="360" y="60" text-anchor="middle" font-size="13" fill="#64748B">黑格种树 🌳，白格种灌木 🌿 · 树不能相邻，棋盘格刚好错开</text>
 
-  <!-- 网格参数：3×3，单元格 100×100，左上角 (110, 90) -->
+  <!-- 网格参数：3×3，单元格 100×100，左上角 (110, 90)
+       编程农场坐标：原点 (0,0) 在左下角，x 向右（East），y 向上（North） -->
   <g transform="translate(110, 90)">
     <!-- 田底色 -->
     <rect width="300" height="300" fill="#c9a36a" rx="4"/>
@@ -19,30 +20,38 @@
       <rect x="0" y="0" width="300" height="300" stroke-width="2"/>
     </g>
 
-    <!-- 树木（黑格 (0,0)(1,1)(2,2) 和 (0,2)(2,0)） -->
+    <!-- 树木（黑格：x、y 奇偶性相同） -->
     <g font-size="44" text-anchor="middle" dominant-baseline="central">
-      <text x="50"  y="50">🌳</text>
+      <text x="50"  y="250">🌳</text>
       <text x="150" y="150">🌳</text>
-      <text x="250" y="250">🌳</text>
+      <text x="250" y="50">🌳</text>
     </g>
-    <!-- 灌木（其余 6 格） -->
+    <!-- 灌木（白格：其余 6 格） -->
     <g font-size="40" text-anchor="middle" dominant-baseline="central" opacity="0.95">
-      <text x="150" y="50">🌿</text>
-      <text x="250" y="50">🌿</text>
-      <text x="50"  y="150">🌿</text>
-      <text x="50"  y="250">🌿</text>
       <text x="150" y="250">🌿</text>
+      <text x="250" y="250">🌿</text>
+      <text x="50"  y="150">🌿</text>
+      <text x="50"  y="50">🌿</text>
+      <text x="150" y="50">🌿</text>
       <text x="250" y="150">🌿</text>
     </g>
 
-    <!-- 坐标标签（x=列, y=行） -->
+    <!-- 坐标轴：x 向右（底部标 0→2），y 向上（左侧标 0→2），原点 (0,0) 在左下角 -->
     <g font-size="11" fill="#5a3a1a" font-weight="600" font-family="ui-monospace, Menlo, monospace">
-      <text x="20" y="-8">(0,0)</text>
-      <text x="120" y="-8">(1,0)</text>
-      <text x="220" y="-8">(2,0)</text>
-      <text x="-30" y="54">x=0</text>
-      <text x="-30" y="154">x=1</text>
-      <text x="-30" y="254">x=2</text>
+      <!-- 底部 x 轴标签 -->
+      <text x="50"  y="318" text-anchor="middle">x=0</text>
+      <text x="150" y="318" text-anchor="middle">x=1</text>
+      <text x="250" y="318" text-anchor="middle">x=2</text>
+      <!-- 左侧 y 轴标签（从下往上 0,1,2） -->
+      <text x="-32" y="254" text-anchor="middle">y=0</text>
+      <text x="-32" y="154" text-anchor="middle">y=1</text>
+      <text x="-32" y="54"  text-anchor="middle">y=2</text>
+    </g>
+
+    <!-- 原点标记 -->
+    <g>
+      <circle cx="0" cy="300" r="9" fill="#F3A21C" stroke="#fff" stroke-width="2"/>
+      <text x="0" y="336" text-anchor="middle" font-size="10.5" font-weight="700" fill="#F3A21C" font-family="ui-monospace, Menlo, monospace">(0,0)</text>
     </g>
   </g>
 

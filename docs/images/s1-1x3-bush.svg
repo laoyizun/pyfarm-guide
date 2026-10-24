@@ -60,8 +60,8 @@
       <tspan>3 格都是灌木（<tspan font-family="ui-monospace, Menlo, monospace">Entities.Bush</tspan>），无人机在 0→1→2→1→0 之间来回走并收草。</tspan>
     </text>
     <text x="20" y="42" font-size="12" fill="#8a6a2a">
-      <tspan font-weight="700">关键判断：</tspan>
-      <tspan font-family="ui-monospace, Menlo, monospace">get_pos_x() == 2</tspan> 时 <tspan font-family="ui-monospace, Menlo, monospace">move(West)</tspan>，<tspan font-family="ui-monospace, Menlo, monospace">== 0</tspan> 时 <tspan font-family="ui-monospace, Menlo, monospace">move(East)</tspan>。
+      <tspan font-weight="700">关键点：</tspan>
+      <tspan>每次 <tspan font-family="ui-monospace, Menlo, monospace">move(East)</tspan> 走 3 步就正好绕回起点（0→1→2→0），不需要判断位置。</tspan>
     </text>
   </g>
 </svg>

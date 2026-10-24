@@ -831,6 +831,62 @@ details.fold > .fold-body li { margin: 4px 0; }
   font-weight: 600;
 }
 
+/* ============ 运算符速查表 ============ */
+.op-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 13.5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.op-table th {
+  background: #fff8ec;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #8a6a2a;
+  border-bottom: 2px solid var(--orange);
+  text-align: left;
+  white-space: nowrap;
+}
+.op-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-mute);
+}
+.op-table tr:last-child td {
+  border-bottom: none;
+}
+.op-table tbody tr:nth-child(even) {
+  background: #fdfbf7;
+}
+.op-table .op-sym {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--orange);
+  white-space: nowrap;
+  width: 1%;
+}
+.op-table .op-name {
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.op-table .op-eg {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  color: #3a6b3a;
+  white-space: nowrap;
+}
+.op-table .op-note {
+  font-size: 12.5px;
+  color: #a05a4a;
+}
+
 /* ============ 章节底部导航 ============ */
 .ch-nav {
   max-width: 760px;
