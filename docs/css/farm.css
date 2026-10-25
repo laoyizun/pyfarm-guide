@@ -445,24 +445,19 @@ body {
   background: var(--paper);
   border: 1px dashed var(--line);
   border-radius: var(--radius-sm);
-  padding: 12px 18px;
+  padding: 12px 18px 12px 42px;
   margin: 16px 0;
   font-size: 14px;
   color: var(--ink-mute);
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  position: relative;
+  overflow-x: auto;
 }
 .tip::before {
   content: "💡";
-  flex-shrink: 0;
-}
-.tip p {
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
 }
 .tip code {
   white-space: nowrap;
@@ -473,24 +468,19 @@ body {
   background: #f0f5fb;
   border: 1px dashed #8db4e0;
   border-radius: var(--radius-sm);
-  padding: 12px 18px;
+  padding: 12px 18px 12px 42px;
   margin: 16px 0;
   font-size: 14px;
   color: #2a4a6a;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  position: relative;
+  overflow-x: auto;
 }
 .tip-task::before {
   content: "📌";
-  flex-shrink: 0;
-}
-.tip-task p {
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
 }
 .tip-task code {
   white-space: nowrap;
@@ -501,28 +491,22 @@ body {
   background: #fdf2f0;
   border: 1px dashed #e0a89d;
   border-radius: var(--radius-sm);
-  padding: 12px 18px;
+  padding: 12px 18px 12px 42px;
   margin: 16px 0;
   font-size: 14px;
   color: #6a2a20;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  position: relative;
+  overflow-x: auto;
 }
 .tip-warn::before {
   content: "⚠️";
-  flex-shrink: 0;
-}
-.tip-warn p {
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
 }
 .tip-warn code {
   white-space: nowrap;
-  word-break: keep-all;
 }
 
 /* ============ 代码块 + 复制按钮 ============ */
