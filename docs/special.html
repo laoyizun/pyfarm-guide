@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>特殊订单 · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">特殊订单</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">🎯</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">特殊订单 · 综合实战</div>
+      <h1 class="ch-h">把前面学过的全用上</h1>
+      <p class="ch-d">S1–S6 每个阶段练一个知识点。<strong>特殊订单</strong>不一样——它把好几个阶段的知识点捆在一起，做完才算真的会。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="sp" data-total="4">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <h2>🎮 游戏进度 · 课前准备</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>南瓜（Pumpkin）</strong>——种在翻好的土（<code>Grounds.Soil</code>）上。</li>
+        <li>解锁 <strong>水（Items.Water）</strong>——浇水能让生长快约 5 倍，但<strong>挡不住枯死</strong>。</li>
+        <li>解锁 <strong>施肥（Items.Fertilizer）</strong>——对新苗施肥能缩短约 2 秒生长。</li>
+        <li><strong>亲眼看一次枯死</strong>：种 9 颗南瓜等它们长大，会看到某个格子变成一个干瘪的南瓜——那就是烂格。</li>
+        <li>记住这条关键规则：<strong>在烂格上直接种东西，会自动清掉它</strong>，不用先清理。</li>
+        <li>学会用 <code>can_harvest()</code> 判断一格能不能收——<strong>不用去认哪个是烂的</strong>，问一句就知道。</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">为什么单独设栏目</span>特殊订单<strong>不教新语法</strong>，只考"你会不会把学过的拼起来"。如果某个知识点忘了，先回对应的 S 阶段补上——别硬扛。</p>
+    </div>
+
+    <h2>🎯 特殊订单 · 大南瓜</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">特殊订单 1</span>
+        <h3>大南瓜：把烂瓜清干净再一起收</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        把<strong>所有土地都种上南瓜</strong>。南瓜长大时大约<strong>五分之一会枯死</strong>，留下烂格——只要还有一个烂格，整片南瓜就<strong>聚合不成大南瓜</strong>，只能收成零碎小块。
+        <br><br>
+        客户要你：<strong>把烂格一个不漏地找出来，重新种上</strong>，一直补到<strong>整片田全是好南瓜</strong>，然后<strong>一次性收走</strong>。
+      </div>
+
+      <figure class="order-fig">
+        <img src="images/sp-pumpkin-field.svg" alt="大南瓜田示意图：整片田种满南瓜，其中有几格是枯死的烂南瓜，坏格被标记出来需要重新补种" loading="lazy">
+        <figcaption>图：整片南瓜田。<strong>一个烂格就能毁掉整片</strong>——所以必须先找齐烂格、再逐个补种，最后才收。</figcaption>
+      </figure>
+
+      <div class="order-must">
+        <span class="order-must-chip">必须用列表记账</span>
+        <span class="order-must-chip">必须用 append</span>
+        <span class="order-must-chip">必须用 for 遍历坏格</span>
+        <span class="order-must-chip">必须用 len() 判断清空</span>
+        <span class="order-must-chip">必须用 can_harvest() 判断好坏</span>
+      </div>
+
+      <details class="fold">
+        <summary>💡 思路拆解（先自己读一遍再看）</summary>
+        <div class="fold-body">
+          <p><b>第 1 步 · 种满</b>：用两层 <code>for</code> 扫全田，每格先 <code>till()</code> 再 <code>plant(Entities.Pumpkin)</code>。</p>
+          <p><b>第 2 步 · 记账</b>：再扫一遍全田，每格问一句"收得了不"——<code>can_harvest()</code> 返回 <code>False</code> 的格子，就是<strong>要记账的坏格</strong>，把坐标 <code>bad.append([x, y])</code> 记下来。</p>
+          <p><b>第 3 步 · 补种</b>：<code>for pos in bad:</code> 逐个飞回去，在坏格上重新种南瓜（种上去就自动清掉烂南瓜）。</p>
+          <p><b>第 4 步 · 收</b>：<code>bad</code> 列表空了，说明整片都是好南瓜，回到任意一格 <code>harvest()</code>。</p>
+          <p class="tip"><strong>关键点</strong>：<code>can_harvest()</code> 返回 <code>False</code> 有<strong>两种可能</strong>——烂了，或者<strong>还没长熟</strong>。所以扫描之前要<strong>先等全田长熟</strong>（浇水能加速），否则会把没熟的南瓜也当成坏格去补种，反而把好苗种坏。</p>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>🔧 常见报错 · 卡住了先看这里</summary>
+        <div class="fold-body">
+          <p><b>收上来是一堆小块，不是大南瓜</b> → 收割太早了，还有南瓜没长熟或者还有烂格。<strong>先确认 <code>bad</code> 列表真的空了</strong>。</p>
+          <p><b>怎么判断"这格要补种"</b> → <code>can_harvest()</code>。返回 <code>True</code> = 好了不用管；返回 <code>False</code> = 要记账。</p>
+          <p><b>坏格列表越来越长 / 越补越乱</b> → 你把<strong>还没长熟</strong>的南瓜也当成烂瓜了。<strong>先等全田长熟再扫</strong>，别急着补种。</p>
+          <p><b>在烂格上 plant 报错</b> → 检查是否先 <code>till()</code> 翻土。烂格也要翻土才能种。</p>
+          <p><b>补种完还是收不到大南瓜</b> → 补种的新南瓜还没长熟。<strong>补种后要等</strong>，或者循环到全部 <code>can_harvest()</code> 为 True。</p>
+          <p><b>收完发现地上还有南瓜</b> → 收割会拆掉合并。整片要<strong>同时收</strong>，中途不要收别的。</p>
+        </div>
+      </details>
+
+      <div class="gate">
+        <span class="gate-label">✓ 4 个知识点 · 真的会了才勾</span>
+        <ul>
+          <li><label><input type="checkbox" data-key="farm_sp_k1"> 我能用列表把"坏格坐标"记下来，而不是靠记忆</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k2"> 我能用 <code>can_harvest()</code> 判断一格南瓜能不能收</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k3"> 我能解释"为什么补种完不能马上收"</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k4"> 我能收成一整片大南瓜，而不是一堆零碎小块</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>🧠 换需求测试 · 真会了才过</summary>
+      <div class="fold-body">
+        <ul>
+          <li><strong>换田大小</strong>：把 3×3 改成 5×5，代码要不要改？（用 <code>get_world_size()</code> 就完全不用改）</li>
+          <li><strong>换检测方式</strong>：不用 <code>Dead_Pumpkin</code>，改用"种下去之前是不是空地"来判断烂格，行不行？</li>
+          <li><strong>加肥料</strong>：补种时加一句 <code>use_item(Items.Fertilizer)</code>，会让新苗更快长熟。为什么要加在"刚种完"而不是"随便哪一格"？</li>
+          <li><strong>口述题</strong>：为什么"记账补种"比"一直全田扫描"快？说清理由。</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout">
+      <p><span class="callout-label">📌 老师注记</span>这道题是<strong>列表综合实战</strong>：S3 的列表 + S3 的 for 遍历 + S2 的 if 判断 + L1 的双层 for，四样东西一起用。<br>大南瓜产量是 <strong>n³</strong>（边长 1–5），6×6 起是 <strong>6·n²</strong>——32×32 的田能收 6144 个。学生看到那个数字时会自己理解"为什么要优化"，不用讲。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="stage-6.html" class="prev"><span class="arrow">←</span><span class="text">S6 走进迷宫和恐龙帽</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="index.html" class="next"><span class="text">返回路线</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    特殊订单不教新语法，只考"能不能把学过的拼起来" · 做不出来先回 S 阶段补<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

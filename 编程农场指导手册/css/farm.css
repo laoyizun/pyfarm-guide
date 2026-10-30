@@ -445,19 +445,69 @@ body {
   background: var(--paper);
   border: 1px dashed var(--line);
   border-radius: var(--radius-sm);
-  padding: 12px 18px;
+  padding: 12px 18px 12px 42px;
   margin: 16px 0;
   font-size: 14px;
   color: var(--ink-mute);
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  position: relative;
+  overflow-x: auto;
 }
 .tip::before {
   content: "💡";
-  flex-shrink: 0;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
 }
-.tip p { margin: 0; }
+.tip code {
+  white-space: nowrap;
+}
+
+/* 任务提示：订单卡里的提示，蓝色 📌 */
+.tip-task {
+  background: #f0f5fb;
+  border: 1px dashed #8db4e0;
+  border-radius: var(--radius-sm);
+  padding: 12px 18px 12px 42px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #2a4a6a;
+  position: relative;
+  overflow-x: auto;
+}
+.tip-task::before {
+  content: "📌";
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
+}
+.tip-task code {
+  white-space: nowrap;
+}
+
+/* 警告提示：报错/易错点，红色 ⚠️ */
+.tip-warn {
+  background: #fdf2f0;
+  border: 1px dashed #e0a89d;
+  border-radius: var(--radius-sm);
+  padding: 12px 18px 12px 42px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #6a2a20;
+  position: relative;
+  overflow-x: auto;
+}
+.tip-warn::before {
+  content: "⚠️";
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1.5;
+}
+.tip-warn code {
+  white-space: nowrap;
+}
 
 /* ============ 代码块 + 复制按钮 ============ */
 .code-wrap {
@@ -765,6 +815,62 @@ details.fold > .fold-body li { margin: 4px 0; }
   font-weight: 600;
 }
 
+/* ============ 运算符速查表 ============ */
+.op-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 13.5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.op-table th {
+  background: #fff8ec;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #8a6a2a;
+  border-bottom: 2px solid var(--orange);
+  text-align: left;
+  white-space: nowrap;
+}
+.op-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-mute);
+}
+.op-table tr:last-child td {
+  border-bottom: none;
+}
+.op-table tbody tr:nth-child(even) {
+  background: #fdfbf7;
+}
+.op-table .op-sym {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--orange);
+  white-space: nowrap;
+  width: 1%;
+}
+.op-table .op-name {
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.op-table .op-eg {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  color: #3a6b3a;
+  white-space: nowrap;
+}
+.op-table .op-note {
+  font-size: 12.5px;
+  color: #a05a4a;
+}
+
 /* ============ 章节底部导航 ============ */
 .ch-nav {
   max-width: 760px;
@@ -946,4 +1052,36 @@ details.fold > .fold-body li { margin: 4px 0; }
   .howto { margin-top: 24px; }
   .site-nav { padding: 10px 16px; }
   .site-nav-stage { display: none; }
+}
+
+/* ===== 订单配图 ===== */
+.order-fig {
+  margin: 16px 0 18px;
+  padding: 12px 14px 10px;
+  background: #fffbf2;
+  border: 1px solid var(--c-border, #f0e0c0);
+  border-radius: 12px;
+  text-align: center;
+}
+.order-fig img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 8px;
+  border-radius: 8px;
+}
+.order-fig figcaption {
+  font-size: 13px;
+  color: var(--c-muted, #6b5a3a);
+  line-height: 1.6;
+  text-align: left;
+  margin-top: 4px;
+}
+.order-fig figcaption code {
+  background: #fff;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid #f0e0c0;
+  font-size: 12px;
 }

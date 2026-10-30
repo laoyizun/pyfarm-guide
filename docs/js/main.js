@@ -82,7 +82,7 @@
     var total = parseInt(wrap.getAttribute('data-total') || '0', 10);
     var done = 0;
     for (var i = 1; i <= total; i++) {
-      if (g('farm_s' + stage + '_k' + i) === '1') done++;
+      if (g(keyOf(stage, i)) === '1') done++;
     }
     var fill = wrap.querySelector('.ch-top-fill');
     var text = wrap.querySelector('.ch-top-text');
@@ -90,7 +90,12 @@
     if (text) text.textContent = '已会 ' + done + ' / ' + total + ' 个知识点';
   }
 
-  // 总览页：6 张卡的进度徽标 + 顶部总进度
+  // key 规则：阶段 sp → farm_sp_k1；阶段 1 → farm_s1_k1
+  function keyOf(stage, i) {
+    return stage === 'sp' ? 'farm_sp_k' + i : 'farm_s' + stage + '_k' + i;
+  }
+
+  // 总览页：6 张卡 + 特殊订单卡的进度徽标 + 顶部总进度
   function updateOverviewProgress() {
     var cards = document.querySelectorAll('[data-stage-card]');
     if (cards.length === 0) return;
@@ -100,10 +105,13 @@
       var total = parseInt(card.getAttribute('data-total') || '0', 10);
       var done = 0;
       for (var i = 1; i <= total; i++) {
-        if (g('farm_s' + stage + '_k' + i) === '1') done++;
+        if (g(keyOf(stage, i)) === '1') done++;
       }
-      totalAll += total;
-      doneAll += done;
+      // 特殊订单是独立栏目，不计入顶部总进度
+      if (stage !== 'sp') {
+        totalAll += total;
+        doneAll += done;
+      }
       var badge = card.querySelector('.toc-prog');
       if (badge) {
         if (done > 0) {
