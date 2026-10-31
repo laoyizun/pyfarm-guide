@@ -3,7 +3,7 @@
 
   <!-- 标题 -->
   <text x="360" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#333">订单 1 · 三色轮作田（4×4 或 6×6）</text>
-  <text x="360" y="60" text-anchor="middle" font-size="13" fill="#64748B">按列轮种：列 0 草 🌱 · 列 1 灌木 🪵 · 列 2 南瓜 🎃</text>
+  <text x="360" y="60" text-anchor="middle" font-size="13" fill="#64748B">按列轮种：列 0 草 🌱 · 列 1 树 🌳 · 列 2 胡萝卜 🥕</text>
 
   <!-- 网格 3×3，单元格 110×110，左上 (90, 100) -->
   <g transform="translate(90, 100)">
@@ -11,7 +11,7 @@
     <rect width="330" height="330" fill="#7a5a32" rx="6"/>
     <!-- 三列不同色背景 -->
     <rect x="0"   y="0" width="110" height="330" fill="#a0c45a" opacity="0.5"/>  <!-- 草：浅绿 -->
-    <rect x="110" y="0" width="110" height="330" fill="#6f9a3a" opacity="0.55"/> <!-- 灌木：深绿 -->
+    <rect x="110" y="0" width="110" height="330" fill="#4e7c2a" opacity="0.6"/>  <!-- 树：深绿 -->
     <rect x="220" y="0" width="110" height="330" fill="#d6884a" opacity="0.55"/> <!-- 胡萝卜：橙棕 -->
 
     <!-- 网格线 -->
@@ -30,25 +30,25 @@
       <text x="55"  y="165">🌱</text>
       <text x="55"  y="275">🌱</text>
 
-      <!-- 列 1 灌木 -->
-      <text x="165" y="55">🪵</text>
-      <text x="165" y="165">🪵</text>
-      <text x="165" y="275">🪵</text>
+      <!-- 列 1 树 -->
+      <text x="165" y="55">🌳</text>
+      <text x="165" y="165">🌳</text>
+      <text x="165" y="275">🌳</text>
 
-      <!-- 列 2 南瓜 -->
-      <text x="275" y="55">🎃</text>
-      <text x="275" y="165">🎃</text>
-      <text x="275" y="275">🎃</text>
+      <!-- 列 2 胡萝卜 -->
+      <text x="275" y="55">🥕</text>
+      <text x="275" y="165">🥕</text>
+      <text x="275" y="275">🥕</text>
     </g>
 
     <!-- 坐标轴：x 向右（底部 0→2），y 向上（左侧 0→2），原点 (0,0) 在左下角 -->
     <g font-size="13" fill="#fff" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">
       <rect x="20"  y="-30" width="70" height="22" rx="11" fill="#6f9a3a"/>
       <text x="55"  y="-15">x=0 草</text>
-      <rect x="130" y="-30" width="70" height="22" rx="11" fill="#4a6f25"/>
-      <text x="165" y="-15">x=1 灌</text>
+      <rect x="130" y="-30" width="70" height="22" rx="11" fill="#33611c"/>
+      <text x="165" y="-15">x=1 树</text>
       <rect x="240" y="-30" width="70" height="22" rx="11" fill="#a85a25"/>
-      <text x="275" y="-15">x=2 南</text>
+      <text x="275" y="-15">x=2 胡</text>
     </g>
 
     <!-- 行标签：y 从下往上 0,1,2 -->
@@ -75,16 +75,17 @@
 
     <text x="20" y="60" font-size="12" font-weight="600" fill="#333">3 列 3 种作物：</text>
     <text x="20" y="80" font-size="11" fill="#333">列 0：🌱 草（零维护）</text>
-    <text x="20" y="100" font-size="11" fill="#333">列 1：🪵 灌木（零维护）</text>
-    <text x="20" y="120" font-size="11" fill="#333">列 2：🎃 南瓜（需翻土）</text>
+    <text x="20" y="100" font-size="11" fill="#333">列 1：🌳 树（要隔格种）</text>
+    <text x="20" y="120" font-size="11" fill="#333">列 2：🥕 胡萝卜（需翻土）</text>
 
     <text x="20" y="160" font-size="12" font-weight="600" fill="#F3A21C">🟧 为什么这样选？</text>
-    <text x="20" y="180" font-size="11" fill="#333">草 + 灌木：不用翻土，自动长</text>
-    <text x="20" y="200" font-size="11" fill="#333">南瓜：产量高，但要先 till()</text>
-    <text x="20" y="220" font-size="11" font-weight="600" fill="#3a6b3a">✓ 三者产出-消耗平衡</text>
-    <text x="20" y="240" font-size="11" font-weight="600" fill="#3a6b3a">✓ 不会让单种作物压库存</text>
+    <text x="20" y="180" font-size="11" fill="#333">草：默认地块，不用管</text>
+    <text x="20" y="200" font-size="11" fill="#333">树：隔一列种，才不会相邻</text>
+    <text x="20" y="220" font-size="11" fill="#333">胡萝卜：产量高，要先 till()</text>
+    <text x="20" y="240" font-size="11" font-weight="600" fill="#3a6b3a">✓ 三者产出-消耗平衡</text>
+    <text x="20" y="260" font-size="11" font-weight="600" fill="#3a6b3a">✓ 不会让单种作物压库存</text>
 
-    <text x="20" y="280" font-size="12" font-weight="600" fill="#F3A21C">🟧 怎么用代码实现？</text>
-    <text x="20" y="300" font-size="11" fill="#64748B" font-style="italic">见订单 1 的起步骨架</text>
+    <text x="20" y="292" font-size="12" font-weight="600" fill="#F3A21C">🟧 怎么用代码实现？</text>
+    <text x="20" y="310" font-size="11" fill="#64748B" font-style="italic">见订单 1 的起步骨架</text>
   </g>
 </svg>
