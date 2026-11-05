@@ -73,17 +73,14 @@ while changed:                 # 还要继续
     swap(East)    # 我比右边大，右边比我小 → 交换
 # 交换后 measure() 现在是原来右边的值</code></pre></div>
 
-    <h3>④ 反向：用一个函数处理方向</h3>
-    <p>蛇形扫描需要"这一行从左到右、下一行从右到左"。用 <code>reverse()</code> 把 East 变 West：</p>
-    <div class="code-wrap"><pre><code>def reverse(d):
-    if d == East:  return West
-    if d == West:  return East
-    if d == North: return South
-    return North
+    <h3>④ 方向反转：列表 + 取余，不用函数</h3>
+    <p>蛇形扫描需要"这一行从左到右、下一行从右到左"。把 4 个方向排进列表，<strong>反向 = 下标加 2 再取模 4</strong>：</p>
+    <div class="code-wrap"><pre><code>dirs = [North, East, South, West]   # 下标 0 1 2 3
 
-dir = East
-# ... 扫完一行后
-dir = reverse(dir)    # 东变西，西变东</code></pre></div>
+dir = East                        # dir = dirs[1]
+i = dirs.index(dir)               # i = 1
+dir = dirs[(i + 2) % 4]           # (1 + 2) % 4 = 3 → West</code></pre></div>
+    <p class="tip"><strong>为什么是 +2？</strong> 列表是"北→东→南→西"绕一圈，<strong>对面</strong>就是隔 2 个（北↔南、东↔西）。加 2 会算出 3 或 5，<strong>取模 4</strong>把 5 变回 1，下标永远在 0~3。</p>
 
     <h2>🚜 农场订单 · 闯关任务</h2>
 
@@ -116,7 +113,7 @@ dir = reverse(dir)    # 东变西，西变东</code></pre></div>
       </div>
       <div class="order-must">
         <span class="order-must-chip">横竖两向都做</span>
-        <span class="order-must-chip">用 reverse 函数</span>
+        <span class="order-must-chip">用方向列表 + 取余反转</span>
         <span class="order-must-chip">全部变绿才算成功</span>
       </div>
       <p class="tip">当整片变绿，<code>harvest()</code> 一次会拿到 n² 倍的仙人掌。</p>
@@ -125,17 +122,18 @@ dir = reverse(dir)    # 东变西，西变东</code></pre></div>
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 3（挑战）</span>
-        <h3>把它写成函数</h3>
+        <h3>让它跑得更快：少走冤枉路</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        把订单 2 全部打包成一个函数 <code>sort_cactus(size)</code>，主循环调用即可。
+        排好一格后<strong>不要再回头扫它</strong>。提示：横向排完一行后，往回走一趟会把刚排好的又打乱——想想<strong>为什么</strong>，然后调整扫描策略（比如每轮只扫"还没确认"的那一段）。
       </div>
       <div class="order-must">
-        <span class="order-must-chip">def + 参数</span>
-        <span class="order-must-chip">主循环 ≤ 10 行</span>
-        <span class="order-must-chip">可以传入任意 size</span>
+        <span class="order-must-chip">用变量记录进度</span>
+        <span class="order-must-chip">减少重复扫描</span>
+        <span class="order-must-chip">结果必须全绿</span>
       </div>
+      <p class="tip-task">这一关不考新语法，考的是<strong>算法效率</strong>——同样的结果，少走一半的路。泡泡排序最坏要 O(n²) 轮，你能做到几轮？</p>
     </div>
 
     <details class="fold">
@@ -166,13 +164,13 @@ dir = reverse(dir)    # 东变西，西变东</code></pre></div>
   </article>
 
   <nav class="ch-nav">
-    <a href="stage-4.html" class="prev"><span class="arrow">←</span><span class="text">S4 函数</span></a>
+    <a href="stage-4.html" class="prev"><span class="arrow">←</span><span class="text">S4 混种伴生</span></a>
     <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
     <a href="stage-6.html" class="next"><span class="text">S6 迷宫 + 恐龙</span><span class="arrow">→</span></a>
   </nav>
 
   <div class="footer">
-    排序是算法的入口 · 一维先练通再上二维 · 脑子要炸就回 S4<br>
+    排序是算法的入口 · 一维先练通再上二维 · 脑子要炸就回知识卡 ① 和 ②<br>
     由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
   </div>
 

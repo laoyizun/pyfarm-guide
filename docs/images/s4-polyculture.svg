@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans CJK SC', sans-serif">
+  <rect width="720" height="440" fill="#F9FAFB"/>
+
+  <!-- 标题 -->
+  <text x="360" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#333">S4 订单 1 · 伴生请求怎么读</text>
+  <text x="360" y="57" text-anchor="middle" font-size="12.5" fill="#64748B">灌木主动提出请求：给我什么 + 种在哪（不一定挨着它）</text>
+
+  <!-- 网格 4×3，单元格 92×92，左上 (105, 95)，原点在左下角 -->
+  <g transform="translate(105, 95)">
+    <rect width="368" height="276" fill="#8a6636" rx="6"/>
+    <g stroke="#3a2a10" stroke-width="1.3" fill="none">
+      <rect x="0" y="0" width="368" height="276" stroke-width="2"/>
+      <line x1="92"  y1="0" x2="92"  y2="276"/>
+      <line x1="184" y1="0" x2="184" y2="276"/>
+      <line x1="276" y1="0" x2="276" y2="276"/>
+      <line x1="0" y1="92"  x2="368" y2="92"/>
+      <line x1="0" y1="184" x2="368" y2="184"/>
+    </g>
+
+    <!-- 普通作物 -->
+    <g font-size="30" text-anchor="middle" dominant-baseline="central" opacity="0.75">
+      <text x="46"  y="46">🌱</text>
+      <text x="138" y="46">🌱</text>
+      <text x="322" y="46">🌱</text>
+      <text x="46"  y="230">🌱</text>
+      <text x="230" y="230">🌱</text>
+      <text x="322" y="230">🌱</text>
+      <text x="138" y="230">🌱</text>
+    </g>
+
+    <!-- 主角：灌木 (1,2) -->
+    <g>
+      <rect x="93" y="185" width="90" height="90" fill="#4e7c2a" opacity="0.45" rx="3"/>
+      <text x="138" y="230" font-size="36" text-anchor="middle" dominant-baseline="central">🌿</text>
+      <circle cx="138" cy="230" r="30" fill="none" stroke="#F3A21C" stroke-width="3"/>
+    </g>
+
+    <!-- 伴生目标：胡萝卜 (3,2) -->
+    <g>
+      <rect x="277" y="185" width="90" height="90" fill="#d6884a" opacity="0.5" rx="3"/>
+      <text x="322" y="230" font-size="34" text-anchor="middle" dominant-baseline="central">🥕</text>
+      <circle cx="322" cy="230" r="30" fill="none" stroke="#e74c3c" stroke-width="3"/>
+    </g>
+
+    <!-- 请求箭头：灌木 → 胡萝卜 -->
+    <path d="M 172 212 Q 245 168 292 212" fill="none" stroke="#e74c3c" stroke-width="3"
+          stroke-dasharray="7 5" marker-end="url(#arrowRed)"/>
+    <defs>
+      <marker id="arrowRed" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 Z" fill="#e74c3c"/>
+      </marker>
+    </defs>
+    <text x="232" y="150" font-size="11.5" font-weight="700" fill="#e74c3c" text-anchor="middle">它要胡萝卜，种在 (3,2)</text>
+
+    <!-- 坐标：原点在左下 -->
+    <circle cx="0" cy="276" r="8" fill="#F3A21C" stroke="#fff" stroke-width="2"/>
+    <text x="13" y="280" font-size="10" font-weight="700" fill="#8a6a2a" font-family="ui-monospace, Menlo, monospace">(0,0)</text>
+    <g font-size="10" fill="#8a6a2a" font-weight="600" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">
+      <text x="46"  y="296">x=0</text>
+      <text x="138" y="296">x=1</text>
+      <text x="230" y="296">x=2</text>
+      <text x="322" y="296">x=3</text>
+    </g>
+    <g font-size="10" fill="#8a6a2a" font-weight="600" font-family="ui-monospace, Menlo, monospace" text-anchor="middle">
+      <text x="-14" y="234">y=0</text>
+      <text x="-14" y="142">y=1</text>
+      <text x="-14" y="50">y=2</text>
+    </g>
+  </g>
+
+  <!-- 右侧说明 -->
+  <g transform="translate(510, 95)">
+    <rect width="195" height="300" fill="#fff" stroke="#EDEDED" rx="10"/>
+
+    <text x="16" y="26" font-size="13" font-weight="700" fill="#F3A21C">🟧 怎么问？</text>
+    <rect x="16" y="34" width="163" height="26" rx="5" fill="#1f1f1f"/>
+    <text x="24" y="51" font-size="9.5" fill="#e8e8e8" font-family="ui-monospace, Menlo, monospace">get_companion()</text>
+    <text x="16" y="76" font-size="10.5" fill="#333">返回值有两种：</text>
+    <text x="16" y="94" font-size="10.5" fill="#a05a4a">· None → 没偏好</text>
+    <text x="16" y="110" font-size="10.5" fill="#3a6b3a">· (作物, (x, y))</text>
+
+    <text x="16" y="140" font-size="13" font-weight="700" fill="#F3A21C">🟧 怎么拆？</text>
+    <rect x="16" y="148" width="163" height="46" rx="5" fill="#1f1f1f"/>
+    <text x="24" y="165" font-size="9" fill="#e8e8e8" font-family="ui-monospace, Menlo, monospace">want, target = result</text>
+    <text x="24" y="183" font-size="9" fill="#e8e8e8" font-family="ui-monospace, Menlo, monospace">x, y = target</text>
+
+    <text x="16" y="216" font-size="13" font-weight="700" fill="#F3A21C">🟧 两条铁律</text>
+    <text x="16" y="236" font-size="10.5" fill="#333">① 偏好是<tspan font-weight="700">随机</tspan>的，</text>
+    <text x="22" y="250" font-size="10.5" fill="#333">猜不出来，只能问</text>
+    <text x="16" y="268" font-size="10.5" fill="#333">② 伴生<tspan font-weight="700">不用长熟</tspan></text>
+    <text x="22" y="282" font-size="10.5" fill="#333">种下就能收本株</text>
+  </g>
+</svg>

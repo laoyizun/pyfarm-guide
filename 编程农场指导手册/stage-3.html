@@ -21,14 +21,14 @@
     <div class="ch-text">
       <div class="ch-eyebrow">第 3 阶段 · 把数据存起来</div>
       <h1 class="ch-h">列表 / 索引 / append / len / 遍历</h1>
-      <p class="ch-d">当订单从"种一种作物"变成"按列种 5 种作物"，你就会发现 if 链会爆炸——这时必须用列表。</p>
+      <p class="ch-d">当订单从"种一种作物"变成"按列种 3 种作物"，你就会发现 if 链会爆炸——这时必须用列表。向日葵那关还要你把"哪朵、多少瓣"一起记下来。</p>
     </div>
   </header>
 
-  <div class="ch-top" data-stage-top="3" data-total="5">
+  <div class="ch-top" data-stage-top="3" data-total="6">
     <div class="ch-top-bar">
       <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
-      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+      <span class="ch-top-text">已会 0 / 6 个知识点</span>
     </div>
   </div>
 
@@ -38,13 +38,13 @@
     <div class="stage-card">
       <h4>📌 课前在游戏里做这些事</h4>
       <ul>
-        <li>解锁 <strong>南瓜（Pumpkin）</strong>——需要先把所有格子种满，成熟后会自动聚合成巨大南瓜。</li>
-        <li>试试只种 1 种南瓜，看产量；再试试种树，比较两种的维护成本（树不能相邻）。</li>
+        <li>解锁 <strong>向日葵（Sunflower）</strong>——站在上面用 <code>measure()</code> 能读到<strong>花瓣数</strong>（整数）。</li>
+        <li>试试看：种一排向日葵，分别收几朵，数数各自多少瓣——<strong>花瓣数每株都不一样</strong>。</li>
         <li>记住：<code>Entities.Grass</code>（草）是默认地块，通常<strong>不需要种</strong>，收获后自然恢复。</li>
       </ul>
     </div>
 
-    <h2>📖 知识卡 · 5 张</h2>
+    <h2>📖 知识卡 · 6 张</h2>
 
     <h3>① if：先会判断，才能挑东西</h3>
     <p>列表要用下标取元素，但<strong>下标是算出来的</strong>——算出来的东西要先判断合不合理，再去取。这就是 <code>if</code> 的用处：<strong>先确认，再行动</strong>。</p>
@@ -72,11 +72,13 @@ quick_print(crops[2])      # 第 3 列：胡萝卜
 quick_print(crops[3])      # 报错：IndexError: list index out of range</code></pre></div>
 
     <h3>④ append / len：往里加、问多长</h3>
-    <div class="code-wrap"><pre><code>bad = []                   # 空列表：先准备一个"烂格账本"
-bad.append([1, 2])         # 记下 (1, 2) 这个烂格
-bad.append([3, 0])         # 再记下 (3, 0)
-quick_print(len(bad))      # 2，账本上有 2 个烂格
-quick_print(bad[0])        # [1, 2]，第一个烂格的坐标</code></pre></div>
+    <div class="code-wrap"><pre><code>flowers = []                # 空列表：准备记录每朵向日葵
+flowers.append(5)          # 第一朵有 5 片花瓣
+flowers.append(8)          # 第二朵有 8 片
+flowers.append(3)          # 第三朵有 3 片
+quick_print(len(flowers))  # 3，列表长度
+quick_print(max(flowers))  # 8，最大值
+quick_print(sum(flowers))  # 16，总和</code></pre></div>
 
     <h3>⑤ for x in list：遍历列表</h3>
     <p>这是把"列表学完"的关键用法：<strong>遍历</strong>就是把列表里每个东西挨个拿出来一次。</p>
@@ -112,19 +114,22 @@ quick_print(bad[0])        # [1, 2]，第一个烂格的坐标</code></pre></div
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 2</span>
-        <h3>烂格记账：列表第一次当账本</h3>
+        <h3>向日葵：只收花瓣最多的那朵</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        解锁南瓜（Pumpkin）后，<strong>全田种南瓜</strong>。南瓜长大时会随机"枯死"，要凑成"巨大南瓜"必须<strong>没有烂格</strong>。任务：扫一遍全田，<strong>把烂格的坐标（x, y）append 进列表</strong>，再用 for 循环 <code>for x, y in bad:</code> <strong>解包</strong>，走回烂格补种，直到列表清空，最后整片一起收。
+        解锁<strong>向日葵（Sunflower）</strong>后，客户只要<strong>花瓣最多的那一朵</strong>——其他的不用管。任务：扫一遍全田，把每朵成熟向日葵的花瓣数 <code>measure()</code> 出来，<strong>append 进列表</strong>；然后找出最大的那个值，最后<strong>只收那一朵</strong>。
+        <br><br>
+        提示：一朵向日葵就是一个坐标，<strong>坐标用两个数装起来</strong>——先想想用列表还是用元组更合适。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 append</span>
-        <span class="order-must-chip">必须用列表 [x, y] 存坐标</span>
-        <span class="order-must-chip">必须用 for x, y in bad: 解包</span>
-        <span class="order-must-chip">必须用 while len(bad) &gt; 0</span>
+        <span class="order-must-chip">必须用 len()</span>
+        <span class="order-must-chip">必须用 max() 或 for 找最大</span>
+        <span class="order-must-chip">必须用 measure() 读花瓣数</span>
+        <span class="order-must-chip">坐标要能解包</span>
       </div>
-      <p class="tip-task">解包：<code>for x, y in bad:</code> 会把 <code>[2, 1]</code> 拆成 <code>x = 2, y = 1</code> 两个变量——这是 L4 函数的"参数解包"前身，先在这里熟悉手感。</p>
+      <p class="tip-task">难点在最后一步：<strong>找到最大的花瓣数容易，回到那朵面前难</strong>——你得把"哪朵"和"多少瓣"一起记下来。</p>
     </div>
 
     <details class="fold">
@@ -139,13 +144,14 @@ quick_print(bad[0])        # [1, 2]，第一个烂格的坐标</code></pre></div
 
     <h2>🚪 自查门</h2>
     <div class="gate">
-      <span class="gate-label">✓ 5 个知识点 · 真的会了才勾</span>
+      <span class="gate-label">✓ 6 个知识点 · 真的会了才勾</span>
       <ul>
         <li><label><input type="checkbox" data-key="farm_s3_k1"> 我能用 <code>if i &lt; len(crops):</code> 先判断再取下标，避免 IndexError</label></li>
         <li><label><input type="checkbox" data-key="farm_s3_k2"> 我能定义一个列表、修改元素、添加元素</label></li>
         <li><label><input type="checkbox" data-key="farm_s3_k3"> 我能用下标 0/1/2 取到正确的元素，并且能解释"下标从 0 开始"</label></li>
         <li><label><input type="checkbox" data-key="farm_s3_k4"> 我能用 <code>for x in list:</code> 遍历列表里所有元素</label></li>
         <li><label><input type="checkbox" data-key="farm_s3_k5"> 我能把订单 1 的"3 个 if"改成"列表 + 取余"，且代码行数更少</label></li>
+        <li><label><input type="checkbox" data-key="farm_s3_k6"> 我能用 <code>append</code> + <code>max()</code> 找出一批数里最大的那个</label></li>
       </ul>
     </div>
 
