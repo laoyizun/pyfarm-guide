@@ -78,11 +78,10 @@
   function updateStageProgress() {
     var wrap = document.querySelector('[data-stage-top]');
     if (!wrap) return;
-    var stage = wrap.getAttribute('data-stage-top');
     var total = parseInt(wrap.getAttribute('data-total') || '0', 10);
     var done = 0;
     for (var i = 1; i <= total; i++) {
-      if (g(keyOf(stage, i)) === '1') done++;
+      if (g(keyOf(wrap, i)) === '1') done++;
     }
     var fill = wrap.querySelector('.ch-top-fill');
     var text = wrap.querySelector('.ch-top-text');
@@ -90,25 +89,37 @@
     if (text) text.textContent = '已会 ' + done + ' / ' + total + ' 个知识点';
   }
 
-  // key 规则：阶段 sp → farm_sp_k1；阶段 1 → farm_s1_k1
-  function keyOf(stage, i) {
-    return stage === 'sp' ? 'farm_sp_k' + i : 'farm_s' + stage + '_k' + i;
+  // key 规则：默认 farm_s<阶段>_k<i>；用 data-key-prefix + data-key-start 可自定义
+  // 特殊订单三个子页面共用 farm_sp 前缀，靠 data-key-start 各自错开（1 / 5 / 8）
+  function keyOf(el, i) {
+    var prefix = el.getAttribute('data-key-prefix');
+    if (!prefix) {
+      var stage = el.getAttribute('data-stage-top') || el.getAttribute('data-stage-card');
+      prefix = (stage === 'sp') ? 'farm_sp' : 'farm_s' + stage;
+    }
+    var start = parseInt(el.getAttribute('data-key-start') || '1', 10);
+    return prefix + '_k' + (start + i - 1);
   }
 
-  // 总览页：6 张卡 + 特殊订单卡的进度徽标 + 顶部总进度
+  // 特殊订单（含拆出来的三个子页）不计入首页顶部总进度
+  function isSpecial(el) {
+    var stage = el.getAttribute('data-stage-card') || el.getAttribute('data-stage-top') || '';
+    return stage.indexOf('sp') === 0;
+  }
+
+  // 总览页：各阶段卡进度徽标 + 顶部总进度
   function updateOverviewProgress() {
     var cards = document.querySelectorAll('[data-stage-card]');
     if (cards.length === 0) return;
     var totalAll = 0, doneAll = 0;
     cards.forEach(function (card) {
-      var stage = card.getAttribute('data-stage-card');
       var total = parseInt(card.getAttribute('data-total') || '0', 10);
       var done = 0;
       for (var i = 1; i <= total; i++) {
-        if (g(keyOf(stage, i)) === '1') done++;
+        if (g(keyOf(card, i)) === '1') done++;
       }
       // 特殊订单是独立栏目，不计入顶部总进度
-      if (stage !== 'sp') {
+      if (!isSpecial(card)) {
         totalAll += total;
         doneAll += done;
       }

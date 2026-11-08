@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>特殊订单 3 · DFS 与 BFS · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">特殊订单 3</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">🎯</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">特殊订单 3 · 搜索算法</div>
+      <h1 class="ch-h">更快的迷宫：深度优先 vs 广度优先</h1>
+      <p class="ch-d">这一单考的是<strong>搜索算法</strong>：S6 的左手扶墙法一定能走到宝箱，但<strong>不一定是最短路线</strong>。这里要你自己实现 DFS 和 BFS，并想明白<strong>为什么 BFS 找到的一定最近</strong>。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="sp3" data-key-prefix="farm_sp" data-key-start="8" data-total="3">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 3 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <div class="warn">
+      <p><span class="warn-label">📌 建议先做</span>这一单要能生成迷宫。<strong>先做完 S6</strong>（左手扶墙 + 迷宫机制），再来做这一单。</p>
+    </div>
+
+    <h2>🎮 游戏进度 · 课前准备</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁 <strong>奇怪物质（Items.Weird_Substance）</strong>——用<strong>施肥</strong>让作物感染，收获时一半产量会变成这种物质。</li>
+        <li>在<strong>灌木</strong>上用它长出<strong>迷宫</strong>：<code>use_item(Items.Weird_Substance, n)</code>，n = 迷宫的边长。</li>
+        <li>在迷宫里试一下 <code>measure()</code>——它能在<strong>任何格子</strong>告诉你宝箱在哪（这是下面搜索算法的关键工具）。</li>
+        <li>试一下 <code>can_move(dir)</code>——它告诉你这个方向能不能走，<strong>而且不消耗步数</strong>。</li>
+        <li>对 <code>Entities.Treasure</code> 用 <code>harvest()</code> 拿金币，<strong>收别处会让迷宫消失</strong>。</li>
+      </ul>
+    </div>
+
+    <h2>🚜 农场订单</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">特殊订单 3</span>
+        <h3>更快的迷宫：深度优先 vs 广度优先</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        S6 你用的是<strong>左手扶墙法</strong>——它一定能走到宝箱，但<strong>不一定是最短路线</strong>。客户现在要你<strong>算出最短路线</strong>，并且要你<strong>亲手实现两种搜索算法</strong>，比一比谁更聪明：
+        <ul>
+          <li><strong>深度优先 DFS</strong>：一条路走到黑，撞墙才回头换一条。</li>
+          <li><strong>广度优先 BFS</strong>：一圈一圈往外扩，<strong>先找到的一定是最短的</strong>。</li>
+        </ul>
+        关键工具：<code>measure()</code> 在迷宫<strong>任何位置</strong>都能返回宝箱坐标——这就是"目标在哪"的信息来源。
+      </div>
+
+      <figure class="order-fig">
+        <img src="images/sp-bfs-dfs.svg" alt="DFS 与 BFS 对比图：左边深度优先按深入顺序给通路编号，右边广度优先按层扩展给通路编号，两侧迷宫布局相同，终点位置相同" loading="lazy">
+        <figcaption>图：<strong>同一座迷宫，两种走法</strong>。DFS 一条路走到底再回头；BFS 像水波一样一圈圈往外扩——所以 BFS 找到宝箱时<strong>走的步数一定最少</strong>。</figcaption>
+      </figure>
+
+      <div class="order-must">
+        <span class="order-must-chip">必须用 measure() 拿宝箱坐标</span>
+        <span class="order-must-chip">必须用 can_move() 探墙</span>
+        <span class="order-must-chip">必须用队列或栈存待访问的格子</span>
+        <span class="order-must-chip">必须记录已访问过的格子</span>
+        <span class="order-must-chip">必须输出 BFS 的最短步数</span>
+      </div>
+
+      <details class="fold">
+        <summary>💡 思路拆解（先自己读一遍再看）</summary>
+        <div class="fold-body">
+          <p><b>核心概念 · "访问过"标记</b>：两种算法都<strong>必须记住哪些格子已经看过了</strong>，不然会在死胡同里来回转。<br>用<strong>字典</strong>记（S4 学过）：<code>visited[(x, y)] = True</code>。</p>
+          <p><b>DFS · 深度优先</b>：用<strong>栈</strong>（或者干脆<strong>递归</strong>）。规则是"走到最深处，撞墙就退回来换一条路"。<br><strong>特点</strong>：可能先走很远才发现没路；<strong>不适合求最短路</strong>。</p>
+          <p><b>BFS · 广度优先</b>：用<strong>队列</strong>（先进先出）。规则是"一圈一圈往外扩，先把离起点近的都看一遍"。<br><strong>特点</strong>：<strong>第一次碰到宝箱时，走的步数就是最少的</strong>。</p>
+          <p class="tip"><strong>为什么 BFS 求最短路？</strong>因为它<strong>按步数分层</strong>：第 0 层是起点，第 1 层是走一步能到的地方……所以它<strong>永远先搜步数少的</strong>。找到宝箱时，前面所有更短的路线都搜过了。<br>DFS 不分层，它可能一头扎进最长的那条路，所以找到的<strong>不一定最短</strong>。</p>
+          <p class="tip"><strong>游戏里怎么探测？</strong><code>can_move(dir)</code> 告诉你这个方向能不能走（<strong>不消耗步数</strong>）。<code>measure()</code> 在任何格子都能告诉你宝箱坐标。<br>所以：<strong>不用真的一格格走</strong>，可以在"想"的时候就把路径<strong>算出来</strong>，再<strong>真正走一遍</strong>。</p>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>🔧 常见报错 · 卡住了先看这里</summary>
+        <div class="fold-body">
+          <p><b>死循环</b> → <strong>忘了标记已访问</strong>。同一个格子被反复加进队列，永远停不下来。</p>
+          <p><b>IndexError</b> → 算邻居坐标时<strong>越界了</strong>。四个方向要分别判断是否在 <code>0 ~ size-1</code> 之间。</p>
+          <p><b>measure() 返回 None</b> → 你<strong>不在迷宫里</strong>。<code>measure()</code> 只在迷宫里有效。先 <code>plant(Entities.Bush)</code> + <code>use_item(Items.Weird_Substance, n)</code> 把迷宫变出来。</p>
+          <p><b>BFS 步数比左手扶墙还多</b> → 检查一下：<strong>你算的步数是"搜索时想的步数"还是"实际走的步数"</strong>？搜索路径里每一步都要用 <code>can_move</code> 验证过才能走。</p>
+          <p><b>收不到金币</b> → 必须<strong>站到宝箱上</strong>再 <code>harvest()</code>。<code>measure()</code> 给你坐标，但<strong>不会自动走过去</strong>。</p>
+        </div>
+      </details>
+
+      <div class="gate">
+        <span class="gate-label">✓ 3 个知识点 · 真的会了才勾</span>
+        <ul>
+          <li><label><input type="checkbox" data-key="farm_sp_k8"> 我能说清 DFS 和 BFS 的区别，并用"层"解释为什么 BFS 找到的一定最近</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k9"> 我能用字典记录"访问过的格子"，并且不会死循环</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k10"> 我能算出迷宫里到宝箱的最短步数，并按这条路线真的走到宝箱上收下金币</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>🧠 换需求测试 · 真会了才过</summary>
+      <div class="fold-body">
+        <ul>
+          <li><strong>口述题</strong>：如果迷宫的墙随机换一批，DFS 的路线会变吗？BFS 呢？<strong>哪个更稳定？</strong></li>
+          <li><strong>改写题</strong>：把 DFS 改成<strong>递归</strong>写法，<code>visited</code> 还要不要？为什么？</li>
+          <li><strong>扩展题</strong>：如果迷宫里有<strong>两个</strong>宝箱，怎么改成"找完所有"？</li>
+          <li><strong>接上一单</strong>：用特殊订单 2 写的 <code>goto(x, y)</code>，能不能直接用来走 BFS 算出来的路线？</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout">
+      <p><span class="callout-label">📌 老师注记</span>这一单是<strong>整个课程里思维难度最高的一单</strong>，但也是最有价值的一单——<strong>DFS 和 BFS 是计算机专业所有算法的地基</strong>。<br>教学节奏建议：<strong>先只让做 BFS</strong>（目标明确：求最短步数），DFS 作为对比<strong>演示即可</strong>，不必强求两都写出来。<br>学生最容易卡住的地方是<strong>忘了 visited</strong>，可以先让他们<strong>故意不加 visited</strong>跑一次，<strong>亲眼看到死循环</strong>，印象最深。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="special-goto.html" class="prev"><span class="arrow">←</span><span class="text">特殊订单 2 · goto</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="index.html" class="next"><span class="text">返回路线</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    特殊订单不教新语法，只考"能不能把学过的拼起来" · 做不出来先回 S 阶段补<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

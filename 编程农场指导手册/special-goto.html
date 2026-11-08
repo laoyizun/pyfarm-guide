@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>特殊订单 2 · goto(x, y) · 编程农场</title>
+  <link rel="stylesheet" href="css/farm.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-brand">编程农场 · 学生自学</a>
+      <span class="site-nav-stage">特殊订单 2</span>
+      <a href="index.html" class="site-nav-back">← 路线首页</a>
+    </div>
+  </nav>
+
+  <header class="ch-head">
+    <div class="ch-num">🎯</div>
+    <div class="ch-text">
+      <div class="ch-eyebrow">特殊订单 2 · 函数的定义与调用</div>
+      <h1 class="ch-h">goto(x, y)：自己造一个"走到指定位置"</h1>
+      <p class="ch-d">这一单考的是<strong>函数的定义与调用</strong>：游戏没有"一步走到某格"的命令，你得<strong>自己造一个</strong>。顺便认识一下 <code>import</code>——把写好的工具拆到另一个文件里再搬进来。</p>
+    </div>
+  </header>
+
+  <div class="ch-top" data-stage-top="sp2" data-key-prefix="farm_sp" data-key-start="5" data-total="3">
+    <div class="ch-top-bar">
+      <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
+      <span class="ch-top-text">已会 0 / 3 个知识点</span>
+    </div>
+  </div>
+
+  <article class="ch-body">
+
+    <div class="warn">
+      <p><span class="warn-label">📌 建议先做</span>这一单要用到 <code>def</code> 定义函数。<strong>如果函数还不熟，先回 S4 看一遍</strong>——S4 的第 5 张知识卡就是讲函数的。</p>
+    </div>
+
+    <h2>🎮 游戏进度 · 课前准备</h2>
+    <div class="stage-card">
+      <h4>📌 课前在游戏里做这些事</h4>
+      <ul>
+        <li>解锁科技树里的 <strong>「导入」</strong>——它让你能把写好的函数<strong>拆到另一个代码文件里</strong>，再用 <code>import 文件名</code> 搬进来。</li>
+        <li>试着<strong>多开一个代码窗口</strong>——在游戏里那就是一个独立的"文件"，是 import 的实验场。</li>
+        <li>在田里随便走走，记住 <strong>左下角是 (0, 0)</strong>，x 往右、y 往上。</li>
+      </ul>
+    </div>
+
+    <h2>🚜 农场订单</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">特殊订单 2</span>
+        <h3>goto(x, y)：自己造一个"走到指定位置"</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        游戏自带的 API 里没有"一步走到 (x, y)"这种命令——<strong>只有一步一步的 <code>move()</code></strong>。<br>
+        客户要你<strong>自己写一个 <code>goto(x, y)</code></strong>：不管无人机现在在哪，都能把它准确地开到指定格子。写好之后，<strong>整个农场脚本都能用上它</strong>——这叫<strong>函数</strong>。
+      </div>
+
+      <figure class="order-fig">
+        <img src="images/sp-goto.svg" alt="goto 走位示意图：从左下角起点出发，先沿橙色箭头横向走到 x=2 列，再沿绿色箭头竖向走到 y=2 行，最终抵达目标格" loading="lazy">
+        <figcaption>图：<strong>先横后竖</strong>两步走。这样走一定不会绕出田外——如果横竖混着走，很可能走到边界外面去。</figcaption>
+      </figure>
+
+      <div class="order-must">
+        <span class="order-must-chip">必须自己定义 def goto(x, y)</span>
+        <span class="order-must-chip">必须分横竖两步</span>
+        <span class="order-must-chip">必须用 while 判断到没到</span>
+        <span class="order-must-chip">必须在别处调用它</span>
+        <span class="order-must-chip">必须知道 import 是什么</span>
+      </div>
+
+      <details class="fold">
+        <summary>💡 思路拆解（先自己读一遍再看）</summary>
+        <div class="fold-body">
+          <p><b>为什么要分两步？</b>如果写成"先看 x 还差几格就走几格，再看 y 还差几格就走几格"这种混着走的逻辑，<strong>很容易走出田的边界</strong>。先横着走到目标列（此时 y 不变），再竖着走到目标行——<strong>每一步都 guaranteed 在田里</strong>。</p>
+          <p><b>函数的三要素</b>：<br>
+          ① <strong>参数</strong> <code>x, y</code>——"要去哪"，调用时才决定；<br>
+          ② <strong>返回值</strong>——走到就到了，可以 <code>return True</code>；走不到（被墙挡住）就 <code>return False</code>；<br>
+          ③ <strong>调用</strong>——<code>goto(2, 3)</code> 就是"用这个能力"。</p>
+          <p class="tip"><strong>关于 import：</strong>在真实 Python 里，你想用别人写好的功能会写 <code>import math</code>——<strong>把工具箱搬进来</strong>。<br>这个游戏里<strong>也有 import</strong>：科技树里有一个「<strong>导入</strong>」节点（解锁要 80 根胡萝卜），游戏内文档给的写法是：<br>
+          <code>import other_file</code> 然后 <code>other_file.function()</code>。<br>也就是：<strong>只能 import 自己的代码文件</strong>（游戏里另开的代码窗口就是"文件"），<strong>不能 import 标准库</strong>。<br>所以本题的正确姿势是：<strong>把 <code>goto</code> 单独写在一个文件里，主文件 import 它，再通过"文件名.函数名"调用</strong>。<br><strong>这就是"函数"的意义</strong>：写一次，用无数次；<strong>这就是 import 的意义</strong>：写好的工具还能<strong>拆成独立文件，重复利用</strong>。</p>
+          <div class="code-wrap"><pre><code># 文件 A（另一个代码窗口，文件名就叫 tools）
+def goto(x, y):
+    while get_pos_x() != x:
+        move(East) if get_pos_x() &lt; x else move(West)
+    while get_pos_y() != y:
+        move(North) if get_pos_y() &lt; y else move(South)
+
+# 文件 B（主程序）
+import tools                # 把工具箱搬进来
+tools.goto(2, 3)            # 用工具：文件名.函数名()</code></pre></div>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>🔧 常见报错 · 卡住了先看这里</summary>
+        <div class="fold-body">
+          <p><b>一直转圈停不下来</b> → <code>while</code> 的条件写错了。判断条件要同时看<strong>两个</strong>坐标：<code>while get_pos_x() != x or get_pos_y() != y:</code>（<strong>用 or，不用 and</strong>——只要还有一个没到就得继续走）。</p>
+          <p><b>走到一半卡住不动</b> → 田里有墙或障碍，<code>move()</code> 失败了但循环还在转。<strong>让 <code>move()</code> 的返回值参与判断</strong>，走不动就退出。</p>
+          <p><b>走过头了</b> → 移动前<strong>先比较</strong>大小，别无脑往一个方向冲。<code>if get_pos_x() &lt; x: move(East) else: move(West)</code>。</p>
+          <p><b>写 import 报错</b> → <strong>还没解锁「导入」这个科技</strong>。去科技树里找到它（要 80 根胡萝卜），解锁后再写。</p>
+          <p><b>import 报"找不到文件"</b> → <strong>文件名对不上</strong>。<code>import tools</code> 里的 <code>tools</code> 要和另一个代码窗口里<strong>保存的文件名完全一致</strong>（不写 .py 后缀）。</p>
+          <p><b>调用时报"没有这个属性"</b> → 记成 <code>goto(2, 3)</code> 了。import 进来之后要写成 <code>tools.goto(2, 3)</code>——<strong>带上文件名</strong>。</p>
+          <p><b>import 了但还是报错</b> → 游戏里 <code>import</code> 的规则和真实 Python <strong>不完全一样</strong>：只能导入<strong>自己开的代码文件</strong>，<strong>不能 import 任何标准库</strong>（<code>import math</code> 是无效的）。</p>
+        </div>
+      </details>
+
+      <div class="gate">
+        <span class="gate-label">✓ 3 个知识点 · 真的会了才勾</span>
+        <ul>
+          <li><label><input type="checkbox" data-key="farm_sp_k5"> 我能自己写出 <code>def goto(x, y)</code>，并且能从任意位置准确走到目标格</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k6"> 我能解释"先横后竖"和"横竖混着走"的区别，以及为什么前者更安全</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k7"> 我能说出 <code>import</code> 是干什么的，并能把 <code>goto</code> 拆成独立文件再 import 进来</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>🧠 换需求测试 · 真会了才过</summary>
+      <div class="fold-body">
+        <ul>
+          <li><strong>换目标点</strong>：目标改成 <code>(0, 0)</code>（最左下那格），代码要不要改？</li>
+          <li><strong>加返回值</strong>：让 <code>goto</code> 走到了就返回 <code>True</code>，这样能写成 <code>if goto(2, 3): harvest()</code> 吗？</li>
+          <li><strong>改写题</strong>：把 <code>goto(x, y)</code> 改成"能走多远走多远，但<strong>不能穿过墙</strong>"——你会怎么改？</li>
+          <li><strong>拆文件</strong>：把 <code>goto</code> 单独放一个代码窗口，主文件用 <code>import</code> 把它搬进来。</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout">
+      <p><span class="callout-label">📌 老师注记</span>这是<strong>函数的第一次正式亮相</strong>：S4 只是在知识卡里出现过 <code>def</code>，这里要学生<strong>自己定义 + 自己调用</strong>。<br>特别强调 <strong>import 的意义</strong>：<strong>写好的工具能拆成独立文件反复用</strong>——这是从"会写代码"到"会组织代码"的分水岭。<br>这一单也是<strong>特殊订单 3 的前置</strong>：迷宫里"算路径再走过去"用的就是 <code>goto</code> 的思路。</p>
+    </div>
+
+  </article>
+
+  <nav class="ch-nav">
+    <a href="special-pumpkin.html" class="prev"><span class="arrow">←</span><span class="text">特殊订单 1 · 大南瓜</span></a>
+    <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
+    <a href="special-maze.html" class="next"><span class="text">特殊订单 3 · DFS 与 BFS</span><span class="arrow">→</span></a>
+  </nav>
+
+  <div class="footer">
+    特殊订单不教新语法，只考"能不能把学过的拼起来" · 做不出来先回 S 阶段补<br>
+    由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
