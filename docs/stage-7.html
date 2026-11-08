@@ -19,7 +19,7 @@
   <header class="ch-head">
     <div class="ch-num">S7</div>
     <div class="ch-text">
-      <div class="ch-eyebrow">第 7 阶段 · 巨型农场（进阶）</div>
+      <div class="ch-eyebrow">第 7 阶段 · 巨型农场</div>
       <h1 class="ch-h">一群无人机：把一件事拆成多份</h1>
       <p class="ch-d">这一关不教新语法，教<strong>怎么想</strong>：一件大活怎么切成几份、每份交给谁、怎么等他们干完再继续。</p>
     </div>
@@ -35,8 +35,8 @@
   <article class="ch-body">
 
     <div class="warn">
-      <p><span class="warn-label">⚠️ 先说清楚这一关的前提</span>这一关是<strong>选修的进阶关</strong>。如果你在 S5（排序）或 S6（迷宫）还很吃力，<strong>完全可以跳过这一关</strong>——它不影响前面 6 关的收获。</p>
-      <p>另外它需要你先<strong>通关 S6（恐龙帽）</strong>，因为<strong>巨型农场（Megafarm）</strong>科技要在恐龙帽之后才解锁。</p>
+      <p><span class="warn-label">⚠️ 先说清楚这一关的前提</span>这一关需要你先在科技树里解锁 <strong>巨型农场（Megafarm）</strong>——这是<strong>唯一</strong>能多台无人机同时干活的科技。</p>
+      <p>刚解锁时你只有 <strong>2 台无人机</strong>（<strong>含主角自己</strong>），也就是<strong>只能再派出 1 台</strong>。<br>所以这一关的全部订单都按<strong>"两台机器"来设计</strong>——<strong>学会怎么把活切成两半</strong>，比开多少台机器都重要。</p>
     </div>
 
     <h2>🎮 游戏进度 · 课前准备</h2>
@@ -44,8 +44,8 @@
       <h4>📌 课前在游戏里做这些事</h4>
       <ul>
         <li>解锁 <strong>巨型农场（Megafarm）</strong>——这是<strong>唯一</strong>能多台无人机同时干活的科技。</li>
-        <li>在游戏里点开"巨型农场"，看看你的<strong>无人机上限</strong>（<code>max_drones()</code>）是多少——初始是 2，之后每级 +1。</li>
-        <li>试试<strong>手动生一台无人机</strong>：在游戏自带的代码框里写 <code>spawn_drone(harvest)</code>，观察它生出来在哪、怎么干活。</li>
+        <li>在游戏里点开"巨型农场"，看看你的<strong>无人机上限</strong>（<code>max_drones()</code>）是多少——<strong>刚解锁是 2</strong>，之后每级 +1。</li>
+        <li>试着<strong>手动生一台无人机</strong>：在游戏自带的代码框里写 <code>spawn_drone(harvest)</code>，观察它生出来在哪、怎么干活。</li>
         <li>留意一个现象：<strong>两台无人机不会撞在一起</strong>，也不会互相干扰。</li>
       </ul>
     </div>
@@ -71,19 +71,20 @@ if h == None:
 
 num_drones()     # 现在有几台活着（含主角自己）
 max_drones()     # 最多能活几台</code></pre></div>
-    <p class="tip"><strong>两条铁律</strong>：<br>① <code>spawn_drone</code> 返回 <code>None</code> 表示<strong>已经到上限了</strong>——<strong>主角自己也占一个名额</strong>。<br>② 每生一台就 <code>move(East)</code> 走开，否则所有无人机<strong>挤在同一个格</strong>。</p>
+    <p class="tip"><strong>两条铁律</strong>：<br>① <code>spawn_drone</code> 返回 <code>None</code> 表示<strong>已经到上限了</strong>——<strong>主角自己也占一个名额</strong>。<strong>刚解锁时上限是 2，也就是只能再派出 1 台</strong>。<br>② 每生一台就 <code>move(East)</code> 走开，否则所有无人机<strong>挤在同一个格</strong>。</p>
 
     <h3>③ 参数：把任务"发"给子无人机</h3>
     <p><code>spawn_drone</code> 后面可以继续跟参数，它们会被<strong>复制</strong>一份交给新无人机。</p>
-    <div class="code-wrap"><pre><code>def work_range(start, end):
-    for i in range(start, end):
+    <div class="code-wrap"><pre><code>def work_cols(start, end):
+    """负责第 start 到 end-1 列"""
+    for i in range(end - start):
         if can_harvest():
             harvest()
         move(North)
 
-spawn_drone(work_range, 0, 2)   # 这台负责 0~2 行
-spawn_drone(work_range, 2, 4)   # 那台负责 2~4 行</code></pre></div>
-    <p class="tip">同一份代码，靠<strong>参数</strong>干不同的活——这是 S4 的函数知识在多无人机场景下的直接回报。</p>
+spawn_drone(work_cols, 0, 2)   # 子机负责第 0、1 列
+spawn_drone(work_cols, 2, 4)   # 另一台负责第 2、3 列</code></pre></div>
+    <p class="tip">同一份代码，靠<strong>参数</strong>干不同的活——这是 S4 的函数知识在多无人机场景下的直接回报。<br>你现在只有 2 台，所以<strong>一次只能派出一台</strong>；但<strong>切分的思路</strong>和台数无关，以后升级了照样用得上。</p>
 
     <h3>④ wait_for：唯一的回信方式</h3>
     <div class="code-wrap"><pre><code>handles = []
@@ -118,17 +119,17 @@ spawn_drone(child)
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 1</span>
-        <h3>一生一兵：每列一个负责人</h3>
+        <h3>一兵一柱：主角和子机各管一半</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        田是 4×4。主角一路向东走，<strong>每走一格就生一台无人机</strong>，让它负责<strong>它出生那一列</strong>（从南到北收一遍）。主角自己也不能闲着。
+        田是 4×4。<strong>主角和子机各负责一半</strong>：子机管<strong>左边两列</strong>，主角管<strong>右边两列</strong>，各自从南到北收一遍。
         <br><br>
-        关键：<strong>谁负责哪列，是靠"出生在哪"决定的</strong>——所以生完一台必须马上走开。
+        关键：<strong>谁负责哪几列，是靠"出生在哪"决定的</strong>——所以生完一台必须马上走开。
       </div>
       <figure class="order-fig">
-        <img src="images/s7-drone-columns.svg" alt="多无人机分工示意图：主角沿着一行向东移动，每到一格就生出一台无人机，那台无人机负责自己所在的一列往北收割" loading="lazy">
-        <figcaption>图：<strong>位置就是任务分配</strong>。每台无人机出生在哪，它就负责那一列。</figcaption>
+        <img src="images/s7-drone-columns.svg" alt="两台无人机分工示意图：主角和子机各负责一半区域，生在哪就负责哪几列" loading="lazy">
+        <figcaption>图：<strong>位置就是任务分配</strong>。每台无人机出生在哪，它就负责那几列。</figcaption>
       </figure>
       <div class="order-must">
         <span class="order-must-chip">必须用 spawn_drone()</span>
@@ -146,9 +147,9 @@ spawn_drone(child)
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        把无人机<strong>开满</strong> <code>max_drones()</code>。每一列派一台，<strong>派不出来的那些列主角自己包了</strong>。
+        主角要把田<strong>整个包下来</strong>：能派出去的就派，派不出去（<code>spawn_drone</code> 返回 <code>None</code>）<strong>那部分主角自己干</strong>。
         <br><br>
-        难点：<code>spawn_drone</code> 满了会返回 <code>None</code>，你得<strong>判断它有没有成功</strong>。
+        你现在上限是 2，所以<strong>只有第 1 台能派出去，第 2 台就派不成了</strong>——正好用来体会"满了会返回 None"。
       </div>
       <div class="order-must">
         <span class="order-must-chip">必须用 num_drones()</span>
@@ -162,21 +163,20 @@ spawn_drone(child)
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 3</span>
-        <h3>分阶段干活：等大家都到齐</h3>
+        <h3>分阶段干活：等对方到齐</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
         这次要凑<strong>巨型南瓜</strong>——但有个硬条件：<strong>全场都种满了才能开始收</strong>。<br>
-        所以要分两个阶段：<strong>阶段一</strong>，所有无人机各去种自己那列；<strong>阶段二</strong>，等<strong>全部种完</strong>再统一进"查烂格 → 补种 → 收"。<br>
-        主角种最后一列，然后<strong>等</strong>。
+        所以要分两个阶段：<strong>阶段一</strong>，主角和子机各去种自己那几列；<strong>阶段二</strong>，主角<strong>等子机种完</strong>，再统一进"查烂格 → 补种 → 收"。
       </div>
       <div class="order-must">
-        <span class="order-must-chip">必须用 handles 列表存句柄</span>
         <span class="order-must-chip">必须用 wait_for()</span>
         <span class="order-must-chip">必须分阶段</span>
         <span class="order-must-chip">必须处理 None</span>
+        <span class="order-must-chip">子函数必须有 return</span>
       </div>
-      <p class="tip-task"><strong>这才是"同步"的真正意思</strong>——不是"同时跑"，而是"<strong>等所有人都到齐再继续</strong>"。多无人机的价值一半在这里：<strong>干活是并行的，但阶段必须对齐</strong>。</p>
+      <p class="tip-task"><strong>这才是"同步"的真正意思</strong>——不是"同时跑"，而是"<strong>等对方到齐再继续</strong>"。多无人机的价值一半在这里：<strong>干活是并行的，但阶段必须对齐</strong>。</p>
     </div>
 
     <div class="order-card">
@@ -186,10 +186,10 @@ spawn_drone(child)
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        田大了（比如 10×10），一个人扫太慢。要求<strong>两种切法都实现一遍</strong>，然后<strong>比一比哪个快</strong>：
+        田大了（比如 10×10），一个人扫太慢。同样是"两台机器分活"，要求<strong>两种切法都实现一遍</strong>，然后<strong>比一比</strong>：
         <ul>
-          <li><strong>方式 A · 切竖条</strong>：每台负责几列。</li>
-          <li><strong>方式 B · 切方块</strong>：每台负责一个方块区域。</li>
+          <li><strong>方式 A · 切竖条</strong>：一台管左半边几列，一台管右半边几列。</li>
+          <li><strong>方式 B · 切方块</strong>：一台管左上半区，一台管右下半区。</li>
         </ul>
         参数要告诉每台"你负责哪一块"——<strong>用参数传，不用全局变量</strong>。
       </div>
@@ -205,11 +205,11 @@ spawn_drone(child)
     <div class="order-card">
       <div class="order-card-head">
         <span class="order-tag">订单 5 · 终章</span>
-        <h3>一群无人机各解一座小迷宫</h3>
+        <h3>两台无人机各解一座小迷宫</h3>
       </div>
       <div class="order-req">
         <b>📋 客户要求</b>
-        S6 是"一台无人机解一座大迷宫"。现在有了多无人机——<strong>改成 3 台各解一座 4×4 小迷宫</strong>，而不是 1 台解 12×12 大迷宫。<br>
+        S6 是"一台无人机解一座大迷宫"。现在有了多无人机——<strong>改成主角和子机各解一座 4×4 小迷宫</strong>，而不是 1 台解 8×8 大迷宫。<br>
         每台解完<strong>把自己赚到的金币数 return 回去</strong>，主角用 <code>wait_for</code> <strong>把战果加起来</strong>。
       </div>
       <div class="order-must">
@@ -218,7 +218,7 @@ spawn_drone(child)
         <span class="order-must-chip">必须用 wait_for 汇总</span>
         <span class="order-must-chip">每台各解各的迷宫</span>
       </div>
-      <p class="tip-task"><strong>这才是多无人机最漂亮的用法</strong>——官方也专门建议"<strong>多个小任务，胜过一个大任务</strong>"。同样收 4 座迷宫，<strong>4×4 的墙比 12×12 少得多</strong>，走起来快得多。</p>
+      <p class="tip-task"><strong>这才是多无人机最漂亮的用法</strong>——官方也专门建议"<strong>多个小任务，胜过一个大任务</strong>"。同样收 2 座迷宫，<strong>4×4 的墙比 8×8 少得多</strong>，走起来快得多。<br><strong>注意</strong>：<strong>迷宫的边长由你用的奇怪物质数量决定</strong>——想让它小一点，就<strong>少放材料</strong>。<br>还有：<strong>一座迷宫要用一整块地方，两座迷宫不能叠在一起</strong>——要让它们分别长在田的两个角落。</p>
     </div>
 
     <details class="fold">
@@ -226,11 +226,12 @@ spawn_drone(child)
       <div class="fold-body">
         <p><b>新无人机什么都不干</b> → 写成了 <code>spawn_drone(work())</code>。<strong>去掉括号</strong>，交函数本身。</p>
         <p><b>所有无人机挤在一格</b> → 生完一台<strong>忘了 <code>move</code></strong>。每生一台就往东走一格。</p>
-        <p><b>生不出第二台</b> → <code>max_drones()</code> 初始只有 2（<strong>含主角自己</strong>）。要升级巨型农场才有更多。</p>
+        <p><b>生不出第二台</b> → <strong>这是正常的！</strong><code>max_drones()</code> 刚解锁只有 2（<strong>含主角自己</strong>），所以<strong>只能派出 1 台</strong>。要升级巨型农场才有更多。</p>
         <p><b>子无人机的结果拿不到</b> → 必须靠 <code>wait_for(h)</code> 取它的 <code>return</code> 值。直接读变量<strong>读不到</strong>——变量不共享。</p>
         <p><b>wait_for 卡住不动</b> → 子无人机<strong>永远不会结束</strong>（函数里是 <code>while True</code>）。<code>wait_for</code> 要等函数 <code>return</code> 才返回。</p>
         <p><b>子无人机干的活没效果</b> → 它得<strong>自己也种</strong>。别让子函数只 <code>move</code> 不 <code>plant</code>。</p>
         <p><b>不同无人机抢同一格</b> → 任务<strong>重叠</strong>了。重新设计切分方式，保证<strong>每格只归一台管</strong>。</p>
+        <p><b>两台无人机抢同一座迷宫</b> → 一座迷宫要用一整块地方，<strong>不能叠</strong>。让它们分别长在田的两个角落。</p>
       </div>
     </details>
 
@@ -251,7 +252,8 @@ spawn_drone(child)
       <div class="fold-body">
         <ul>
           <li><strong>换切分粒度</strong>：每台负责 1 列改成 2 列、4 列，代码要改几处？</li>
-          <li><strong>换主作物</strong>：把 <code>work_column</code> 里的收割改成种胡萝卜，函数结构要变吗？</li>
+          <li><strong>换主作物</strong>：把 <code>work_cols</code> 里的收割改成种胡萝卜，函数结构要变吗？</li>
+          <li><strong>升级 Megafarm 之后</strong>：上限变成 6 台了，你的代码<strong>要改吗</strong>？<strong>为什么？</strong></li>
           <li><strong>加返回值</strong>：让每台无人机 <code>return</code> 自己收了多少草，主角怎么加总？</li>
           <li><strong>口述题</strong>：为什么不能"让所有无人机共用一个坏格列表"？<strong>用游戏机制来解释</strong>，不要用"线程不安全"这种词。</li>
         </ul>
@@ -259,7 +261,7 @@ spawn_drone(child)
     </details>
 
     <div class="callout">
-      <p><span class="callout-label">📌 老师注记</span>这一关的价值不在语法，在<strong>工程思维</strong>：<br>① <strong>切分</strong>——一个大任务怎么拆成互不打架的若干份；<br>② <strong>分配</strong>——用"位置"或"参数"把活派下去；<br>③ <strong>同步</strong>——并行干活，但阶段要对齐。<br>这三条<strong>出了游戏照样有用</strong>，而且比真多线程简单得多（不用管锁）。<br>如果学生 S5/S6 还没过关，<strong>别硬推这一关</strong>——基础不牢时学并发只会更晕。</p>
+      <p><span class="callout-label">📌 老师注记</span>这一关的价值不在语法，在<strong>工程思维</strong>：<br>① <strong>切分</strong>——一个大任务怎么拆成互不打架的若干份；<br>② <strong>分配</strong>——用"位置"或"参数"把活派下去；<br>③ <strong>同步</strong>——并行干活，但阶段要对齐。<br>这三条<strong>出了游戏照样有用</strong>，而且比真多线程简单得多（不用管锁）。<br><strong>只有 2 台机器反而是好事</strong>：学生不用纠结调度，<strong>被迫把"切分"这件事想明白</strong>。等他们升级了 Megafarm，切分思路直接复用。<br>如果学生 S5/S6 还没过关，<strong>可以先跳过这一关</strong>——基础不牢时学并发只会更晕。</p>
     </div>
 
   </article>
