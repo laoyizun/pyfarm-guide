@@ -21,14 +21,14 @@
     <div class="ch-text">
       <div class="ch-eyebrow">特殊订单 · 综合实战</div>
       <h1 class="ch-h">把前面学过的全用上</h1>
-      <p class="ch-d">S1–S6 每个阶段练一个知识点。<strong>特殊订单</strong>不一样——它把好几个阶段的知识点捆在一起，做完才算真的会。</p>
+      <p class="ch-d">S1–S7 每个阶段练一个知识点。<strong>特殊订单</strong>不一样——它把好几个阶段的知识点捆在一起，做完才算真的会。<br>三个订单分别在考：<strong>列表综合</strong>、<strong>函数的定义与调用</strong>、<strong>搜索算法</strong>。</p>
     </div>
   </header>
 
-  <div class="ch-top" data-stage-top="sp" data-total="4">
+  <div class="ch-top" data-stage-top="sp" data-total="10">
     <div class="ch-top-bar">
       <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
-      <span class="ch-top-text">已会 0 / 4 个知识点</span>
+      <span class="ch-top-text">已会 0 / 10 个知识点</span>
     </div>
   </div>
 
@@ -44,6 +44,11 @@
         <li><strong>亲眼看一次枯死</strong>：种 9 颗南瓜等它们长大，会看到某个格子变成一个干瘪的南瓜——那就是烂格。</li>
         <li>记住这条关键规则：<strong>在烂格上直接种东西，会自动清掉它</strong>，不用先清理。</li>
         <li>学会用 <code>can_harvest()</code> 判断一格能不能收——<strong>不用去认哪个是烂的</strong>，问一句就知道。</li>
+        <li>解锁 <strong>奇怪物质（Items.Weird_Substance）</strong>——用<strong>施肥</strong>让作物感染，收获时一半产量会变成这种物质。</li>
+        <li>在<strong>灌木</strong>上用它长出<strong>迷宫</strong>：<code>use_item(Items.Weird_Substance, n)</code>，n = 田的边长。</li>
+        <li>在迷宫里试一下 <code>measure()</code>——它能在<strong>任何格子</strong>告诉你宝箱在哪（这是后面搜索算法的关键工具）。</li>
+        <li>解锁科技树里的 <strong>「导入」</strong>——它让你能把写好的函数<strong>拆到另一个代码文件里</strong>，再用 <code>import 文件名</code> 搬进来。</li>
+        <li>试着<strong>多开一个代码窗口</strong>——在游戏里那就是一个独立的"文件"，是后面 import 的实验场。</li>
       </ul>
     </div>
 
@@ -112,6 +117,142 @@
       </div>
     </div>
 
+    <div class="callout">
+      <p><span class="callout-label">📌 老师注记</span>这道题是<strong>列表综合实战</strong>：S3 的列表 + S3 的 for 遍历 + S2 的 if 判断 + L1 的双层 for，四样东西一起用。<br>大南瓜产量是 <strong>n³</strong>（边长 1–5），6×6 起是 <strong>6·n²</strong>——32×32 的田能收 6144 个。学生看到那个数字时会自己理解"为什么要优化"，不用讲。</p>
+    </div>
+
+    <h2>🎯 特殊订单 · 走位与搜索</h2>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">特殊订单 2</span>
+        <h3>goto(x, y)：自己造一个"走到指定位置"</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        游戏自带的 API 里没有"一步走到 (x, y)"这种命令——<strong>只有一步一步的 <code>move()</code></strong>。<br>
+        客户要你<strong>自己写一个 <code>goto(x, y)</code></strong>：不管无人机现在在哪，都能把它准确地开到指定格子。写好之后，<strong>整个农场脚本都能用上它</strong>——这叫<strong>函数</strong>。
+      </div>
+
+      <figure class="order-fig">
+        <img src="images/sp-goto.svg" alt="goto 走位示意图：从左下角起点出发，先沿橙色箭头横向走到 x=2 列，再沿绿色箭头竖向走到 y=2 行，最终抵达目标格" loading="lazy">
+        <figcaption>图：<strong>先横后竖</strong>两步走。这样走一定不会绕出田外——如果横竖混着走，很可能走到边界外面去。</figcaption>
+      </figure>
+
+      <div class="order-must">
+        <span class="order-must-chip">必须自己定义 def goto(x, y)</span>
+        <span class="order-must-chip">必须分横竖两步</span>
+        <span class="order-must-chip">必须用 while 判断到没到</span>
+        <span class="order-must-chip">必须在别处调用它</span>
+        <span class="order-must-chip">必须知道 import 是什么</span>
+      </div>
+
+      <details class="fold">
+        <summary>💡 思路拆解（先自己读一遍再看）</summary>
+        <div class="fold-body">
+          <p><b>为什么要分两步？</b>如果写成"先看 x 还差几格就走几格，再看 y 还差几格就走几格"这种混着走的逻辑，<strong>很容易走出田的边界</strong>。先横着走到目标列（此时 y 不变），再竖着走到目标行——<strong>每一步都 guaranteed 在田里</strong>。</p>
+          <p><b>函数的三要素</b>：<br>
+          ① <strong>参数</strong> <code>x, y</code>——"要去哪"，调用时才决定；<br>
+          ② <strong>返回值</strong>——走到就到了，可以 <code>return True</code>；走不到（被墙挡住）就 <code>return False</code>；<br>
+          ③ <strong>调用</strong>——<code>goto(2, 3)</code> 就是"用这个能力"。</p>
+          <p class="tip"><strong>关于 import：</strong>在真实 Python 里，你想用别人写好的功能会写 <code>import math</code>——<strong>把工具箱搬进来</strong>。<br>这个游戏里<strong>也有 import</strong>：科技树里有一个「<strong>导入</strong>」节点（解锁要 80 根胡萝卜），游戏内文档给的写法是：<br>
+          <code>import other_file</code> 然后 <code>other_file.function()</code>。<br>也就是：<strong>只能 import 自己的代码文件</strong>（游戏里另开的代码窗口就是"文件"），<strong>不能 import 标准库</strong>。<br>所以本题的正确姿势是：<strong>把 <code>goto</code> 单独写在一个文件里，主文件 import 它，再通过"文件名.函数名"调用</strong>。<br><strong>这就是"函数"的意义</strong>：写一次，用无数次；<strong>这就是 import 的意义</strong>：写好的工具还能<strong>拆成独立文件，重复利用</strong>。</p>
+          <div class="code-wrap"><pre><code># 文件 A（另一个代码窗口，文件名就叫 tools）
+def goto(x, y):
+    while get_pos_x() != x:
+        move(East) if get_pos_x() &lt; x else move(West)
+    while get_pos_y() != y:
+        move(North) if get_pos_y() &lt; y else move(South)
+
+# 文件 B（主程序）
+import tools                # 把工具箱搬进来
+tools.goto(2, 3)            # 用工具：文件名.函数名()</code></pre></div>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>🔧 常见报错 · 卡住了先看这里</summary>
+        <div class="fold-body">
+          <p><b>一直转圈停不下来</b> → <code>while</code> 的条件写错了。判断条件要同时看<strong>两个</strong>坐标：<code>while get_pos_x() != x or get_pos_y() != y:</code>（<strong>用 or，不用 and</strong>——只要还有一个没到就得继续走）。</p>
+          <p><b>走到一半卡住不动</b> → 田里有墙或障碍，<code>move()</code> 失败了但循环还在转。<strong>让 <code>move()</code> 的返回值参与判断</strong>，走不动就退出。</p>
+          <p><b>走过头了</b> → 移动前<strong>先比较</strong>大小，别无脑往一个方向冲。<code>if get_pos_x() &lt; x: move(East) else: move(West)</code>。</p>
+          <p><b>写 import 报错</b> → <strong>还没解锁「导入」这个科技</strong>。去科技树里找到它（要 80 根胡萝卜），解锁后再写。</p>
+          <p><b>import 报"找不到文件"</b> → <strong>文件名对不上</strong>。<code>import tools</code> 里的 <code>tools</code> 要和另一个代码窗口里<strong>保存的文件名完全一致</strong>（不写 .py 后缀）。</p>
+          <p><b>调用时报"没有这个属性"</b> → 记成 <code>goto(2, 3)</code> 了。import 进来之后要写成 <code>tools.goto(2, 3)</code>——<strong>带上文件名</strong>。</p>
+          <p><b>import 了但还是报错</b> → 游戏里 <code>import</code> 的规则和真实 Python <strong>不完全一样</strong>：只能导入<strong>自己开的代码文件</strong>，<strong>不能 import 任何标准库</strong>（<code>import math</code> 是无效的）。</p>
+        </div>
+      </details>
+
+      <div class="gate">
+        <span class="gate-label">✓ 3 个知识点 · 真的会了才勾</span>
+        <ul>
+          <li><label><input type="checkbox" data-key="farm_sp_k5"> 我能自己写出 <code>def goto(x, y)</code>，并且能从任意位置准确走到目标格</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k6"> 我能解释"先横后竖"和"横竖混着走"的区别，以及为什么前者更安全</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k7"> 我能说出 <code>import</code> 是干什么的，并能把 <code>goto</code> 拆成独立文件再 import 进来</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">特殊订单 3</span>
+        <h3>更快的迷宫：深度优先 vs 广度优先</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        S6 你用的是<strong>左手扶墙法</strong>——它一定能走到宝箱，但<strong>不一定是最短路线</strong>。客户现在要你<strong>算出最短路线</strong>，并且要你<strong>亲手实现两种搜索算法</strong>，比一比谁更聪明：
+        <ul>
+          <li><strong>深度优先 DFS</strong>：一条路走到黑，撞墙才回头换一条。</li>
+          <li><strong>广度优先 BFS</strong>：一圈一圈往外扩，<strong>先找到的一定是最短的</strong>。</li>
+        </ul>
+        关键工具：<code>measure()</code> 在迷宫<strong>任何位置</strong>都能返回宝箱坐标——这就是"目标在哪"的信息来源。
+      </div>
+
+      <figure class="order-fig">
+        <img src="images/sp-bfs-dfs.svg" alt="DFS 与 BFS 对比图：左边深度优先按深入顺序给通路编号，右边广度优先按层扩展给通路编号，两侧迷宫布局相同，终点位置相同" loading="lazy">
+        <figcaption>图：<strong>同一座迷宫，两种走法</strong>。DFS 一条路走到底再回头；BFS 像水波一样一圈圈往外扩——所以 BFS 找到宝箱时<strong>走的步数一定最少</strong>。</figcaption>
+      </figure>
+
+      <div class="order-must">
+        <span class="order-must-chip">必须用 measure() 拿宝箱坐标</span>
+        <span class="order-must-chip">必须用 can_move() 探墙</span>
+        <span class="order-must-chip">必须用队列或栈存待访问的格子</span>
+        <span class="order-must-chip">必须记录已访问过的格子</span>
+        <span class="order-must-chip">必须输出 BFS 的最短步数</span>
+      </div>
+
+      <details class="fold">
+        <summary>💡 思路拆解（先自己读一遍再看）</summary>
+        <div class="fold-body">
+          <p><b>核心概念 · "访问过"标记</b>：两种算法都<strong>必须记住哪些格子已经看过了</strong>，不然会在死胡同里来回转。<br>用<strong>字典</strong>记（S4 学过）：<code>visited[(x, y)] = True</code>。</p>
+          <p><b>DFS · 深度优先</b>：用<strong>栈</strong>（或者干脆<strong>递归</strong>）。规则是"走到最深处，撞墙就退回来换一条路"。<br><strong>特点</strong>：可能先走很远才发现没路；<strong>不适合求最短路</strong>。</p>
+          <p><b>BFS · 广度优先</b>：用<strong>队列</strong>（先进先出）。规则是"一圈一圈往外扩，先把离起点近的都看一遍"。<br><strong>特点</strong>：<strong>第一次碰到宝箱时，走的步数就是最少的</strong>。</p>
+          <p class="tip"><strong>为什么 BFS 求最短路？</strong>因为它<strong>按步数分层</strong>：第 0 层是起点，第 1 层是走一步能到的地方……所以它<strong>永远先搜步数少的</strong>。找到宝箱时，前面所有更短的路线都搜过了。<br>DFS 不分层，它可能一头扎进最长的那条路，所以找到的<strong>不一定最短</strong>。</p>
+          <p class="tip"><strong>游戏里怎么探测？</strong><code>can_move(dir)</code> 告诉你这个方向能不能走（<strong>不消耗步数</strong>）。<code>measure()</code> 在任何格子都能告诉你宝箱坐标。<br>所以：<strong>不用真的一格格走</strong>，可以在"想"的时候就把路径<strong>算出来</strong>，再<strong>真正走一遍</strong>。</p>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>🔧 常见报错 · 卡住了先看这里</summary>
+        <div class="fold-body">
+          <p><b>死循环</b> → <strong>忘了标记已访问</strong>。同一个格子被反复加进队列，永远停不下来。</p>
+          <p><b>IndexError</b> → 算邻居坐标时<strong>越界了</strong>。四个方向要分别判断是否在 <code>0 ~ size-1</code> 之间。</p>
+          <p><b>measure() 返回 None</b> → 你<strong>不在迷宫里</strong>。<code>measure()</code> 只在迷宫里有效。先 <code>plant(Entities.Bush)</code> + <code>use_item(Items.Weird_Substance, n)</code> 把迷宫变出来。</p>
+          <p><b>BFS 步数比左手扶墙还多</b> → 检查一下：<strong>你算的步数是"搜索时想的步数"还是"实际走的步数"</strong>？搜索路径里每一步都要用 <code>can_move</code> 验证过才能走。</p>
+          <p><b>收不到金币</b> → 必须<strong>站到宝箱上</strong>再 <code>harvest()</code>。<code>measure()</code> 给你坐标，但<strong>不会自动走过去</strong>。</p>
+        </div>
+      </details>
+
+      <div class="gate">
+        <span class="gate-label">✓ 3 个知识点 · 真的会了才勾</span>
+        <ul>
+          <li><label><input type="checkbox" data-key="farm_sp_k8"> 我能说清 DFS 和 BFS 的区别，并用"层"解释为什么 BFS 找到的一定最近</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k9"> 我能用字典记录"访问过的格子"，并且不会死循环</label></li>
+          <li><label><input type="checkbox" data-key="farm_sp_k10"> 我能算出迷宫里到宝箱的最短步数，并按这条路线真的走到宝箱上收下金币</label></li>
+        </ul>
+      </div>
+    </div>
+
     <details class="fold">
       <summary>🧠 换需求测试 · 真会了才过</summary>
       <div class="fold-body">
@@ -120,18 +261,16 @@
           <li><strong>换检测方式</strong>：不用 <code>Dead_Pumpkin</code>，改用"种下去之前是不是空地"来判断烂格，行不行？</li>
           <li><strong>加肥料</strong>：补种时加一句 <code>use_item(Items.Fertilizer)</code>，会让新苗更快长熟。为什么要加在"刚种完"而不是"随便哪一格"？</li>
           <li><strong>口述题</strong>：为什么"记账补种"比"一直全田扫描"快？说清理由。</li>
+          <li><strong>口述题</strong>：如果迷宫的墙随机换一批，DFS 的路线会变吗？BFS 呢？<strong>哪个更稳定？</strong></li>
+          <li><strong>改写题</strong>：把 <code>goto(x, y)</code> 改成"能走多远走多远，但<strong>不能穿过墙</strong>"——你会怎么改？</li>
         </ul>
       </div>
     </details>
 
-    <div class="callout">
-      <p><span class="callout-label">📌 老师注记</span>这道题是<strong>列表综合实战</strong>：S3 的列表 + S3 的 for 遍历 + S2 的 if 判断 + L1 的双层 for，四样东西一起用。<br>大南瓜产量是 <strong>n³</strong>（边长 1–5），6×6 起是 <strong>6·n²</strong>——32×32 的田能收 6144 个。学生看到那个数字时会自己理解"为什么要优化"，不用讲。</p>
-    </div>
-
   </article>
 
   <nav class="ch-nav">
-    <a href="stage-6.html" class="prev"><span class="arrow">←</span><span class="text">S6 走进迷宫和恐龙帽</span></a>
+    <a href="stage-7.html" class="prev"><span class="arrow">←</span><span class="text">S7 巨型农场</span></a>
     <a href="index.html" class="mid"><span class="arrow">⌂</span><span class="text">路线首页</span></a>
     <a href="index.html" class="next"><span class="text">返回路线</span><span class="arrow">→</span></a>
   </nav>
