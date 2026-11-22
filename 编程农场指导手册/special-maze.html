@@ -36,14 +36,14 @@
 
     <div class="warn">
       <p><span class="warn-label">📌 建议先做</span>这一单要能生成迷宫。<strong>先做完 S6</strong>（左手扶墙 + 迷宫机制），再来做这一单。<br>
-      <strong>强烈建议先做 <a href="stage-8.html">S8 栈与递归</a></strong>——这一单会用到的<strong>栈</strong>和<strong>递归</strong>在那里已经学过了，先做 S8 会轻松很多。</p>
+      <strong>强烈建议先做 <a href="stage-8.html">S8 递归</a></strong>——这一单会用到的<strong>递归</strong>在那里已经学过了，先做 S8 会轻松很多。</p>
     </div>
 
     <div class="callout">
       <p><span class="callout-label">🧠 先回顾一下（S8 学过的）</span>
-      <strong>栈</strong>：只能从顶上拿东西的架子（<code>append</code> 压栈、<code>pop</code> 弹栈、<code>len()</code> 判断空不空）。<br>
       <strong>递归</strong>：函数自己调用自己，靠"同样的问题小一号"往下走。<br>
-      这一单的 DFS 会把两个都用上——<strong>DFS 的"记住来时的路"就是栈</strong>，<strong>DFS 的"一路走到黑"就是递归</strong>。</p>
+      这一单的 DFS 可以写成<strong>递归</strong>——"一条路走到黑，撞墙就退回来"，和 S8 的伴生链是同一个套路。<br>
+      另外，<strong>DFS 还可以用一个列表当"栈"</strong>来写（<code>append</code> 压进去、<code>pop</code> 拿出来）——两种写法做的是同一件事。</p>
     </div>
 
     <h2>🎮 游戏进度 · 课前准备</h2>
