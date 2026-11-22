@@ -60,17 +60,37 @@ x, y = pos       # 解包：一句话拆成两个变量
 
     <h3>② 字典：用"位置"查"要种什么"</h3>
     <p>列表是"按顺序排的一排"，字典是"<strong>按名字查</strong>"。字典的每个格子有两半：<strong>键（key）</strong>和<strong>值（value）</strong>。</p>
-    <div class="code-wrap"><pre><code>companions = {}                      # 空字典
-companions[(2, 1)] = Entities.Carrot  # 键 = 坐标，值 = 要种的作物
-companions[(0, 3)] = Entities.Bush
+    <p>先看一个<strong>跟农场有关的字典</strong>——它记的是"<strong>谁想在哪儿种什么</strong>"：</p>
+    <figure class="order-fig">
+      <img src="images/s4-dictionary.svg" alt="字典示意图：左侧是 5×4 的田，三株作物分别向带编号的格子提出伴生请求；右侧是字典表，把编号 1 2 3 对应到键值对 (2,1)→胡萝卜、(0,3)→树、(4,2)→灌木" loading="lazy">
+      <figcaption>图：<strong>字典就是一张心愿单</strong>。左边田里每株植物提出请求，右边字典把它记成一条"<strong>坐标 → 要种的作物</strong>"。</figcaption>
+    </figure>
+    <div class="code-wrap"><pre><code>companions = {}
+# 这是一个空字典，里面还没有任何记录
 
-# 按键查值
+# —— 写入 ——
+# 灌木 A 说："我想在 (2, 1) 那格种胡萝卜"
+companions[(2, 1)] = Entities.Carrot
+# 灌木 B 说："我想在 (0, 3) 那格种树"
+companions[(0, 3)] = Entities.Tree
+
+# 现在字典里长这样（对应上图右边那张表）：
+#   键(在哪)   →  值(种什么)
+#   (2, 1)     →  Entities.Carrot
+#   (0, 3)     →  Entities.Tree
+
+# —— 读取 ——
 want = companions[(2, 1)]        # → Entities.Carrot
+quick_print("(2, 1) 那格要种", want)
 
 # 查在不在
 if (2, 1) in companions:
-    ...</code></pre></div>
-    <p class="tip">字典的键可以是<strong>元组</strong>——所以 <code>(2, 1)</code> 这种"坐标"能直接当键用，不需要先转成字符串。</p>
+    quick_print("有人点名要这一格")
+if (5, 5) in companions:
+    quick_print("这格没人要")     # 这句不会执行</code></pre></div>
+    <p class="tip"><strong>字典和列表最大的不同</strong>：列表要靠<strong>下标</strong>找东西（第 0 个、第 1 个…），字典要靠<strong>键</strong>找东西。<br>
+    而且<strong>键不用连着</strong>——上面 <code>(0, 3)</code> 和 <code>(2, 1)</code> 之间<strong>隔了一整格也没关系</strong>，这是列表做不到的（列表要连续）。<br>
+    字典的键可以是<strong>元组</strong>——所以 <code>(2, 1)</code> 这种"坐标"能直接当键用，不需要先转成字符串。</p>
 
     <h3>③ get_companion()：怎么读它给的东西</h3>
     <p>站在任意一株参与混种的作物上调用它，会返回<strong>两种东西之一</strong>：</p>
@@ -86,18 +106,18 @@ else:
     <p class="tip"><strong>关键</strong>：伴生偏好是<strong>随机</strong>的，每株都不一样，<strong>猜不出来</strong>——只能一株一株问。伴生在 3 格以内，而且不能跟自己是同一种。</p>
 
     <h3>④ 字典的三板斧：查 / 写 / 销账</h3>
-    <div class="code-wrap"><pre><code>companions = {}
-
-# 查：这格有没有人在等伴生
-if pos in companions:
-    want = companions[pos]
+    <p>接着上面那个字典往下走——<strong>三条命令，学生只需要记这三条</strong>：</p>
+    <div class="code-wrap"><pre><code># 查：这格有没有人在等伴生
+if (2, 1) in companions:
+    want = companions[(2, 1)]
 
 # 写：记下"我要 (x, y) 那格种 want"
-companions[target] = want
+companions[(4, 2)] = Entities.Bush
 
 # 销账：读出来同时删掉（pop = 取出来 + 删掉）
-want = companions.pop(pos)</code></pre></div>
-    <p class="tip"><code>pop()</code> 一次干两件事：<strong>取出值</strong> + <strong>删掉这一条</strong>。混种里正好用它——一个伴生请求只会被满足一次。</p>
+want = companions.pop((2, 1))</code></pre></div>
+    <p class="tip"><code>pop()</code> 一次干两件事：<strong>取出值</strong> + <strong>删掉这一条</strong>。混种里正好用它——一个伴生请求只会被满足一次。<br>
+    执行完最后这行，字典里就<strong>只剩 <code>(0, 3)</code> 和 <code>(4, 2)</code> 两条</strong>了——<code>(2, 1)</code> 那条已经被兑现掉了。</p>
 
     <h3>⑤ def：把一整段动作打包成一个名字</h3>
     <p>字典方案要重复做两件事——"种一格"和"扫全田"。这两件事各写一次、反复调用，比复制粘贴清楚得多。</p>
