@@ -134,6 +134,49 @@ plant_tile(Entities.Bush)</code></pre></div>
         <span class="order-must-chip">必须两层解包</span>
         <span class="order-must-chip">必须记住伴生不用长熟</span>
       </div>
+
+      <details class="fold">
+        <summary>🧩 起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <p><strong>先记住一件事</strong>：<code>get_companion()</code> 只告诉你<strong>伴生在哪</strong>，<strong>不会告诉你灌木原来在哪</strong>——所以<strong>问之前先把灌木的位置存下来</strong>，等会儿要回来收它。</p>
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre># ① 先找到一株灌木，站到它旁边
+#    （两层 for 扫田，get_entity_type() == Entities.Bush）
+# ② 先把灌木的位置存下来，等会儿要回来
+bx = get_pos_x()
+by = get_pos_y()
+
+# ③ 问它想要什么
+result = get_companion()
+
+if result != None:
+    # ④ 拆两层：先拆出"要种什么"和"在哪一格"
+    want, target = <span class="blank">____________</span>
+    x, y = <span class="blank">____________</span>
+
+    # ⑤ 先横后竖，走到伴生那一格
+    while get_pos_x() != x:
+        move(<span class="blank">______</span>) if get_pos_x() &lt; x else move(<span class="blank">______</span>)
+    while get_pos_y() != y:
+        move(<span class="blank">______</span>) if get_pos_y() &lt; y else move(<span class="blank">______</span>)
+
+    # ⑥ 种下它想要的（胡萝卜要先翻土）
+    if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
+        till()
+    plant(want)
+
+    # ⑦ 走回灌木那里，收获 —— 这一步就有 5 倍加成
+    while get_pos_x() != bx:
+        move(<span class="blank">______</span>)
+    while get_pos_y() != by:
+        move(<span class="blank">______</span>)
+    harvest()</pre>
+          </div>
+          <p class="tip"><strong>填空提示</strong>：④ 是两层解包；⑤ 和 ⑦ 的方向要<strong>分情况</strong>（往大的走还是往小的走）；⑥ 种什么直接用 <code>want</code> 就行。</p>
+        </div>
+      </details>
+
       <p class="tip-task">伴生作物<strong>不用等它长熟</strong>——种下去就能立刻收本株。这是很多人白等好几轮的原因。</p>
     </div>
 
@@ -158,6 +201,65 @@ plant_tile(Entities.Bush)</code></pre></div>
         <span class="order-must-chip">种之前先看字典</span>
         <span class="order-must-chip">用函数组织代码</span>
       </div>
+
+      <details class="fold">
+        <summary>🧩 起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <p><strong>为什么必须用字典，不能用列表？</strong><br>
+          你的心愿单要回答的问题是"<strong>(3, 5) 这格要种什么？</strong>"——这是<strong>按坐标查</strong>，不是"按顺序找"。<br>
+          用列表的话，你得<strong>把整个列表从头翻到尾</strong>去找那一格，格子一多就<strong>又慢又难写</strong>；用字典，<strong>一下就查到了</strong>。<br>
+          <strong>记住这句口诀</strong>：<strong>键是"在哪"，值是"种什么"</strong>。</p>
+
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre># ① 心愿单：一个空字典，键 = 坐标，值 = 要种的作物
+companions = {}
+
+def plant_tile(main_crop):
+    pos = (get_pos_x(), get_pos_y())
+
+    if can_harvest():
+        harvest()
+
+    # ② 先问字典：有没有人点名要这格？
+    if <span class="blank">____________</span> in companions:
+        # 有 —— 种它要的，并把这条心愿销掉（pop = 取出 + 删除）
+        want = companions.<span class="blank">______</span>(pos)
+        if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
+            till()
+        plant(want)
+        <span class="blank">________________</span>      # 这格让给伴生，主作物不种了
+
+    # ③ 没有人才种主作物
+    if main_crop == Entities.Carrot and get_ground_type() != Grounds.Soil:
+        till()
+    plant(main_crop)
+
+    # ④ 问这株想要什么，记进字典
+    result = get_companion()
+    if result != None:
+        want, target = <span class="blank">____________</span>
+        if <span class="blank">____________</span> not in companions:   # 别让两株抢同一格
+            companions[target] = want
+
+def sweep(main_crop):
+    size = get_world_size()
+    for i in range(size):
+        for j in range(size):
+            plant_tile(main_crop)
+            move(East)
+        move(North)
+
+while True:
+    sweep(Entities.Tree)</pre>
+          </div>
+
+          <p class="tip"><strong>填空提示</strong>：② 的条件是"<strong>这格</strong>在字典里"；<code>pop</code> 前面那个空是 <code>companions</code>。<br>② 最后那行空是 <strong><code>return</code></strong>——这格已经让给伴生了，<strong>不能再种主作物</strong>，所以直接<strong>结束这一格的处理</strong>。<br>④ 两个空分别是"<strong>两层解包</strong>"和"<strong>键</strong>"。</p>
+
+          <p class="tip"><strong>为什么 ④ 要先判断"没被占"？</strong>因为<strong>两株植物可能都想在同一个位置种伴生</strong>。不判断的话，后来登记的那个会<strong>把先前的覆盖掉</strong>，先前的那个心愿就永远等不到了。</p>
+        </div>
+      </details>
+
       <p class="tip-task">为什么不能"走过去种完再走回来"？因为<strong>你种下伴生时，会把那格原来作物的心愿弄丢</strong>。用字典记账就不会互相踩。</p>
     </div>
 
