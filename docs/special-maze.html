@@ -35,7 +35,15 @@
   <article class="ch-body">
 
     <div class="warn">
-      <p><span class="warn-label">📌 建议先做</span>这一单要能生成迷宫。<strong>先做完 S6</strong>（左手扶墙 + 迷宫机制），再来做这一单。</p>
+      <p><span class="warn-label">📌 建议先做</span>这一单要能生成迷宫。<strong>先做完 S6</strong>（左手扶墙 + 迷宫机制），再来做这一单。<br>
+      <strong>强烈建议先做 <a href="stage-8.html">S8 栈与递归</a></strong>——这一单会用到的<strong>栈</strong>和<strong>递归</strong>在那里已经学过了，先做 S8 会轻松很多。</p>
+    </div>
+
+    <div class="callout">
+      <p><span class="callout-label">🧠 先回顾一下（S8 学过的）</span>
+      <strong>栈</strong>：只能从顶上拿东西的架子（<code>append</code> 压栈、<code>pop</code> 弹栈、<code>len()</code> 判断空不空）。<br>
+      <strong>递归</strong>：函数自己调用自己，靠"同样的问题小一号"往下走。<br>
+      这一单的 DFS 会把两个都用上——<strong>DFS 的"记住来时的路"就是栈</strong>，<strong>DFS 的"一路走到黑"就是递归</strong>。</p>
     </div>
 
     <h2>🎮 游戏进度 · 课前准备</h2>
@@ -117,7 +125,7 @@
       <div class="fold-body">
         <ul>
           <li><strong>口述题</strong>：如果迷宫的墙随机换一批，DFS 的路线会变吗？BFS 呢？<strong>哪个更稳定？</strong></li>
-          <li><strong>改写题</strong>：把 DFS 改成<strong>递归</strong>写法，<code>visited</code> 还要不要？为什么？</li>
+          <li><strong>改写题</strong>：把 DFS 改成<strong>递归</strong>写法（S8 学过的），<code>visited</code> 还要不要？为什么？</li>
           <li><strong>扩展题</strong>：如果迷宫里有<strong>两个</strong>宝箱，怎么改成"找完所有"？</li>
           <li><strong>接上一单</strong>：用特殊订单 2 写的 <code>goto(x, y)</code>，能不能直接用来走 BFS 算出来的路线？</li>
         </ul>
