@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>编程农场 · 学生自学路线</title>
   <link rel="stylesheet" href="css/farm.css">
+  <link rel="stylesheet" href="css/celebrate.css">
 </head>
 <body>
 
@@ -21,6 +22,10 @@
         <li>知识点的「已会」勾和订单的自查勾都<strong>存在本机浏览器</strong>，换设备不保留。</li>
         <li>API 名字（<code>Entities.</code> / <code>Items.</code> / <code>Grounds.</code>）<strong>以游戏内文档为准</strong>，不同版本有差异。</li>
       </ol>
+      <button class="celebrate-trigger" type="button">
+        <img src="images/star-fan-honggu.jpg" alt="范泓谷">
+        🏆 全站第一人 · 为大家解锁了《编程矿场》
+      </button>
     </div>
   </header>
 
@@ -202,6 +207,48 @@
 
   </div>
 
+  <!-- 🏆 荣誉弹窗 · 首个解锁《编程矿场》DLC -->
+  <div class="celebrate-mask" role="dialog" aria-modal="true" aria-labelledby="celebrate-title">
+    <div class="celebrate-card">
+      <div class="celebrate-banner">🎉 第一人 · 全站解锁 🎉</div>
+
+      <div class="celebrate-dlc-wrap">
+        <img class="celebrate-dlc-art" src="images/dlc-miner.png" alt="《编程矿场》DLC 宣传图">
+      </div>
+
+      <div class="celebrate-glow"></div>
+
+      <div class="celebrate-medal">
+        <div class="celebrate-crown">👑</div>
+        <img class="celebrate-avatar" src="images/star-fan-honggu.jpg" alt="范泓谷">
+      </div>
+
+      <h2 class="celebrate-title" id="celebrate-title">🏆 编程矿场 DLC 解锁 🏆</h2>
+      <div class="celebrate-name"><span>范泓谷</span></div>
+      <p class="celebrate-sub">
+        <b>全站第一人</b>——率先完成三个进阶挑战，<br>
+        为全体同学<b>解锁了《编程矿场》DLC</b>！
+      </p>
+
+      <div class="celebrate-badges">
+        <span class="celebrate-badge done">🌵 仙人掌排序</span>
+        <span class="celebrate-badge done">🌿 伴生混种</span>
+        <span class="celebrate-badge done">🗺️ 基础走迷宫</span>
+      </div>
+
+      <div class="celebrate-reward">
+        🎁 <b>为全体同学解锁的奖励</b>：《编程矿场》（The Miner Was Replaced）DLC ——<br>
+        地下采矿、煤 / 石英 / 蘑菇 / 炸药，还有<strong>扫雷式谜题</strong>和新解锁树。
+      </div>
+
+      <div class="celebrate-actions">
+        <a class="celebrate-btn primary" href="stage-6.html">继续闯关 →</a>
+        <button class="celebrate-btn ghost" type="button" data-celebrate-close>关闭</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
+  <script src="js/celebrate.js"></script>
 </body>
 </html>

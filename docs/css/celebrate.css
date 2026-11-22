@@ -1,0 +1,295 @@
+/* ============================================
+   荣誉弹窗 · 首个解锁《编程矿场》DLC 的同学
+   独立文件，只在首页引入
+   ============================================ */
+
+/* ============ 遮罩 ============ */
+.celebrate-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(26, 26, 26, 0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.celebrate-mask.on {
+  display: flex;
+  animation: celeb-fade 0.35s ease both;
+}
+@keyframes celeb-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ============ 卡片 ============ */
+.celebrate-card {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(170deg, #fffdf6 0%, #fff6e3 45%, #ffeccc 100%);
+  border-radius: 22px;
+  border: 2px solid var(--orange-60);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  text-align: center;
+  animation: celeb-pop 0.55s cubic-bezier(0.22, 1.4, 0.4, 1) both;
+}
+@keyframes celeb-pop {
+  from { transform: scale(0.72) translateY(24px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 顶部彩带 */
+.celebrate-banner {
+  background: linear-gradient(90deg, #F3A21C, #E8830C, #F3A21C);
+  background-size: 220% 100%;
+  animation: celeb-ribbon 3.4s linear infinite;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  padding: 9px 16px;
+}
+@keyframes celeb-ribbon {
+  from { background-position: 0% 0; }
+  to   { background-position: 220% 0; }
+}
+
+/* 金色光芒 */
+.celebrate-glow {
+  position: absolute;
+  top: 46px;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  margin-left: -130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 162, 28, 0.42) 0%, rgba(243, 162, 28, 0) 68%);
+  pointer-events: none;
+  animation: celeb-glow 3s ease-in-out infinite;
+}
+@keyframes celeb-glow {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50%      { transform: scale(1.16); opacity: 1; }
+}
+
+/* ============ DLC 宣传图 ============ */
+.celebrate-dlc-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border-bottom: 2px solid var(--orange-60);
+}
+.celebrate-dlc-wrap {
+  position: relative;
+  line-height: 0;
+}
+
+/* ============ 奖章 + 头像 ============ */
+.celebrate-medal {
+  position: relative;
+  margin: -62px auto 0;
+  width: 148px;
+  height: 148px;
+}
+.celebrate-medal::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 3px dashed var(--orange-60);
+  animation: celeb-spin 9s linear infinite;
+}
+@keyframes celeb-spin {
+  to { transform: rotate(360deg); }
+}
+.celebrate-avatar {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 5px solid #fff;
+  box-shadow: 0 8px 24px rgba(180, 120, 20, 0.4);
+}
+/* 头像上的金冠 */
+.celebrate-crown {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
+  filter: drop-shadow(0 3px 5px rgba(180, 120, 20, 0.5));
+  animation: celeb-bob 1.9s ease-in-out infinite;
+}
+@keyframes celeb-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0) rotate(-5deg); }
+  50%      { transform: translateX(-50%) translateY(-6px) rotate(5deg); }
+}
+
+/* ============ 文字 ============ */
+.celebrate-title {
+  margin: 18px 22px 2px;
+  font-size: 25px;
+  font-weight: 800;
+  color: #a05a10;
+  letter-spacing: 0.02em;
+}
+.celebrate-name {
+  margin: 6px 22px 4px;
+  font-size: 34px;
+  font-weight: 800;
+  color: #333;
+  letter-spacing: 0.16em;
+}
+.celebrate-name span {
+  display: inline-block;
+  animation: celeb-wave 1.4s ease-in-out infinite;
+}
+@keyframes celeb-wave {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+.celebrate-sub {
+  margin: 0 22px 16px;
+  font-size: 14.5px;
+  color: #7a5a28;
+  line-height: 1.7;
+}
+.celebrate-sub b {
+  color: #c25e0c;
+  font-weight: 800;
+}
+
+/* ============ 三个挑战徽章 ============ */
+.celebrate-badges {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 0 20px 18px;
+}
+.celebrate-badge {
+  background: #fff;
+  border: 1.5px solid var(--orange-60);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8a5a10;
+  box-shadow: 0 2px 6px rgba(180, 120, 20, 0.12);
+}
+.celebrate-badge.done {
+  background: linear-gradient(135deg, #F3A21C, #E8830C);
+  border-color: #E8830C;
+  color: #fff;
+}
+
+/* ============ 奖励条 ============ */
+.celebrate-reward {
+  margin: 0 20px 18px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1.5px solid var(--orange-60);
+  border-radius: 12px;
+  font-size: 14px;
+  color: #6b4a15;
+  line-height: 1.65;
+}
+.celebrate-reward b {
+  color: #a05a10;
+}
+
+/* ============ 按钮 ============ */
+.celebrate-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 0 20px 24px;
+  flex-wrap: wrap;
+}
+.celebrate-btn {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 11px 24px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.celebrate-btn.primary {
+  background: linear-gradient(135deg, #F3A21C, #E8830C);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(232, 131, 12, 0.36);
+}
+.celebrate-btn.ghost {
+  background: #fff;
+  color: #8a5a10;
+  border: 1.5px solid var(--orange-60);
+}
+.celebrate-btn:hover {
+  transform: translateY(-2px);
+}
+.celebrate-btn:active {
+  transform: translateY(0);
+}
+
+/* ============ 彩纸 ============ */
+.confetti {
+  position: absolute;
+  top: -18px;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(520px) rotate(720deg); }
+}
+
+/* ============ 触发入口（首页顶部小徽章） ============ */
+.celebrate-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #F3A21C, #E8830C);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(232, 131, 12, 0.3);
+  transition: transform 0.16s ease;
+}
+.celebrate-trigger:hover { transform: translateY(-2px); }
+.celebrate-trigger img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+@media (max-width: 640px) {
+  .celebrate-card { max-width: 100%; }
+  .celebrate-name { font-size: 28px; }
+  .celebrate-title { font-size: 21px; }
+  .celebrate-medal { width: 124px; height: 124px; }
+  .celebrate-avatar { width: 124px; height: 124px; }
+  .celebrate-actions { flex-direction: column; }
+  .celebrate-btn { width: 100%; }
+}
