@@ -138,42 +138,31 @@ plant_tile(Entities.Bush)</code></pre></div>
       <details class="fold">
         <summary>🧩 起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
-          <p><strong>先记住一件事</strong>：<code>get_companion()</code> 只告诉你<strong>伴生在哪</strong>，<strong>不会告诉你灌木原来在哪</strong>——所以<strong>问之前先把灌木的位置存下来</strong>，等会儿要回来收它。</p>
+          <p><strong>只有下划线空位是要你填的</strong>，其余步骤都写成了注释，照着做就行。</p>
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre># ① 先找到一株灌木，站到它旁边
-#    （两层 for 扫田，get_entity_type() == Entities.Bush）
-# ② 先把灌木的位置存下来，等会儿要回来
-bx = get_pos_x()
-by = get_pos_y()
-
-# ③ 问它想要什么
-result = get_companion()
-
+<pre># ① 在田里找到一株灌木，站到它旁边
+#    （两层 for 扫田，看 get_entity_type() == Entities.Bush）
+#
+# ② 把灌木的位置记下来 —— 等会儿要回来收它
+#    （提示：get_companion() 只告诉你伴生在哪，不会告诉你灌木原来在哪）
+#
+# ③ 问它想要什么：result = get_companion()
+#
+# ④ 如果 result 不是 None，就拆开它
 if result != None:
-    # ④ 拆两层：先拆出"要种什么"和"在哪一格"
-    want, target = <span class="blank">____________</span>
-    x, y = <span class="blank">____________</span>
+    want, target = <span class="blank">____________</span>       # 第一层：拆出"要种什么"和"在哪一格"
+    x, y = <span class="blank">____________</span>               # 第二层：把坐标拆成 x 和 y
 
-    # ⑤ 先横后竖，走到伴生那一格
-    while get_pos_x() != x:
-        move(<span class="blank">______</span>) if get_pos_x() &lt; x else move(<span class="blank">______</span>)
-    while get_pos_y() != y:
-        move(<span class="blank">______</span>) if get_pos_y() &lt; y else move(<span class="blank">______</span>)
-
-    # ⑥ 种下它想要的（胡萝卜要先翻土）
-    if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
-        till()
-    plant(want)
-
+    # ⑤ 走到伴生那一格（先横后竖：先把 x 走到位，再把 y 走到位）
+    #    走过去之前别忘了：胡萝卜要种在翻过的土上
+    #
+    # ⑥ 种下它想要的
+    #
     # ⑦ 走回灌木那里，收获 —— 这一步就有 5 倍加成
-    while get_pos_x() != bx:
-        move(<span class="blank">______</span>)
-    while get_pos_y() != by:
-        move(<span class="blank">______</span>)
-    harvest()</pre>
+    #    （伴生不用长熟，种下就能收）</pre>
           </div>
-          <p class="tip"><strong>填空提示</strong>：④ 是两层解包；⑤ 和 ⑦ 的方向要<strong>分情况</strong>（往大的走还是往小的走）；⑥ 种什么直接用 <code>want</code> 就行。</p>
+          <p class="tip"><strong>填空提示</strong>：两处都是<strong>解包</strong>。<code>get_companion()</code> 返回的是<strong>两层</strong>结构——第一层拆出 <code>want</code> 和 <code>target</code>，第二层才把 <code>target</code> 拆成 <code>x</code> 和 <code>y</code>。</p>
         </div>
       </details>
 
@@ -212,7 +201,8 @@ if result != None:
 
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
-<pre># ① 心愿单：一个空字典，键 = 坐标，值 = 要种的作物
+<pre># ① 心愿单：一个空字典
+#    键 = 坐标，值 = 要种的作物
 companions = {}
 
 def plant_tile(main_crop):
@@ -221,42 +211,38 @@ def plant_tile(main_crop):
     if can_harvest():
         harvest()
 
-    # ② 先问字典：有没有人点名要这格？
+    # ② 先问字典：这一格有没有人点名要伴生？
     if <span class="blank">____________</span> in companions:
-        # 有 —— 种它要的，并把这条心愿销掉（pop = 取出 + 删除）
+        # 有 —— 把它的愿望取出来，顺便销掉这条账
+        #      （pop = 取出 + 删除，一个请求只兑现一次）
         want = companions.<span class="blank">______</span>(pos)
-        if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
-            till()
-        plant(want)
-        <span class="blank">________________</span>      # 这格让给伴生，主作物不种了
+        # ③ 种下它想要的（胡萝卜要先翻土）
+        #
+        # ④ 这格已经让给伴生了 —— 主作物不能再种
+        #    （想想这里该写什么，才能让下面那段不执行）
+        <span class="blank">________________</span>
 
-    # ③ 没有人才种主作物
-    if main_crop == Entities.Carrot and get_ground_type() != Grounds.Soil:
-        till()
-    plant(main_crop)
-
-    # ④ 问这株想要什么，记进字典
+    # ⑤ 没有人才轮到主作物
+    #    （胡萝卜要先翻土；翻土的规矩和 S3 一样）
+    #
+    # ⑥ 再问问这株想要什么，记进字典
     result = get_companion()
     if result != None:
         want, target = <span class="blank">____________</span>
-        if <span class="blank">____________</span> not in companions:   # 别让两株抢同一格
+        # ⑦ 别让两株植物抢同一格
+        if <span class="blank">____________</span> not in companions:
             companions[target] = want
 
-def sweep(main_crop):
-    size = get_world_size()
-    for i in range(size):
-        for j in range(size):
-            plant_tile(main_crop)
-            move(East)
-        move(North)
-
-while True:
-    sweep(Entities.Tree)</pre>
+# ⑧ 用一个函数把全田扫一遍：每格调一次 plant_tile，每行末尾往北挪一格</pre>
           </div>
 
-          <p class="tip"><strong>填空提示</strong>：② 的条件是"<strong>这格</strong>在字典里"；<code>pop</code> 前面那个空是 <code>companions</code>。<br>② 最后那行空是 <strong><code>return</code></strong>——这格已经让给伴生了，<strong>不能再种主作物</strong>，所以直接<strong>结束这一格的处理</strong>。<br>④ 两个空分别是"<strong>两层解包</strong>"和"<strong>键</strong>"。</p>
+          <p class="tip"><strong>填空提示</strong>：<br>
+          ② 第一个空是"<strong>这一格的坐标</strong>"——就是上面那个 <code>pos</code>。<br>
+          ② 第二个空是<strong>取出并删除</strong>的那个方法（<code>pop</code>）。<br>
+          ④ 那个空是 <strong><code>return</code></strong>——这格让给伴生了，<strong>直接结束这一格的处理</strong>，下面主作物那段就不会执行。<br>
+          ⑥ 第一个空是<strong>两层解包</strong>；⑦ 那个空是<strong>坐标</strong>。</p>
 
-          <p class="tip"><strong>为什么 ④ 要先判断"没被占"？</strong>因为<strong>两株植物可能都想在同一个位置种伴生</strong>。不判断的话，后来登记的那个会<strong>把先前的覆盖掉</strong>，先前的那个心愿就永远等不到了。</p>
+          <p class="tip"><strong>为什么 ⑦ 要先判断"没被占"？</strong>因为<strong>两株植物可能都想在同一个位置种伴生</strong>。不判断的话，后来登记的那个会<strong>把先前的覆盖掉</strong>，先前的那个心愿就永远等不到了。</p>
         </div>
       </details>
 
