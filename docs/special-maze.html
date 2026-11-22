@@ -36,14 +36,15 @@
 
     <div class="warn">
       <p><span class="warn-label">📌 建议先做</span>这一单要能生成迷宫。<strong>先做完 S6</strong>（左手扶墙 + 迷宫机制），再来做这一单。<br>
-      <strong>强烈建议先做 <a href="stage-8.html">S8 递归</a></strong>——这一单会用到的<strong>递归</strong>在那里已经学过了，先做 S8 会轻松很多。</p>
+      <strong>这一单难度最高</strong>——建议放到矿场订单之前或之后都行，但<strong>要有心理准备</strong>：它要求你自己实现两种搜索算法。</p>
     </div>
 
     <div class="callout">
-      <p><span class="callout-label">🧠 先回顾一下（S8 学过的）</span>
-      <strong>递归</strong>：函数自己调用自己，靠"同样的问题小一号"往下走。<br>
-      这一单的 DFS 可以写成<strong>递归</strong>——"一条路走到黑，撞墙就退回来"，和 S8 的伴生链是同一个套路。<br>
-      另外，<strong>DFS 还可以用一个列表当"栈"</strong>来写（<code>append</code> 压进去、<code>pop</code> 拿出来）——两种写法做的是同一件事。</p>
+      <p><span class="callout-label">🧠 这一单要用到的两个工具</span>
+      <strong>队列</strong>：先进先出的一列东西，用 <code>list.pop(0)</code> 取第一个。<br>
+      <strong>栈</strong>：后进先出，用 <code>list.append()</code> 压进去、<code>list.pop()</code> 取最后一个。<br>
+      <strong>递归</strong>：函数自己调用自己（<a href="mine-2.html">矿场订单 2</a>会正式讲）。<br>
+      下面两种写法你都可以用：<strong>用列表记"待访问的格子"</strong>，或者<strong>直接递归</strong>——两种做的是同一件事。</p>
     </div>
 
     <h2>🎮 游戏进度 · 课前准备</h2>
@@ -125,7 +126,7 @@
       <div class="fold-body">
         <ul>
           <li><strong>口述题</strong>：如果迷宫的墙随机换一批，DFS 的路线会变吗？BFS 呢？<strong>哪个更稳定？</strong></li>
-          <li><strong>改写题</strong>：把 DFS 改成<strong>递归</strong>写法（S8 学过的），<code>visited</code> 还要不要？为什么？</li>
+          <li><strong>改写题</strong>：把 DFS 改成<strong>递归</strong>写法，<code>visited</code> 还要不要？为什么？（<strong>递归</strong>会在矿场订单 2 正式讲）</li>
           <li><strong>扩展题</strong>：如果迷宫里有<strong>两个</strong>宝箱，怎么改成"找完所有"？</li>
           <li><strong>接上一单</strong>：用特殊订单 2 写的 <code>goto(x, y)</code>，能不能直接用来走 BFS 算出来的路线？</li>
         </ul>
