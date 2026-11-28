@@ -113,9 +113,10 @@
     <text x="140" y="193" font-size="12.5">🌿 灌木</text>
 
     <!-- 底部说明 -->
-    <rect x="16" y="214" width="253" height="44" rx="6" fill="#FFF8E8"/>
-    <text x="26" y="232" font-size="10.5" fill="#a06a10">键<tspan font-weight="700">不用连着</tspan>：</text>
-    <text x="88" y="232" font-size="10.5" fill="#a06a10">(0,3) 和 (2,1) 隔了一格</text>
-    <text x="26" y="250" font-size="10.5" fill="#a06a10">也能各查各的 —— 列表做不到</text>
+    <rect x="16" y="210" width="253" height="52" rx="6" fill="#FFF8E8"/>
+    <text x="26" y="227" font-size="10.5" fill="#a06a10">键<tspan font-weight="700">不用连着</tspan>：</text>
+    <text x="88" y="227" font-size="10.5" fill="#a06a10">(0,3) 和 (2,1) 隔了一格</text>
+    <text x="26" y="244" font-size="10.5" fill="#a06a10">也能各查各的 —— 列表做不到</text>
+    <text x="26" y="258" font-size="10" font-weight="700" fill="#c2410c">遍历顺序 ≠ 写入顺序（字典无序）</text>
   </g>
 </svg>

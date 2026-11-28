@@ -35,7 +35,7 @@
   <article class="ch-body">
 
     <div class="warn">
-      <p><span class="warn-label">📌 建议先做</span>这一单要用到 <code>def</code> 定义函数。<strong>如果函数还不熟，先回 S4 看一遍</strong>——S4 的第 5 张知识卡就是讲函数的。</p>
+      <p><span class="warn-label">📌 建议先做</span>这一单要用到 <code>def</code> 定义函数。<strong>如果函数还不熟，先回 S4 看一遍</strong>——S4 订单 2 的骨架里就有一段 <code>def plant_tile(main_crop):</code>，那是本关第一次出现函数。</p>
     </div>
 
     <h2>🎮 游戏进度 · 课前准备</h2>
@@ -87,13 +87,21 @@
           <div class="code-wrap"><pre><code># 文件 A（另一个代码窗口，文件名就叫 tools）
 def goto(x, y):
     while get_pos_x() != x:
-        move(East) if get_pos_x() &lt; x else move(West)
+        if get_pos_x() &lt; x:
+            move(East)
+        else:
+            move(West)
     while get_pos_y() != y:
-        move(North) if get_pos_y() &lt; y else move(South)
+        if get_pos_y() &lt; y:
+            move(North)
+        else:
+            move(South)
 
 # 文件 B（主程序）
 import tools                # 把工具箱搬进来
 tools.goto(2, 3)            # 用工具：文件名.函数名()</code></pre></div>
+          <p class="tip"><strong>⚠️ 注意</strong>：这个游戏<strong>不支持三元表达式</strong>（<code>a if 条件 else b</code> 那种一行写法）。<br>
+          必须老老实实写成 <code>if ... else ...</code> 两行——<strong>缩进要写对</strong>。</p>
         </div>
       </details>
 
@@ -133,7 +141,7 @@ tools.goto(2, 3)            # 用工具：文件名.函数名()</code></pre></di
     </details>
 
     <div class="callout">
-      <p><span class="callout-label">📌 老师注记</span>这是<strong>函数的第一次正式亮相</strong>：S4 只是在知识卡里出现过 <code>def</code>，这里要学生<strong>自己定义 + 自己调用</strong>。<br>特别强调 <strong>import 的意义</strong>：<strong>写好的工具能拆成独立文件反复用</strong>——这是从"会写代码"到"会组织代码"的分水岭。<br>这一单也是<strong>特殊订单 3 的前置</strong>：迷宫里"算路径再走过去"用的就是 <code>goto</code> 的思路。</p>
+      <p><span class="callout-label">📌 老师注记</span>这是<strong>函数的第一次正式亮相</strong>：S4 只是在订单骨架里出现过一次 <code>def</code>，这里要学生<strong>自己定义 + 自己调用</strong>。<br>特别强调 <strong>import 的意义</strong>：<strong>写好的工具能拆成独立文件反复用</strong>——这是从"会写代码"到"会组织代码"的分水岭。<br>这一单也是<strong>特殊订单 3 的前置</strong>：迷宫里"算路径再走过去"用的就是 <code>goto</code> 的思路。</p>
     </div>
 
   </article>

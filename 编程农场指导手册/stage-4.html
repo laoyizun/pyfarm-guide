@@ -20,15 +20,15 @@
     <div class="ch-num">S4</div>
     <div class="ch-text">
       <div class="ch-eyebrow">第 4 阶段 · 混种与伴生</div>
-      <h1 class="ch-h">字典 / 元组 / 随机规则要读不要猜</h1>
-      <p class="ch-d">这一关的伴生偏好是<strong>随机的</strong>——猜不出来，只能问。问回来的答案要用字典存下来，一格一格去满足。</p>
+      <h1 class="ch-h">字典 / 元组 / 遍历 / 随机规则要读不要猜</h1>
+      <p class="ch-d">这一关的伴生偏好是<strong>随机的</strong>——猜不出来，只能问。问回来的答案要用字典存下来，一格一格去满足；<strong>存了一整本</strong>之后，还要学会<strong>把它整本翻出来看</strong>。</p>
     </div>
   </header>
 
-  <div class="ch-top" data-stage-top="4" data-total="5">
+  <div class="ch-top" data-stage-top="4" data-total="8">
     <div class="ch-top-bar">
       <div class="ch-top-track"><div class="ch-top-fill" style="width: 0%"></div></div>
-      <span class="ch-top-text">已会 0 / 5 个知识点</span>
+      <span class="ch-top-text">已会 0 / 8 个知识点</span>
     </div>
   </div>
 
@@ -46,7 +46,7 @@
       </ul>
     </div>
 
-    <h2>📖 知识卡 · 5 张</h2>
+    <h2>📖 知识卡 · 6 张</h2>
 
     <h3>① 元组：把两个值打包成一组</h3>
     <p>列表用 <code>[ ]</code>，元组用 <code>( )</code>。元组里的每一项也有下标，从 0 开始。</p>
@@ -118,20 +118,50 @@ companions[(4, 2)] = Entities.Bush
 want = companions.pop((2, 1))</code></pre></div>
     <p class="tip"><code>pop()</code> 一次干两件事：<strong>取出值</strong> + <strong>删掉这一条</strong>。混种里正好用它——一个伴生请求只会被满足一次。<br>
     执行完最后这行，字典里就<strong>只剩 <code>(0, 3)</code> 和 <code>(4, 2)</code> 两条</strong>了——<code>(2, 1)</code> 那条已经被兑现掉了。</p>
+    <div class="warn">
+      <p><span class="warn-label">⚠️ 游戏里没有的字典方法</span>这个游戏<strong>只实现了三个方法</strong>：<code>in</code>、<code>[]=</code>、<code>pop()</code>，外加全局 <code>len()</code>。<br>
+      <strong><code>d.items()</code>、<code>d.keys()</code>、<code>d.values()</code>、<code>d.get()</code> 全部都不存在</strong>——写了会直接报错。<br>
+      真实 Python 里这些都有，但<strong>这一关只能用游戏给的</strong>。</p>
+    </div>
 
-    <h3>⑤ def：把一整段动作打包成一个名字</h3>
-    <p>字典方案要重复做两件事——"种一格"和"扫全田"。这两件事各写一次、反复调用，比复制粘贴清楚得多。</p>
-    <div class="code-wrap"><pre><code>def plant_tile(crop):         # 定义：给它起个名字
-    if can_harvest():
-        harvest()
-    if get_ground_type() != Grounds.Soil:
-        till()
-    plant(crop)
+    <h3>⑤ 遍历字典：把整本心愿单翻出来</h3>
+    <p>心愿单攒到几十条以后，你得能<strong>把它整本翻一遍</strong>——看谁还欠着伴生、统计每种作物被要了几次。这就要用到 <code>for</code> 遍历字典。</p>
+    <div class="code-wrap"><pre><code>for key in companions:              # 遍历字典：每次拿到一个"键"
+    want = companions[key]        # 想看值？得自己再查一次
+    quick_print(key, want)</code></pre></div>
+    <p class="tip"><strong>注意</strong>：<code>for</code> 遍历字典<strong>只会给你键</strong>（就是"在哪儿"），<strong>不会同时给你值</strong>（"种什么"）。<br>
+    所以想看值，必须<strong>再查一次</strong>：<code>companions[key]</code>。<br>
+    <strong>为什么没有 <code>items()</code>？</strong>游戏没实现。真实 Python 里 <code>for k, v in d.items():</code> 一次能拿到键和值，但这里只能拿键。</p>
+    <p>我们的键恰好是<strong>元组</strong> <code>(x, y)</code>，而 Python 的 <code>for</code> 遇到元组会<strong>自动拆开</strong>——所以可以直接这么写：</p>
+    <div class="code-wrap"><pre><code>for x, y in companions:            # 元组键自动解包，等价于 for key in ...
+    quick_print(x, y, companions[(x, y)])</code></pre></div>
+    <p class="tip"><strong>但要当心</strong>：<code>for x, y in companions:</code> 拆出来的是<strong>坐标</strong>，<strong>不是"要种什么"</strong>。<br>
+    要拿到作物，还是得写 <code>companions[(x, y)]</code>。</p>
+    <div class="warn">
+      <p><span class="warn-label">📌 字典是"无序"的</span>遍历出来的顺序<strong>不保证</strong>是写入的顺序。<br>
+      所以<strong>不能用字典来记录"第几个"</strong>——需要顺序就用列表（<code>append</code> 那种）。<br>
+      游戏官方文档原话："There are no guarantees about the order in which the keys are iterated."</p>
+    </div>
 
-# 调用：括号里传什么，crop 就是什么
-plant_tile(Entities.Tree)
-plant_tile(Entities.Bush)</code></pre></div>
-    <p class="tip"><strong>为什么要函数？</strong>因为"种一格"这套动作要写很多遍。<strong>每写一遍可能改漏一处</strong>——改成函数后只改一个地方。<br>参数就是<strong>占位符</strong>：定义时写 <code>crop</code>，调用时才能决定种什么。</p>
+    <h3>⑥ 计数器字典：统计"每种作物被要了几次"</h3>
+    <p>心愿单翻多了，常常要回答另一个问题——"<strong>哪种作物最抢手？</strong>"。这还是老套路：<strong>键查值</strong>，只是把键从"坐标"换成"作物"。</p>
+    <div class="code-wrap"><pre><code>counts = {}                     # 空的计数器字典
+
+for key in companions:        # 还是老规矩：遍历只给键
+    want = companions[key]    # 值要自己查
+    if want in counts:       # 这种作物以前出现过吗？
+        counts[want] = counts[want] + 1
+    else:
+        counts[want] = 1     # 第一次见，记 1 次</code></pre></div>
+    <p class="tip"><strong>为什么"计数"要用字典，不用列表？</strong>因为要回答的是"<strong>胡萝卜被要了几次</strong>"——这是<strong>按名字查</strong>，跟心愿单一模一样的思路。<br>
+    列表能做到吗？也能，但要<strong>从头翻到尾</strong>去找"胡萝卜在哪"，慢而且啰嗦。<br>
+    <strong>同一个字典可以有两种键</strong>：心愿单用<strong>坐标</strong>当键，计数器用<strong>作物</strong>当键。<strong>字典的键可以是任何能当键的东西</strong>。</p>
+
+    <div class="tip-task">
+      <strong>🔗 下一站：自己造一个 <code>goto(x, y)</code></strong><br>
+      想学会<strong>定义自己的函数</strong>、再把它<strong>拆到另一个文件里用 <code>import</code> 搬进来</strong>吗？<br>
+      去 <a href="special-goto.html"><strong>特殊订单 2 · goto(x, y) 自制函数</strong></a> —— 那是函数和 import 的正式主场。
+    </div>
 
     <h2>🚜 农场订单 · 闯关任务</h2>
 
@@ -158,7 +188,7 @@ plant_tile(Entities.Bush)</code></pre></div>
       <details class="fold">
         <summary>🧩 起步骨架（点开前先自己想）</summary>
         <div class="fold-body">
-          <p><strong>只有下划线空位是要你填的</strong>，其余步骤都写成了注释，照着做就行。</p>
+          <p><strong>只有下划线空位是要你填的</strong>。走路、翻土、种下、收获这些<strong>老套路已经写好了</strong>——真正要你动脑的是<strong>怎么把返回值拆开</strong>。</p>
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
 <pre># ① 在田里找到一株灌木，站到它旁边
@@ -166,23 +196,51 @@ plant_tile(Entities.Bush)</code></pre></div>
 #
 # ② 把灌木的位置记下来 —— 等会儿要回来收它
 #    （提示：get_companion() 只告诉你伴生在哪，不会告诉你灌木原来在哪）
-#
-# ③ 问它想要什么：result = get_companion()
-#
+bush_pos = (get_pos_x(), get_pos_y())
+
+# ③ 问它想要什么
+result = get_companion()
+
 # ④ 如果 result 不是 None，就拆开它
-if result != None:
+if <span class="blank">____________</span>:
     want, target = <span class="blank">____________</span>       # 第一层：拆出"要种什么"和"在哪一格"
     x, y = <span class="blank">____________</span>               # 第二层：把坐标拆成 x 和 y
 
     # ⑤ 走到伴生那一格（先横后竖：先把 x 走到位，再把 y 走到位）
-    #    走过去之前别忘了：胡萝卜要种在翻过的土上
-    #
-    # ⑥ 种下它想要的
-    #
+    while get_pos_x() != x:
+        if get_pos_x() &lt; x:
+            move(East)
+        else:
+            move(West)
+    while get_pos_y() != y:
+        if get_pos_y() &lt; y:
+            move(North)
+        else:
+            move(South)
+
+    # ⑥ 种下它想要的（胡萝卜要种在翻过的土上）
+    if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
+        till()
+    plant(want)
+
     # ⑦ 走回灌木那里，收获 —— 这一步就有 5 倍加成
-    #    （伴生不用长熟，种下就能收）</pre>
+    #    （伴生不用长熟，种下就能收）
+    bx, by = bush_pos
+    while get_pos_x() != bx:
+        if get_pos_x() &lt; bx:
+            move(East)
+        else:
+            move(West)
+    while get_pos_y() != by:
+        if get_pos_y() &lt; by:
+            move(North)
+        else:
+            move(South)
+    harvest()</pre>
           </div>
-          <p class="tip"><strong>填空提示</strong>：两处都是<strong>解包</strong>。<code>get_companion()</code> 返回的是<strong>两层</strong>结构——第一层拆出 <code>want</code> 和 <code>target</code>，第二层才把 <code>target</code> 拆成 <code>x</code> 和 <code>y</code>。</p>
+          <p class="tip"><strong>填空提示</strong>：三处空都是<strong>本关的知识点</strong>。<br>
+          第一个空是<strong>判断</strong>——<code>get_companion()</code> 可能返回 <code>None</code>（这株没偏好），也可能返回一个元组。所以判断要写成"<strong>它不是 None</strong>"。<br>
+          第二、三个空都是<strong>解包</strong>：返回的是<strong>两层</strong>结构——第一层拆出 <code>want</code> 和 <code>target</code>，第二层才把 <code>target</code> 拆成 <code>x</code> 和 <code>y</code>。</p>
         </div>
       </details>
 
@@ -219,6 +277,11 @@ if result != None:
           用列表的话，你得<strong>把整个列表从头翻到尾</strong>去找那一格，格子一多就<strong>又慢又难写</strong>；用字典，<strong>一下就查到了</strong>。<br>
           <strong>记住这句口诀</strong>：<strong>键是"在哪"，值是"种什么"</strong>。</p>
 
+          <p><strong>顺带认识一下 <code>def</code></strong>（本关只用到这一种写法）：<br>
+          <code>def 名字(参数):</code> 是"<strong>把这一段打包，起个名字</strong>"；调用时写 <code>名字(实参)</code>。<br>
+          下面骨架里的 <code>plant_tile(main_crop)</code> 就是"种一格"这个动作——<code>main_crop</code> 是<strong>占位符</strong>，调用时才决定种什么。<br>
+          为什么要打包？因为"种一格"这套动作要写很多遍，<strong>每写一遍可能改漏一处</strong>；打包成函数后<strong>只改一个地方</strong>。</p>
+
           <div class="scaffold">
             <span class="scaffold-label">从这段改起</span>
 <pre># ① 心愿单：一个空字典
@@ -236,22 +299,29 @@ def plant_tile(main_crop):
         # 有 —— 把它的愿望取出来，顺便销掉这条账
         #      （pop = 取出 + 删除，一个请求只兑现一次）
         want = companions.<span class="blank">______</span>(pos)
+
         # ③ 种下它想要的（胡萝卜要先翻土）
-        #
+        if want == Entities.Carrot and get_ground_type() != Grounds.Soil:
+            till()
+        plant(want)
+
         # ④ 这格已经让给伴生了 —— 主作物不能再种
         #    （想想这里该写什么，才能让下面那段不执行）
         <span class="blank">________________</span>
 
     # ⑤ 没有人才轮到主作物
     #    （胡萝卜要先翻土；翻土的规矩和 S3 一样）
-    #
+    if main_crop == Entities.Carrot and get_ground_type() != Grounds.Soil:
+        till()
+    plant(main_crop)
+
     # ⑥ 再问问这株想要什么，记进字典
     result = get_companion()
     if result != None:
         want, target = <span class="blank">____________</span>
         # ⑦ 别让两株植物抢同一格
         if <span class="blank">____________</span> not in companions:
-            companions[target] = want
+            companions[<span class="blank">______</span>] = want
 
 # ⑧ 用一个函数把全田扫一遍：每格调一次 plant_tile，每行末尾往北挪一格</pre>
           </div>
@@ -260,13 +330,106 @@ def plant_tile(main_crop):
           ② 第一个空是"<strong>这一格的坐标</strong>"——就是上面那个 <code>pos</code>。<br>
           ② 第二个空是<strong>取出并删除</strong>的那个方法（<code>pop</code>）。<br>
           ④ 那个空是 <strong><code>return</code></strong>——这格让给伴生了，<strong>直接结束这一格的处理</strong>，下面主作物那段就不会执行。<br>
-          ⑥ 第一个空是<strong>两层解包</strong>；⑦ 那个空是<strong>坐标</strong>。</p>
+          ⑥ 第一个空是<strong>两层解包</strong>；⑦ 第一个空是<strong>坐标</strong>；⑦ 第二个空是<strong>键</strong>（"在哪"）。</p>
 
           <p class="tip"><strong>为什么 ⑦ 要先判断"没被占"？</strong>因为<strong>两株植物可能都想在同一个位置种伴生</strong>。不判断的话，后来登记的那个会<strong>把先前的覆盖掉</strong>，先前的那个心愿就永远等不到了。</p>
         </div>
       </details>
 
       <p class="tip-task">为什么不能"走过去种完再走回来"？因为<strong>你种下伴生时，会把那格原来作物的心愿弄丢</strong>。用字典记账就不会互相踩。</p>
+    </div>
+
+    <div class="order-card">
+      <div class="order-card-head">
+        <span class="order-tag">订单 3</span>
+        <h3>心愿单盘点：把整本字典翻出来看</h3>
+      </div>
+      <div class="order-req">
+        <b>📋 客户要求</b>
+        账记了一整天，客户要<strong>一张盘点表</strong>——把心愿单里<strong>还没兑现的每一条</strong>都打印出来，外加<strong>一共有多少条</strong>。<br>
+        具体要你做三件事：<br>
+        <strong>① 逐条打印</strong>：每条心愿打印"坐标 + 要种什么"；<br>
+        <strong>② 报总数</strong>：打印心愿单里还剩几条；<br>
+        <strong>③ 统计</strong>：数一数<strong>每种作物</strong>分别被要了几次。
+      </div>
+      <figure class="order-fig">
+        <img src="images/s4-report.svg" alt="字典遍历盘点示意图：左侧心愿单里有三条待兑现的记录，右侧输出区依次打印三条记录、一行总条数、以及按作物种类的统计结果" loading="lazy">
+        <figcaption>图：<strong>遍历字典就是把整本翻一遍</strong>。左边是攒下的心愿，右边是翻出来的结果——<strong>顺序不保证和写入一样</strong>。</figcaption>
+      </figure>
+      <div class="order-must">
+        <span class="order-must-chip">必须用 for 遍历字典</span>
+        <span class="order-must-chip">必须会两层解包</span>
+        <span class="order-must-chip">必须用 len() 报总数</span>
+        <span class="order-must-chip">要统计就得再开一个字典</span>
+        <span class="order-must-chip">不能用 items()</span>
+      </div>
+
+      <details class="fold">
+        <summary>🧩 起步骨架（点开前先自己想）</summary>
+        <div class="fold-body">
+          <p><strong>只有下划线空位是要你填的</strong>。打印、计数这些<strong>老套路</strong>已经写好；真正要想清楚的是<strong>"遍历字典到底给我什么"</strong>。</p>
+          <div class="scaffold">
+            <span class="scaffold-label">从这段改起</span>
+<pre>companions = {}
+# 假设扫完一轮，字典里已经攒了这些心愿（下面三条是举例）
+# companions[(2, 1)] = Entities.Carrot
+# companions[(0, 3)] = Entities.Tree
+# companions[(4, 2)] = Entities.Bush
+
+# ① 逐条打印：把整本翻一遍
+#    （提示：for 遍历字典给你的是"键"，也就是坐标）
+for <span class="blank">____________</span> in companions:
+    # ② 把坐标拆开，并且取出这条心愿要种什么
+    x, y = <span class="blank">____________</span>
+    want = <span class="blank">____________</span>
+    quick_print(x, y, want)
+
+# ③ 报总数：心愿单里还剩几条
+quick_print("心愿总数", <span class="blank">____________</span>(companions))
+
+# ④ 统计：每种作物被要了几次
+#    （再开一个字典当"计数器"：键=作物，值=次数）
+counts = {}
+for key in companions:
+    want = companions[key]
+    if want in counts:
+        counts[want] = counts[want] + 1
+    else:
+        counts[<span class="blank">____________</span>] = 1
+
+# ⑤ 把统计结果也打印出来
+for key in counts:
+    quick_print(key, counts[key])</pre>
+          </div>
+          <p class="tip"><strong>填空提示</strong>：<br>
+          ① 那个空是<strong>循环变量</strong>——你打算把"键"存进哪个变量？<br>
+          ② 第一个空是<strong>刚才那个循环变量</strong>（键是元组，要拆成 x 和 y）；第二个空是"<strong>用这个坐标去查字典</strong>"。<br>
+          ③ 那个空是<strong>长度函数</strong>——跟 S3 量列表长度用的是<strong>同一个</strong> <code>len()</code>。<br>
+          ④ 最后一个空是<strong>作物本身</strong>——第一次见到它，要把它记成"出现过 1 次"。</p>
+          <p class="tip"><strong>为什么统计要再开一个字典？</strong>因为你要回答的是"<strong>哪种作物出现了几次</strong>"——还是<strong>"键查值"</strong>的老套路：键=作物，值=次数。<br>
+          <strong>注意</strong>：游戏里<strong>没有 <code>items()</code></strong>，所以遍历只能拿键，值要自己查。</p>
+        </div>
+      </details>
+
+      <details class="fold">
+        <summary>📄 输出长什么样（对照着写，别纠结顺序）</summary>
+        <div class="fold-body">
+          <p>下面是<strong>一种可能的样子</strong>（心愿单内容固定，但<strong>打印顺序不固定</strong>）：</p>
+          <div class="code-wrap"><pre><code>2 1 Entities.Carrot
+0 3 Entities.Tree
+4 2 Entities.Bush
+心愿总数 3
+Entities.Carrot 1
+Entities.Tree 1
+Entities.Bush 1</code></pre></div>
+          <p class="tip"><strong>三个必须知道的细节</strong>：<br>
+          ① <code>print</code> / <code>quick_print</code> 的多个参数之间<strong>用空格隔开</strong>，不会自动加逗号。<br>
+          ② 坐标被拆成了 <code>x</code> 和 <code>y</code> 两个数打印，所以是 <code>2 1</code> 而不是 <code>(2,1)</code>。<br>
+          ③ <strong>顺序会变</strong>：字典是无序的，三条心愿<strong>可能按任何顺序</strong>打出来。<br>
+          <strong>只要 7 行内容都在、总数对，就算过</strong>——不要去对顺序。</p>
+          <p class="tip"><strong>进阶玩法</strong>：想一次拿到"键和值"？真实 Python 的 <code>d.items()</code> 这里<strong>用不了</strong>。但你可以<strong>把"作物"直接当键</strong>——订单 3 的第 ④ 步就是这么干的。</p>
+        </div>
+      </details>
     </div>
 
     <details class="fold">
@@ -278,18 +441,26 @@ def plant_tile(main_crop):
         <p><b>胡萝卜伴生没生效</b> → 胡萝卜要种在<strong>翻过的土</strong>上。种之前先 <code>till()</code>。</p>
         <p><b>KeyError</b> → 用 <code>companions[pos]</code> 查一个字典里没有的键。要么先用 <code>if pos in companions:</code> 判断，要么用 <code>pop()</code>（它对不存在的键也不会报错，但这里还是先判断更清楚）。</p>
         <p><b>产量还是 5 倍没有叠加</b> → 混种等级没升。<strong>每升一级混种，倍率翻倍</strong>（5 → 10 → 20…），要拿胡萝卜去升级。</p>
+        <p><b>items 未定义 / items is not defined</b> → 用了真实 Python 的写法。<strong>这个游戏没有 <code>d.items()</code></strong>，也没有 <code>keys()</code> / <code>values()</code> / <code>get()</code>。<br>
+        改成老套路：<code>for key in d:</code> 拿键，再 <code>d[key]</code> 取值。</p>
+        <p><b>遍历出来的顺序不对 / 结果每次都不一样</b> → 正常！<strong>字典是无序的</strong>，官方文档明确说"键的迭代顺序没有任何保证"。<br>
+        需要稳定顺序就用<strong>列表</strong>，别用字典。</p>
+        <p><b>统计次数总是 1</b> → 计数器的键写错了。<strong>键必须是"作物"本身</strong>（<code>counts[want]</code>），不是坐标——坐标每条都不一样，永远计数不到一起。</p>
       </div>
     </details>
 
     <h2>🚪 自查门</h2>
     <div class="gate">
-      <span class="gate-label">✓ 5 个知识点 · 真的会了才勾</span>
+      <span class="gate-label">✓ 8 个知识点 · 真的会了才勾</span>
       <ul>
         <li><label><input type="checkbox" data-key="farm_s4_k1"> 我能用元组 <code>(x, y)</code> 存坐标，并一次解包成两个变量</label></li>
         <li><label><input type="checkbox" data-key="farm_s4_k2"> 我能用字典按"坐标"查"要种什么"，并且知道键可以是元组</label></li>
         <li><label><input type="checkbox" data-key="farm_s4_k3"> 我能正确判断 <code>get_companion()</code> 返回的是 <code>None</code> 还是元组，并完成两层解包</label></li>
         <li><label><input type="checkbox" data-key="farm_s4_k4"> 我能解释"为什么伴生偏好不能猜，只能一株一株问"</label></li>
-        <li><label><input type="checkbox" data-key="farm_s4_k5"> 我能把"种一格"打包成带参数的函数，并在两处以上调用它</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k5"> 我能用 <code>for</code> 遍历字典，并知道<strong>遍历只给键</strong>、值要再查一次</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k6"> 我知道这个游戏<strong>没有 <code>items()</code></strong>，要用 <code>for key in d</code> + <code>d[key]</code></label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k7"> 我能解释"为什么字典遍历出来的顺序不保证"，并知道要顺序得用列表</label></li>
+        <li><label><input type="checkbox" data-key="farm_s4_k8"> 我能把"种一格"打包成带参数的函数，并在两处以上调用它</label></li>
       </ul>
     </div>
 
@@ -300,13 +471,18 @@ def plant_tile(main_crop):
           <li><strong>换主作物</strong>：把字典方案里的主作物从树换成灌木或胡萝卜，代码要改几处？</li>
           <li><strong>换伴生规则</strong>：改成"自己种什么就把心愿写在<strong>自己这格</strong>"，行不行？会出什么问题？</li>
           <li><strong>两个作物抢同一格</strong>：如果两株植物请求<strong>同一格</strong>，你的字典会怎样？该加什么判断？</li>
+          <li><strong>顺序题</strong>：订单 3 的输出顺序和学生预期不一样，为什么？<strong>要保证顺序该怎么办？</strong></li>
+          <li><strong>统计题</strong>：把计数器字典的键从"作物"换成"坐标"，会发生什么？</li>
           <li><strong>口述题</strong>：为什么伴生作物不用长熟也能加收益？这件事在代码里体现在哪？</li>
         </ul>
       </div>
     </details>
 
     <div class="callout">
-      <p><span class="callout-label">📌 老师注记</span>混种是<strong>第一个"规则由程序告诉你"的关卡</strong>——偏好随机，学生没法推导，只能调 API 读。<br>这正好引出字典：<strong>坐标当键、作物当值</strong>，把"谁要什么"这类"配对关系"存下来。字典是列表的自然升级——S3 存"一排数据"，S4 存"对应关系"。<br>字典那三个操作（<code>in</code> / <code>[]=</code> / <code>pop()</code>）学生一次记不住很正常，<strong>订单 2 必须写出来才算过</strong>。</p>
+      <p><span class="callout-label">📌 老师注记</span>混种是<strong>第一个"规则由程序告诉你"的关卡</strong>——偏好随机，学生没法推导，只能调 API 读。<br>这正好引出字典：<strong>坐标当键、作物当值</strong>，把"谁要什么"这类"配对关系"存下来。字典是列表的自然升级——S3 存"一排数据"，S4 存"对应关系"。<br>字典那三个操作（<code>in</code> / <code>[]=</code> / <code>pop()</code>）学生一次记不住很正常，<strong>订单 2 必须写出来才算过</strong>。<br>
+      <strong>本关最容易踩的坑是 <code>items()</code></strong>：学生一看"遍历字典"就条件反射写 <code>d.items()</code>——这个游戏<strong>没有这个方法</strong>，一写就报错。知识卡 ⑤ 要反复强调"<strong>遍历只给键</strong>"。<br>
+      <strong>骨架只挖判断和字典操作</strong>——走路、翻土、种下这些都是 S2/S3 学过的老套路，写成完整代码；学生真正要想的是"<strong>先查还是先种</strong>"和"<strong>怎么拆两层</strong>"。<br>
+      <strong>订单 3 的输出顺序不固定，这是特性不是 bug</strong>——判卷只看"内容齐不齐 + 总数对不对"，不要让学生去对顺序。</p>
     </div>
 
   </article>
@@ -319,7 +495,7 @@ def plant_tile(main_crop):
 
   <div class="footer">
     随机规则只能读不能猜 · 字典把"谁要什么"记成一张对应表<br>
-    函数不是硬学，是"这段要写很多遍"逼出来的<br>
+    遍历字典只给键，值要再查一次 · 字典无序，要顺序请用列表<br>
     由 GitHub Pages 提供服务 · 进度存本机浏览器（换设备不保留）
   </div>
 
